@@ -20,8 +20,28 @@ app.use(helmet({
 }));
 app.use(express.json());
 
+const pages = new Map([
+  ['/', 'index.html'],
+  ['/villa', 'villa.html'],
+  ['/photos', 'photos.html'],
+  ['/equipements', 'equipements.html'],
+  ['/localisation', 'localisation.html'],
+  ['/tarifs', 'tarifs.html'],
+  ['/reservation', 'reservation.html'],
+  ['/contact', 'contact.html'],
+]);
+
+app.get(['/index.html', '/villa.html', '/photos.html', '/equipements.html', '/localisation.html', '/tarifs.html', '/reservation.html', '/contact.html'], (req, res) => {
+  const cleanPath = req.path === '/index.html' ? '/' : req.path.replace(/\.html$/, '');
+  res.redirect(301, cleanPath);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+app.get([...pages.keys()], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', pages.get(req.path)));
+});
 
 app.post('/api/send-request', (req, res) => {
   const { name, email, phone, arrival, departure, guests, message } = req.body;
