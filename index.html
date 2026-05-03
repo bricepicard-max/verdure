@@ -3,55 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verdure & Cie — Maison de vacances en pleine nature</title>
-    <meta name="description" content="Verdure & Cie : maison de vacances indépendante, chaleureuse et tout confort. Réservez votre séjour au calme, entouré de nature.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Verdure & Cie — Villa de charme avec piscine à Saint-Pierre, La Réunion</title>
+    <meta name="description" content="Verdure & Cie : villa indépendante de 5 chambres avec piscine privée, vue montagne et billard à Saint-Pierre. Réservez votre séjour au cœur de La Réunion.">
     <link rel="canonical" href="https://verdure.maisonpicard.com/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Verdure &amp; Cie — Maison de vacances en pleine nature">
-    <meta property="og:description" content="Verdure &amp; Cie : maison de vacances indépendante, chaleureuse et tout confort. Réservez votre séjour au calme, entouré de nature.">
+    <meta property="og:title" content="Verdure & Cie — Villa de charme avec piscine à Saint-Pierre">
+    <meta property="og:description" content="Villa indépendante 5 chambres, piscine privée, vue montagne, billard. Jusqu'à 8 voyageurs. Saint-Pierre, La Réunion.">
     <meta property="og:url" content="https://verdure.maisonpicard.com/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="fr_FR">
+    <meta property="og:image" content="https://verdure.maisonpicard.com/assets/images/hero.jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="1597">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Verdure &amp; Cie — Maison de vacances en pleine nature">
-    <meta name="twitter:description" content="Verdure &amp; Cie : maison de vacances indépendante, chaleureuse et tout confort. Réservez votre séjour au calme, entouré de nature.">
+    <meta name="twitter:title" content="Verdure & Cie — Villa de charme avec piscine à Saint-Pierre">
+    <meta name="twitter:description" content="Villa indépendante 5 chambres, piscine privée, vue montagne. Saint-Pierre, La Réunion.">
 
     <!-- JSON-LD -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "VacationRental",
-      "name": "Verdure &amp; Cie",
-      "description": "Maison de vacances indépendante, chaleureuse et tout confort.",
+      "name": "Verdure & Cie",
+      "description": "Villa indépendante avec piscine privée, vue montagne, billard, 5 chambres, 3 salles de bain. Jusqu'à 8 voyageurs.",
       "url": "https://verdure.maisonpicard.com/",
+      "image": "https://verdure.maisonpicard.com/assets/images/hero.jpeg",
       "telephone": "hello@maisonpicard.com",
       "address": {
         "@type": "PostalAddress",
+        "addressLocality": "Saint-Pierre",
+        "addressRegion": "La Réunion",
         "addressCountry": "FR"
       },
-      "numberOfBedrooms": 3,
+      "numberOfBedrooms": 5,
+      "numberOfBathroomsTotal": 3,
       "occupancy": {
         "@type": "QuantitativeValue",
-        "maxValue": 6,
+        "maxValue": 8,
         "unitText": "personnes"
       },
       "petsAllowed": true,
       "amenityFeature": [
-        {"@type": "LocationFeatureSpecification", "name": "Wi-Fi"},
-        {"@type": "LocationFeatureSpecification", "name": "Cheminée"},
-        {"@type": "LocationFeatureSpecification", "name": "Parking gratuit"},
-        {"@type": "LocationFeatureSpecification", "name": "Jardin clos"}
-      ]
+        {"@type": "LocationFeatureSpecification", "name": "Piscine privée"},
+        {"@type": "LocationFeatureSpecification", "name": "Wi-Fi gratuit"},
+        {"@type": "LocationFeatureSpecification", "name": "Parking privé gratuit"},
+        {"@type": "LocationFeatureSpecification", "name": "Climatisation"},
+        {"@type": "LocationFeatureSpecification", "name": "Billard"},
+        {"@type": "LocationFeatureSpecification", "name": "Jardin"}
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "9",
+        "bestRating": "5"
+      }
     }
     </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -68,12 +84,12 @@
                 <span></span>
             </button>
             <ul class="nav__links" id="navLinks">
-                <li><a href="#maison" class="nav__link">La maison</a></li>
+                <li><a href="#maison" class="nav__link">La villa</a></li>
                 <li><a href="#amenities" class="nav__link">Équipements</a></li>
                 <li><a href="#galerie" class="nav__link">Galerie</a></li>
                 <li><a href="#localisation" class="nav__link">Localisation</a></li>
                 <li><a href="#tarifs" class="nav__link">Tarifs</a></li>
-                <li><a href="#contact" class="nav__link nav__link--cta">Contact</a></li>
+                <li><a href="#contact" class="nav__link nav__link--cta">Réserver</a></li>
             </ul>
         </div>
     </nav>
@@ -81,15 +97,15 @@
     <!-- Hero -->
     <header class="hero" id="accueil">
         <div class="hero__overlay"></div>
-        <div class="hero__bg" style="background-image: linear-gradient(135deg, #2d5a27 0%, #1a3a1a 100%);"></div>
+        <div class="hero__bg" style="background-image: url('assets/images/hero.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="hero__content">
-            <div class="hero__badge">★ Nouveau</div>
+            <div class="hero__badge">★ 5,0 — 9 avis</div>
             <h1 class="hero__title">Verdure & Cie</h1>
-            <p class="hero__subtitle">Votre maison de vacances au cœur de la nature</p>
-            <p class="hero__desc">Un havre de paix où le temps ralentit — entre forêt, prairie et ciel étoilé.</p>
+            <p class="hero__subtitle">Villa de charme avec piscine — Saint-Pierre, La Réunion</p>
+            <p class="hero__desc">Un havre de paix perché face aux montagnes, jusqu'à 8 voyageurs, 5 chambres, piscine privée et billard.</p>
             <div class="hero__actions">
                 <a href="#contact" class="btn btn--primary">Demander une disponibilité</a>
-                <a href="#maison" class="btn btn--outline">Découvrir</a>
+                <a href="#galerie" class="btn btn--outline">Voir les photos</a>
             </div>
         </div>
         <div class="hero__scroll">
@@ -103,21 +119,20 @@
         <div class="container">
             <div class="intro">
                 <div class="intro__text">
-                    <span class="section__tag">Bienvenue</span>
-                    <h2 class="section__title">Un séjour qui ressemble à une respiration</h2>
-                    <p class="section__p">Nichée à l'orée des bois, <strong>Verdure & Cie</strong> est une maison de vacances indépendante pensée pour celles et ceux qui cherchent le calme, l'authenticité et le confort.</p>
-                    <p class="section__p">Grande pièce de vie baignée de lumière, cheminée, cuisine équipée, jardin clos, terrasse… Tout est là pour que vous n'ayez à penser à rien — sauf à profiter.</p>
+                    <span class="section__tag">La villa</span>
+                    <h2 class="section__title">Un style résolument unique</h2>
+                    <p class="section__p">Nichée à Saint-Pierre, <strong>Verdure & Cie</strong> est une villa indépendante climatisée qui offre une expérience de séjour hors du commun. Avec sa piscine privée, sa vue imprenable sur les montagnes et son atmosphère chaleureuse, elle est l'endroit idéal pour des vacances en famille ou entre amis.</p>
+                    <p class="section__p">La villa dispose de <strong>5 chambres spacieuses</strong>, 3 salles de bain, un grand salon lumineux, une cuisine entièrement équipée et une terrasse avec coin repas donnant sur la piscine et le jardin. Sans oublier la table de billard pour les soirées animées !</p>
                     <ul class="intro__list">
-                        <li>📍 2h de Paris — 30 min de la côte</li>
-                        <li>🛏 Jusqu'à 6 voyageurs — 3 chambres</li>
-                        <li>🌿 Jardin clos — Terrasse exposée sud</li>
-                        <li>🔥 Cheminée — Wi-Fi — Linge inclus</li>
+                        <li>📍 Saint-Pierre, La Réunion</li>
+                        <li>🛏 Jusqu'à 8 voyageurs — 5 chambres • 3 salles de bain</li>
+                        <li>🏊 Piscine privée — Vue montagne</li>
+                        <li>🎱 Billard — Jardin — Terrasse</li>
+                        <li>⭐ 5,0/5 sur Airbnb • 9 avis</li>
                     </ul>
                 </div>
                 <div class="intro__image">
-                    <div class="intro__img-placeholder" style="background: linear-gradient(135deg, #3a7d3a, #1a4a1a);">
-                        <span>🍃</span>
-                    </div>
+                    <img src="assets/images/salon.jpeg" alt="Salon spacieux de Verdure & Cie" class="intro__img" loading="lazy" width="1200" height="896">
                 </div>
             </div>
         </div>
@@ -128,39 +143,39 @@
         <div class="container">
             <div class="section__header">
                 <span class="section__tag section__tag--light">Confort</span>
-                <h2 class="section__title section__title--light">Équipements</h2>
-                <p class="section__p section__p--light">Tout le confort moderne, sans perdre l'âme de la maison</p>
+                <h2 class="section__title section__title--light">Équipements & services</h2>
+                <p class="section__p section__p--light">Tout le confort moderne pour un séjour sans accroc</p>
             </div>
             <div class="grid grid--3">
                 <div class="card card--dark">
-                    <div class="card__icon">🔥</div>
-                    <h3 class="card__title">Cheminée</h3>
-                    <p class="card__text">Poêle à bois pour les soirées d'automne et d'hiver. Bois fourni.</p>
+                    <div class="card__icon">🏊</div>
+                    <h3 class="card__title">Piscine privée</h3>
+                    <p class="card__text">Piscine extérieure privative avec vue sur les montagnes. Idéale pour se rafraîchir après une journée d'excursion.</p>
                 </div>
                 <div class="card card--dark">
-                    <div class="card__icon">🍳</div>
-                    <h3 class="card__title">Cuisine équipée</h3>
-                    <p class="card__text">Gazinière, frigo, lave-vaisselle, cafetière, robot — de quoi cuisiner comme à la maison.</p>
+                    <div class="card__icon">🎱</div>
+                    <h3 class="card__title">Billard</h3>
+                    <p class="card__text">Table de billard pour des soirées animées entre voyageurs. Détente et convivialité assurées.</p>
+                </div>
+                <div class="card card--dark">
+                    <div class="card__icon">🌬️</div>
+                    <h3 class="card__title">Climatisation</h3>
+                    <p class="card__text">Climatisation réversible dans toutes les pièces pour un confort optimal été comme hiver.</p>
                 </div>
                 <div class="card card--dark">
                     <div class="card__icon">🛜</div>
-                    <h3 class="card__title">Wi-Fi fibre</h3>
-                    <p class="card__text">Connexion fibre haut débit — télétravail possible depuis la campagne.</p>
-                </div>
-                <div class="card card--dark">
-                    <div class="card__icon">🧺</div>
-                    <h3 class="card__title">Linge inclus</h3>
-                    <p class="card__text">Draps, serviettes et torchons fournis. Lit fait à votre arrivée.</p>
+                    <h3 class="card__title">Wi-Fi gratuit</h3>
+                    <p class="card__text">Connexion internet haut débit incluse — télétravail possible depuis le paradis.</p>
                 </div>
                 <div class="card card--dark">
                     <div class="card__icon">🚗</div>
-                    <h3 class="card__title">Parking privé</h3>
-                    <p class="card__text">Deux places de stationnement privatives devant la maison.</p>
+                    <h3 class="card__title">Parking privé gratuit</h3>
+                    <p class="card__text">Stationnement privatif sur place, sans supplément. Idéal pour louer une voiture et explorer l'île.</p>
                 </div>
                 <div class="card card--dark">
                     <div class="card__icon">🌳</div>
-                    <h3 class="card__title">Jardin clos</h3>
-                    <p class="card__text">Grand terrain arboré et clos, parfait pour les enfants et les animaux.</p>
+                    <h3 class="card__title">Jardin & terrasse</h3>
+                    <p class="card__text">Grand jardin arboré avec terrasse aménagée, coin repas extérieur et espace détente.</p>
                 </div>
             </div>
         </div>
@@ -171,18 +186,36 @@
         <div class="container">
             <div class="section__header">
                 <span class="section__tag">Galerie</span>
-                <h2 class="section__title">Photos</h2>
-                <p class="section__p">Quelques aperçus de la maison et de son environnement</p>
+                <h2 class="section__title">Photos de la villa</h2>
+                <p class="section__p">Découvrez Verdure & Cie en images</p>
             </div>
             <div class="gallery">
-                <div class="gallery__item gallery__item--wide" style="background: linear-gradient(135deg, #4a8f4a, #2d5a27);"><span>🌿 Salon</span></div>
-                <div class="gallery__item" style="background: linear-gradient(135deg, #5a7a3a, #3a5a2a);"><span>🛏 Chambre</span></div>
-                <div class="gallery__item" style="background: linear-gradient(135deg, #6a8a5a, #4a6a3a);"><span>🍴 Cuisine</span></div>
-                <div class="gallery__item gallery__item--wide" style="background: linear-gradient(135deg, #3a6a3a, #1a4a2a);"><span>🌅 Terrasse</span></div>
-                <div class="gallery__item" style="background: linear-gradient(135deg, #5a8a4a, #3a6a2a);"><span>🚿 Salle de bain</span></div>
-                <div class="gallery__item" style="background: linear-gradient(135deg, #4a7a5a, #2a5a3a);"><span>🌲 Vue nature</span></div>
+                <div class="gallery__item gallery__item--wide">
+                    <img src="assets/images/piscine.jpeg" alt="Piscine et vue montagne" loading="lazy" class="gallery__img">
+                    <span class="gallery__label">🏊 Piscine & vue montagne</span>
+                </div>
+                <div class="gallery__item">
+                    <img src="assets/images/terrasse.jpeg" alt="Terrasse de la villa" loading="lazy" class="gallery__img">
+                    <span class="gallery__label">🌅 Terrasse</span>
+                </div>
+                <div class="gallery__item">
+                    <img src="assets/images/cuisine.jpeg" alt="Cuisine équipée" loading="lazy" class="gallery__img">
+                    <span class="gallery__label">🍴 Cuisine</span>
+                </div>
+                <div class="gallery__item gallery__item--wide">
+                    <img src="assets/images/exterieur.jpeg" alt="Extérieur de la villa" loading="lazy" class="gallery__img">
+                    <span class="gallery__label">🌿 Extérieur</span>
+                </div>
+                <div class="gallery__item">
+                    <img src="assets/images/chambre1.jpeg" alt="Chambre spacieuse" loading="lazy" class="gallery__img">
+                    <span class="gallery__label">🛏 Chambre</span>
+                </div>
+                <div class="gallery__item">
+                    <img src="assets/images/salle-de-bain.jpeg" alt="Salle de bain moderne" loading="lazy" class="gallery__img">
+                    <span class="gallery__label">🚿 Salle de bain</span>
+                </div>
             </div>
-            <p class="gallery__note">Photos réelles à venir — contactez-nous pour une visite virtuelle.</p>
+            <p class="gallery__note">Photos issues de l'annonce Airbnb officielle.</p>
         </div>
     </section>
 
@@ -191,22 +224,23 @@
         <div class="container">
             <div class="section__header">
                 <span class="section__tag">Où sommes-nous</span>
-                <h2 class="section__title">Localisation</h2>
+                <h2 class="section__title">Saint-Pierre, La Réunion</h2>
             </div>
             <div class="map-info">
                 <div class="map-info__card">
                     <h3>Verdure & Cie</h3>
-                    <p>À 2h de Paris, à 30 minutes des plus belles plages de la côte.</p>
+                    <p>Villa située à Saint-Pierre, sur la côte sud-ouest de La Réunion. Proche de toutes les commodités et des plus beaux sites de l'île.</p>
                     <ul class="map-info__list">
-                        <li><strong>🚗 Paris</strong> — 2h00</li>
-                        <li><strong>🏖 Plages</strong> — 30 min</li>
-                        <li><strong>🛒 Commerces</strong> — 10 min</li>
-                        <li><strong>🚆 Gare TGV</strong> — 25 min</li>
+                        <li><strong>🏖 Plage de Saint-Pierre</strong> — 700 m à 2,4 km</li>
+                        <li><strong>🏭 Saga du Rhum</strong> — 3,9 km</li>
+                        <li><strong>🛒 Commerces & restaurants</strong> — à proximité</li>
+                        <li><strong>✈️ Aéroport Roland Garros</strong> — 55 min en voiture</li>
+                        <li><strong>🌋 Volcan Piton de la Fournaise</strong> — 1h30</li>
                     </ul>
                     <p class="map-info__discreet">L'adresse exacte est communiquée après réservation.</p>
                 </div>
-                <div class="map-info__placeholder" style="background: linear-gradient(135deg, #2d5a27, #1a3a1a);">
-                    <span>🗺 Carte interactive à venir</span>
+                <div class="map-info__placeholder" style="background: url('assets/images/vue.jpeg') center/cover;">
+                    <span>🗺 Vue imprenable sur les montagnes</span>
                 </div>
             </div>
         </div>
@@ -224,21 +258,21 @@
                     <h3 class="pricing__season">Basse saison</h3>
                     <p class="pricing__price">À partir de <strong>120€</strong> <span class="pricing__unit">/ nuit</span></p>
                     <ul class="pricing__list">
-                        <li>✓ Octobre — Avril</li>
+                        <li>✓ Octobre — Avril (hors vacances)</li>
                         <li>✓ 2 nuits minimum</li>
-                        <li>✓ Ménage inclus</li>
-                        <li>✓ Linge fourni</li>
+                        <li>✓ Jusqu'à 8 voyageurs</li>
+                        <li>✓ Linge & serviettes inclus</li>
                     </ul>
                 </div>
                 <div class="pricing__card pricing__card--featured">
-                    <div class="pricing__badge">Recommandé</div>
+                    <div class="pricing__badge">Populaire</div>
                     <h3 class="pricing__season">Moyenne saison</h3>
                     <p class="pricing__price">À partir de <strong>160€</strong> <span class="pricing__unit">/ nuit</span></p>
                     <ul class="pricing__list">
                         <li>✓ Mai — Juin • Septembre</li>
                         <li>✓ 3 nuits minimum</li>
-                        <li>✓ Ménage inclus</li>
-                        <li>✓ Linge fourni</li>
+                        <li>✓ Jusqu'à 8 voyageurs</li>
+                        <li>✓ Linge & serviettes inclus</li>
                         <li>✓ Arrivée flexible</li>
                     </ul>
                 </div>
@@ -246,15 +280,15 @@
                     <h3 class="pricing__season">Haute saison</h3>
                     <p class="pricing__price">À partir de <strong>220€</strong> <span class="pricing__unit">/ nuit</span></p>
                     <ul class="pricing__list">
-                        <li>✓ Juillet — Août</li>
+                        <li>✓ Juillet — Août • Vacances scolaires</li>
                         <li>✓ 5 nuits minimum</li>
-                        <li>✓ Ménage inclus</li>
-                        <li>✓ Linge fourni</li>
-                        <li>✓ Arrivée samedi</li>
+                        <li>✓ Jusqu'à 8 voyageurs</li>
+                        <li>✓ Linge & serviettes inclus</li>
+                        <li>✓ Arrivée samedi recommandée</li>
                     </ul>
                 </div>
             </div>
-            <p class="section__p section__p--light pricing__footnote">Caution : 500€ — Annulation gratuite jusqu'à 14 jours avant l'arrivée.</p>
+            <p class="section__p section__p--light pricing__footnote">Caution : 500€ — Annulation gratuite jusqu'à 14 jours avant l'arrivée. Me contacter pour un devis personnalisé.</p>
         </div>
     </section>
 
@@ -262,9 +296,13 @@
     <section class="section section--light" id="contact">
         <div class="container">
             <div class="section__header">
-                <span class="section__tag">Contact</span>
+                <span class="section__tag">Réservation</span>
                 <h2 class="section__title">Demande de réservation</h2>
-                <p class="section__p">Envie de réserver ? Une question ? utilisez le formulaire ci-dessous.</p>
+                <p class="section__p">Vous pouvez aussi réserver directement sur les plateformes officielles :</p>
+                <div class="contact__platforms">
+                    <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener" class="btn btn--outline btn--platform">Réserver sur Airbnb ★ 5,0</a>
+                    <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener" class="btn btn--outline btn--platform">Réserver sur Booking.com</a>
+                </div>
             </div>
             <form class="form" id="contactForm" novalidate>
                 <div class="form__group">
@@ -294,6 +332,8 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                         <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
                     </select>
                 </div>
                 <div class="form__group">
@@ -301,7 +341,7 @@
                     <textarea id="message" name="message" class="form__input form__textarea" required placeholder="Quelques mots sur votre séjour idéal..." rows="5"></textarea>
                 </div>
                 <button type="submit" class="btn btn--primary btn--full">Envoyer la demande</button>
-                <p class="form__footnote">⭐ Vous nous trouvez aussi sur Booking.com et Airbnb</p>
+                <p class="form__footnote">⭐ Également disponible sur <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a> et <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a></p>
             </form>
         </div>
     </section>
@@ -312,12 +352,12 @@
             <div class="footer__grid">
                 <div class="footer__brand">
                     <span class="footer__logo">🌿 Verdure & Cie</span>
-                    <p class="footer__tagline">Un havre de paix, au cœur de la nature.</p>
+                    <p class="footer__tagline">Villa de charme avec piscine — Saint-Pierre, La Réunion.</p>
                 </div>
                 <div class="footer__links">
                     <h4>Liens</h4>
                     <ul>
-                        <li><a href="#maison">La maison</a></li>
+                        <li><a href="#maison">La villa</a></li>
                         <li><a href="#amenities">Équipements</a></li>
                         <li><a href="#galerie">Galerie</a></li>
                         <li><a href="#tarifs">Tarifs</a></li>
@@ -326,8 +366,8 @@
                 <div class="footer__links">
                     <h4>Réservations</h4>
                     <ul>
-                        <li><span>Booking.com</span></li>
-                        <li><span>Airbnb</span></li>
+                        <li><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></li>
+                        <li><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a></li>
                         <li><a href="#contact">Contact direct</a></li>
                     </ul>
                 </div>
