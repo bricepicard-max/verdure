@@ -5,8 +5,12 @@ window.VERDURE_CONFIG = {};
   try {
     const r = await fetch('/api/config');
     window.VERDURE_CONFIG = await r.json();
-  } catch(e) {
+  } catch (e) {
     console.warn('Config non chargée, mode statique');
-    window.VERDURE_CONFIG = { publishableKey: '', siteUrl: window.location.origin, contactEmail: 'hello@maisonpicard.com' };
+    window.VERDURE_CONFIG = {
+      publishableKey: '',
+      siteUrl: window.location.origin,
+      contactEmail: 'hello@maisonpicard.com',
+    };
   }
 })();

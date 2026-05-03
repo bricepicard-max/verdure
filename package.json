@@ -1,16 +1,18 @@
 {
   "name": "verdure",
   "version": "1.0.0",
-  "description": "Verdure & Cie — Villa de charme à Saint-Pierre, La Réunion",
+  "description": "Verdure & Cie - Villa de charme à Saint-Pierre, La Réunion",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
   },
   "dependencies": {
+    "better-sqlite3": "^12.9.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "helmet": "^7.1.0"
+    "helmet": "^7.1.0",
+    "stripe": "^22.1.0"
   },
   "engines": {
     "node": ">=18"

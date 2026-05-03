@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Verdure & Cie - Villa avec piscine à Saint-Pierre</title>
-  <meta name="description" content="Verdure & Cie, villa de vacances premium à Saint-Pierre, La Réunion : piscine privée, terrasse, jardin et espaces conviviaux.">
+  <meta name="description" content="Verdure & Cie, villa de vacances à Saint-Pierre, La Réunion : 5 chambres, 3 salles de bain, piscine privée, jardin, terrasses et espaces conviviaux pour 10 voyageurs.">
   <link rel="canonical" href="https://verdure.maisonpicard.com/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta property="og:title" content="Verdure & Cie - Villa avec piscine à Saint-Pierre">
-  <meta property="og:description" content="Villa de vacances à Saint-Pierre avec piscine privée, terrasse et espaces chaleureux.">
+  <meta property="og:description" content="Villa entière à Saint-Pierre avec piscine privée, jardin tropical, 5 chambres et terrasses pour les séjours en famille ou entre amis.">
   <meta property="og:url" content="https://verdure.maisonpicard.com/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
@@ -19,12 +19,18 @@
     "@context": "https://schema.org",
     "@type": "VacationRental",
     "name": "Verdure & Cie",
-    "description": "Villa de vacances avec piscine privée, terrasse et espaces extérieurs à Saint-Pierre, La Réunion.",
+    "description": "Villa de vacances à Saint-Pierre avec 5 chambres, 3 salles de bain, piscine privée, jardin et terrasses.",
     "url": "https://verdure.maisonpicard.com/",
     "image": "https://verdure.maisonpicard.com/assets/images/26e34c49-0570-4b30-9990-ca682e0186d9.jpeg",
-    "address": {"@type":"PostalAddress","addressLocality":"Saint-Pierre","addressRegion":"La Réunion","addressCountry":"FR"},
+    "address": {"@type":"PostalAddress","streetAddress":"8 chemin Elie Hoarau Basse Terre","addressLocality":"Saint-Pierre","postalCode":"97410","addressRegion":"La Réunion","addressCountry":"FR"},
     "numberOfBedrooms": 5,
-    "occupancy": {"@type":"QuantitativeValue","maxValue":8,"unitText":"personnes"}
+    "occupancy": {"@type":"QuantitativeValue","maxValue":10,"unitText":"personnes"},
+    "amenityFeature": [
+      {"@type":"LocationFeatureSpecification","name":"Piscine privée","value":true},
+      {"@type":"LocationFeatureSpecification","name":"Wifi","value":true},
+      {"@type":"LocationFeatureSpecification","name":"Parking gratuit","value":true},
+      {"@type":"LocationFeatureSpecification","name":"Cuisine équipée","value":true}
+    ]
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,10 +48,10 @@
         <a data-nav href="/">Accueil</a>
         <a data-nav href="/villa">Villa</a>
         <a data-nav href="/photos">Photos</a>
-        <a data-nav href="/equipements">Equipements</a>
+        <a data-nav href="/equipements">Équipements</a>
         <a data-nav href="/localisation">Localisation</a>
         <a data-nav href="/tarifs">Tarifs</a>
-        <a data-nav class="nav__cta" href="/reservation">Reservation</a>
+        <a data-nav class="nav__cta" href="/reservation">Réserver</a>
       </div>
     </div>
   </nav>
@@ -59,52 +65,96 @@
       <div class="container hero__content">
         <p class="eyebrow eyebrow--light">Saint-Pierre, La Réunion</p>
         <h1>Verdure & Cie</h1>
-        <p>Une villa tropicale avec piscine privée, terrasse et espaces chaleureux pour séjourner au calme sur la côte sud.</p>
+        <p>Une villa tropicale à Basse-Terre, Saint-Pierre, pensée pour les familles et les amis : piscine privée, jardin, trois terrasses et 5 chambres pour profiter du sud de l'île.</p>
         <div class="hero__facts" aria-label="Points forts">
+          <span>10 voyageurs</span>
           <span>5 chambres</span>
-          <span>Jusqu'a 8 voyageurs</span>
+          <span>3 salles de bain</span>
           <span>Piscine privée</span>
         </div>
         <div class="hero__actions">
-          <a class="btn btn--primary" href="/reservation">Demander une disponibilite</a>
-          <a class="btn btn--secondary" href="/villa">Découvrir la villa</a>
-          <a class="btn btn--ghost" href="/photos">Voir les photos</a>
+          <a class="btn btn--primary" href="/reservation">Vérifier les disponibilités</a>
+          <a class="btn btn--secondary" href="/photos">Voir la galerie</a>
+          <a class="btn btn--ghost" href="/villa">Découvrir la villa</a>
         </div>
       </div>
     </header>
 
-    <section class="section">
-      <div class="container split">
+    <section class="section section--intro">
+      <div class="container intro-grid">
         <div>
-          <p class="eyebrow">L'esprit du lieu</p>
-          <h2>Une maison pensée pour profiter dedans comme dehors.</h2>
+          <p class="eyebrow">Maison entière</p>
+          <h2>Une adresse joyeuse, végétale et vraiment facile à vivre.</h2>
           <div class="copy">
-            <p>Verdure & Cie accueille les familles et les groupes dans une atmosphère simple, soignée et conviviale. La terrasse, la piscine et les espaces de vie donnent naturellement le rythme du séjour.</p>
-            <p>L'adresse convient aux voyageurs qui veulent une base confortable à Saint-Pierre, avec de l'espace pour se retrouver et une ambiance de maison de vacances.</p>
-          </div>
-          <div class="stats">
-            <div class="stat"><strong>5</strong><span>chambres</span></div>
-            <div class="stat"><strong>3</strong><span>salles de bain</span></div>
-            <div class="stat"><strong>8</strong><span>voyageurs max.</span></div>
-            <div class="stat"><strong>Sud</strong><span>Saint-Pierre</span></div>
+            <p>Verdure & Cie est située à Basse-Terre, Saint-Pierre, avec une ambiance de maison de vacances généreuse : on cuisine, on plonge, on joue au billard, on partage les repas dehors et chacun retrouve ensuite son coin calme.</p>
+            <p>La villa met en avant ce que les voyageurs cherchent vraiment : de l'espace, une piscine, des chambres confortables, une cuisine équipée, du linge inclus et un accueil attentif.</p>
           </div>
         </div>
-        <div class="split__media">
-          <img src="/assets/images/c51bdbc0-2402-4cb1-bed6-d405fe1c7205.jpeg" alt="Terrasse couverte avec table et piscine">
-        </div>
+        <aside class="review-panel" aria-label="Notes voyageurs">
+          <strong>5,0/5</strong>
+          <span>Airbnb</span>
+          <p>Coup de cœur voyageurs, commentaires saluant l'accueil, la communication et le rapport qualité-prix.</p>
+          <hr>
+          <strong>9,2/10</strong>
+          <span>Booking</span>
+          <p>Villa spacieuse, récemment rénovée, avec piscine, jardin, parking gratuit et wifi.</p>
+          <hr>
+          <strong>414</strong>
+          <span>Abonnés Facebook</span>
+          <p>Une présence locale active pour suivre les nouveautés, les photos et les informations Verdure & Cie.</p>
+        </aside>
       </div>
     </section>
 
     <section class="section section--linen">
       <div class="container">
         <div class="section__head section__head--center">
-          <p class="eyebrow">Aperçu</p>
-          <h2>Tout l'essentiel, sans complication.</h2>
+          <p class="eyebrow">Les essentiels</p>
+          <h2>Tout ce qu'il faut pour un séjour qui respire.</h2>
         </div>
-        <div class="grid">
-          <article class="card"><h3>Villa indépendante</h3><p>Des espaces communs agréables, une circulation simple et des coins plus calmes pour chacun.</p></article>
-          <article class="card"><h3>Extérieurs vivants</h3><p>Piscine, terrasse, assises et végétation créent un vrai lieu de détente.</p></article>
-          <article class="card"><h3>Réservation flexible</h3><p>Disponibilités à vérifier via Airbnb, Booking ou demande directe depuis le site.</p></article>
+        <div class="grid feature-cards">
+          <article class="card card--image">
+            <img src="/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg" alt="Piscine éclairée de nuit">
+            <h3>Piscine et détente</h3>
+            <p>Piscine privée, transats, serviettes et coins ombragés pour profiter du jardin à toute heure.</p>
+          </article>
+          <article class="card card--image">
+            <img src="/assets/images/54332482-041a-4545-a8eb-ef03270b7f47.jpeg" alt="Cuisine équipée de Verdure & Cie">
+            <h3>Cuisine équipée</h3>
+            <p>Une cuisine conviviale pour les repas de groupe, les petits-déjeuners et les retours de plage.</p>
+          </article>
+          <article class="card card--image">
+            <img src="/assets/images/4c515222-8085-4801-8f30-002642b838cb.jpeg" alt="Billard dans la villa">
+            <h3>Moments ensemble</h3>
+            <p>Billard, salon, terrasses, barbecue et espaces extérieurs pour rythmer les journées.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div class="split__media split__media--stack">
+          <img src="/assets/images/12435ca6-fd7c-49b0-a4d9-1eb8726d6ac0.jpeg" alt="Salon lumineux avec fauteuils et rideaux bleus">
+          <img src="/assets/images/c51bdbc0-2402-4cb1-bed6-d405fe1c7205.jpeg" alt="Terrasse extérieure avec grande table">
+        </div>
+        <div>
+          <p class="eyebrow">Visite rapide</p>
+          <h2>Dedans pour le confort, dehors pour la douceur.</h2>
+          <div class="copy">
+            <p>Les pièces de vie sont claires, décorées avec des accents tropicaux et pensées pour les séjours à plusieurs. À l'extérieur, les terrasses deviennent naturellement le cœur de la maison.</p>
+            <p>La galerie complète classe les photos une par une pour montrer la piscine, les chambres, les salles d'eau, la cuisine et les détails d'accueil.</p>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong>5</strong><span>chambres</span></div>
+            <div class="stat"><strong>3</strong><span>salles d'eau</span></div>
+            <div class="stat"><strong>10</strong><span>voyageurs max.</span></div>
+            <div class="stat"><strong>3</strong><span>terrasses</span></div>
+          </div>
+          <div class="actions">
+            <a class="btn btn--primary" href="/photos">Explorer les photos</a>
+            <a class="btn btn--outline" href="/equipements">Voir les équipements</a>
+          </div>
         </div>
       </div>
     </section>
@@ -112,15 +162,15 @@
     <section class="section section--leaf">
       <div class="container split">
         <div>
-          <p class="eyebrow eyebrow--light">Préparer son séjour</p>
-          <h2>Les pages utiles sont maintenant séparées.</h2>
-          <p class="lead">Explorez la villa, les photos, les équipements, les environs et les tarifs avant d'envoyer votre demande de disponibilité.</p>
+          <p class="eyebrow eyebrow--light">Réserver</p>
+          <h2>Comparer les plateformes ou envoyer une demande directe.</h2>
+          <p class="lead">Les prix et disponibilités en temps réel restent visibles sur Airbnb et Booking. Le site sert aussi de vitrine claire pour préparer le séjour et poser une question.</p>
         </div>
         <div class="grid grid--2">
-          <a class="card" href="/villa"><h3>La villa</h3><p>Présentation complète de la maison.</p></a>
-          <a class="card" href="/photos"><h3>Photos</h3><p>Galerie sobre des espaces.</p></a>
-          <a class="card" href="/tarifs"><h3>Tarifs</h3><p>Base indicative et conditions.</p></a>
-          <a class="card" href="/reservation"><h3>Réservation</h3><p>Formulaire et liens plateformes.</p></a>
+          <a class="card" href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener"><h3>Airbnb</h3><p>Voir l'annonce, les commentaires et les disponibilités.</p></a>
+          <a class="card" href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener"><h3>Booking</h3><p>Consulter les notes, équipements et tarifs affichés.</p></a>
+          <a class="card" href="/reservation"><h3>Demande directe</h3><p>Envoyer des dates souhaitées ou appeler le 0692 51 27 66.</p></a>
+          <a class="card" href="/localisation"><h3>Saint-Pierre</h3><p>Préparer l'arrivée et les déplacements sur place.</p></a>
         </div>
       </div>
     </section>
@@ -129,9 +179,9 @@
   <footer class="footer">
     <div class="container footer__grid">
       <div><strong>Verdure & Cie</strong><p>Villa de vacances à Saint-Pierre, La Réunion.</p></div>
-      <div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Equipements</a></div>
-      <div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Reservation</a></div>
-      <div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div>
+      <div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Équipements</a></div>
+      <div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Réserver</a></div>
+      <div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="tel:+262692512766">0692 51 27 66</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div>
     </div>
     <div class="container footer__bottom">© 2026 Verdure & Cie.</div>
   </footer>

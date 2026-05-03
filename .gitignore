@@ -1,7 +1,9 @@
 node_modules/
+data/
 .env
 .env.local
 *.log
+.codex-logs/
 .DS_Store
 npm-debug.log*
 
