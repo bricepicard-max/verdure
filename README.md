@@ -1,72 +1,123 @@
-# 🌿 Verdure & Cie — Site de location saisonnière
+# 🌿 Verdure & Cie — Site de réservation directe
 
-Site vitrine statique pour la maison de vacances **Verdure & Cie**, propriété de Brice.
+Villa de charme avec piscine privée — Saint-Pierre, La Réunion.
+Site vitrine + réservation directe avec Stripe.
 
 ## Stack
 
-- **HTML / CSS / JS** — site statique, responsive, sans backend
-- **Nginx** — servi via `verdure.maisonpicard.com`
-- **Aucune dépendance externe** — zéro build, zéro package
-- **PM2** — processus géré automatiquement (port 3010)
+- **Backend** : Node.js + Express
+- **Frontend** : HTML / CSS / JS statique (servi par Express)
+- **Paiement** : Stripe Checkout (acompte 30%)
+- **Process** : PM2 (auto-restart)
+- **Serveur** : Nginx (reverse proxy → localhost:3010)
 
 ## Structure
 
 ```
 /opt/verdure/
-├── index.html      # Page complète (hero, intro, équipements, galerie, tarifs, contact)
-├── styles.css      # Design nature / premium — variables, grille, responsive
-├── app.js          # Navigation mobile, animations, formulaire statique
+├── server.js              # Serveur Express + routes Stripe
+├── package.json
+├── .env.example           # Modèle des variables d'environnement
+├── ecosystem.config.js    # Configuration PM2
+├── public/
+│   ├── index.html         # Page principale
+│   ├── styles.css         # Design premium responsive
+│   ├── app.js             # Logique frontend (galerie, formulaire)
+│   ├── config.js          # Config dynamique depuis le serveur
+│   ├── success.html       # Page après paiement réussi
+│   ├── cancel.html        # Page après annulation paiement
+│   ├── 404.html           # Page personnalisée
+│   ├── robots.txt
+│   └── sitemap.xml
+├── assets/
+│   └── images/            # 68 photos (UUID Airbnb)
 ├── README.md
 ├── AGENTS.md
 ├── ROADMAP.md
-├── TASKS.md
-└── assets/         # (futur) photos, icônes
+└── TASKS.md
 ```
 
-## Développement local
-
-```
-python3 -m http.server 3010
-# → http://localhost:3010
-```
-
-## Production (PM2)
-
-Le site est géré par **PM2** avec redémarrage automatique :
+## Lancer le site
 
 ```bash
-pm2 status verdure
-pm2 logs verdure
-pm2 restart verdure
+cd /opt/verdure
+npm install
+cp .env.example .env        # Configurer Stripe (voir ci-dessous)
+pm2 start ecosystem.config.js
+pm2 save
 ```
 
-La configuration se trouve dans `ecosystem.config.js`.
+Le site est accessible sur `http://localhost:3010`.
+Nginx proxyfie vers `https://verdure.maisonpicard.com`.
 
-## Déploiement
+## Configurer Stripe
 
-Le site est déployé sur le VPS à l'adresse :
+1. Créez un compte Stripe → [dashboard.stripe.com](https://dashboard.stripe.com)
+2. Allez dans **Developers → API Keys**
+3. Copiez les clés test dans `.env` :
+   ```
+   STRIPE_SECRET_KEY=sk_test_xxxxx
+   STRIPE_PUBLISHABLE_KEY=pk_test_xxxxx
+   ```
+4. Créez un produit **"Acompte 30% Verdure & Cie"** (montant fixe, 30% du prix moyen)
+5. Copiez le Price ID (pri_test_xxxx) dans :
+   ```
+   STRIPE_PRICE_ID_ACOMPTE=pri_test_xxxxx
+   ```
+6. Redémarrez PM2 : `pm2 restart verdure`
 
-- **URL** : https://verdure.maisonpicard.com
-- **Racine** : `/var/www/verdure.maisonpicard.com/public_html/`
+### Mode test vs mode production
 
-Voir `ROADMAP.md` pour les prochaines étapes.
+- **Sans clés** : le formulaire envoie une demande manuelle (pas de paiement)
+- **Avec clés test** : paiement Stripe en mode test (carte : 4242 4242 4242 4242)
+- **Avec clés production** : paiements réels
 
----
+## Caution (500€)
 
-*Fait avec 🏡 par Atlas pour Brice*
+La caution est gérée **semi-manuellement** :
 
-## Améliorations réalisées (v2)
+1. **Affichée clairement** sur le site (section Conditions)
+2. **Option Stripe** : si `STRIPE_PRICE_ID_CAUTION` est configuré, un bouton "Payer la caution" apparaît après réservation
+3. **Remboursement** : manuel depuis le dashboard Stripe après le séjour (virement ou remboursement carte)
 
-| Domaine | Changement |
-|---------|-----------|
-| SEO | Balises Open Graph + Twitter Card + canonical |
-| SEO | JSON-LD (VacationRental) |
-| SEO | `robots.txt` + `sitemap.xml` |
-| SEO | Balises heading hiérarchisées (h1 → h2 → h3 → h4) |
-| Accessibilité | `lang="fr"`, `aria-label` sur le menu, labels de formulaire |
-| Performance | Cache 7 jours CSS/JS, 30 jours favicon |
-| Performance | Gzip activé (text/css, js, svg, text/plain) |
-| Liens morts | Logo → `/`, liens Booking/Airbnb neutralisés |
-| 404 | Page personnalisée cohérente avec le design |
-| Favicon | SVG inline (🌿) |
-| Infra | Nginx `proxy_intercept_errors` pour 404 custom |
+Stripe ne propose pas de préautorisation native via Checkout. La solution actuelle :
+- Paiement séparé pour la caution (optionnel)
+- Remboursement manuel via le dashboard Stripe
+- Avant déploiement final, vous pouvez :
+  - Utiliser Stripe Payment Links pour la caution
+  - Ou intégrer Stripe Payment Intents pour une préautorisation (plus complexe)
+
+## Modifier les photos
+
+Les 68 photos sont dans `assets/images/`. Pour changer la galerie :
+
+1. Ajoutez vos photos dans `assets/images/`
+2. Modifiez le tableau `photos` dans `public/app.js` (fonction `loadGallery`)
+3. Les photos sont référencées par leur nom de fichier
+
+## Variables d'environnement
+
+| Variable | Obligatoire | Description |
+|----------|-------------|-------------|
+| `STRIPE_SECRET_KEY` | Non (mode manuel) | Clé secrète Stripe |
+| `STRIPE_PUBLISHABLE_KEY` | Non | Clé publiable Stripe |
+| `STRIPE_WEBHOOK_SECRET` | Non | Secret webhook Stripe |
+| `STRIPE_PRICE_ID_ACOMPTE` | Non | ID du prix acompte 30% |
+| `STRIPE_PRICE_ID_CAUTION` | Non | ID du prix caution 500€ |
+| `PORT` | Non (défaut: 3010) | Port local |
+| `SITE_URL` | Non | URL publique du site |
+| `CONTACT_EMAIL` | Non | Email de contact |
+
+## Commandes utiles
+
+```bash
+pm2 status verdure          # Voir l'état
+pm2 logs verdure            # Voir les logs
+pm2 restart verdure         # Redémarrer
+pm2 stop verdure            # Arrêter
+curl -I https://verdure.maisonpicard.com  # Vérifier HTTPS
+```
+
+## Licence
+
+Propriété de Brice — Tous droits réservés.

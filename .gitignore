@@ -1,1 +1,9 @@
-*.bak
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+npm-debug.log*
+
+# Keep example but not actual secrets
+!.env.example
