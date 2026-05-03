@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiement confirmé — Verdure & Cie</title>
-    <meta name="robots" content="noindex">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demande envoyée - Verdure & Cie</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <div class="hero" style="min-height:100vh;background:linear-gradient(135deg,#0f2b12,#1a4a20);">
-        <div class="hero__overlay" style="background:rgba(0,0,0,0.3);"></div>
-        <div class="hero__content">
-            <div style="font-size:4rem;margin-bottom:16px;">✅</div>
-            <h1 class="hero__title" style="font-size:clamp(2rem,4vw,3rem);">Paiement confirmé !</h1>
-            <p class="hero__desc" style="max-width:500px;margin:0 auto 32px;">
-                Merci pour votre réservation. Votre acompte a bien été reçu.
-                Vous allez recevoir un email de confirmation avec les détails de votre séjour.
-            </p>
-            <a href="/" class="btn btn--outline">← Retour à l'accueil</a>
-        </div>
+  <main class="section booking" style="min-height:100vh;display:grid;place-items:center;">
+    <div class="container" style="max-width:720px;text-align:center;">
+      <p class="eyebrow">Verdure & Cie</p>
+      <h1 style="font-size:clamp(3rem,8vw,5rem);color:var(--leaf);">Demande envoyée</h1>
+      <p style="color:var(--muted);">Votre message a bien été transmis. Vous pouvez aussi consulter Airbnb ou Booking pour vérifier les disponibilités.</p>
+      <div class="hero__actions" style="justify-content:center;margin-top:28px;">
+        <a class="btn btn--primary" href="/">Retour au site</a>
+        <a class="btn btn--secondary btn--dark" href="/#reserver">Disponibilités</a>
+      </div>
     </div>
+  </main>
 </body>
 </html>

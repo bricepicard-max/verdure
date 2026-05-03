@@ -16,9 +16,9 @@
 
 ## Phase 3 — Réservation directe
 - [ ] Intégration calendrier des disponibilités (manuel → automatisé)
-- [ ] Système de paiement Stripe (acompte 30%)
 - [ ] Backend léger pour les réservations
 - [ ] Email automatique de confirmation
+- [ ] Parcours de règlement en ligne, à étudier seulement après validation de la vitrine
 
 ## Phase 4 — Synchronisation
 - [ ] Sync calendrier avec Booking.com via API
