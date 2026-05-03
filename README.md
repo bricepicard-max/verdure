@@ -54,3 +54,19 @@ Voir `ROADMAP.md` pour les prochaines étapes.
 ---
 
 *Fait avec 🏡 par Atlas pour Brice*
+
+## Améliorations réalisées (v2)
+
+| Domaine | Changement |
+|---------|-----------|
+| SEO | Balises Open Graph + Twitter Card + canonical |
+| SEO | JSON-LD (VacationRental) |
+| SEO | `robots.txt` + `sitemap.xml` |
+| SEO | Balises heading hiérarchisées (h1 → h2 → h3 → h4) |
+| Accessibilité | `lang="fr"`, `aria-label` sur le menu, labels de formulaire |
+| Performance | Cache 7 jours CSS/JS, 30 jours favicon |
+| Performance | Gzip activé (text/css, js, svg, text/plain) |
+| Liens morts | Logo → `/`, liens Booking/Airbnb neutralisés |
+| 404 | Page personnalisée cohérente avec le design |
+| Favicon | SVG inline (🌿) |
+| Infra | Nginx `proxy_intercept_errors` pour 404 custom |

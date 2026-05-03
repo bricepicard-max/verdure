@@ -9,56 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://verdure.maisonpicard.com/">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Verdure &amp; Cie — Maison de vacances en pleine nature">
-    <meta property="og:description" content="Verdure &amp; Cie : maison de vacances indépendante, chaleureuse et tout confort. Réservez votre séjour au calme, entouré de nature.">
-    <meta property="og:url" content="https://verdure.maisonpicard.com/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="fr_FR">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Verdure &amp; Cie — Maison de vacances en pleine nature">
-    <meta name="twitter:description" content="Verdure &amp; Cie : maison de vacances indépendante, chaleureuse et tout confort. Réservez votre séjour au calme, entouré de nature.">
-
-    <!-- JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "VacationRental",
-      "name": "Verdure &amp; Cie",
-      "description": "Maison de vacances indépendante, chaleureuse et tout confort.",
-      "url": "https://verdure.maisonpicard.com/",
-      "telephone": "hello@maisonpicard.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "FR"
-      },
-      "numberOfBedrooms": 3,
-      "occupancy": {
-        "@type": "QuantitativeValue",
-        "maxValue": 6,
-        "unitText": "personnes"
-      },
-      "petsAllowed": true,
-      "amenityFeature": [
-        {"@type": "LocationFeatureSpecification", "name": "Wi-Fi"},
-        {"@type": "LocationFeatureSpecification", "name": "Cheminée"},
-        {"@type": "LocationFeatureSpecification", "name": "Parking gratuit"},
-        {"@type": "LocationFeatureSpecification", "name": "Jardin clos"}
-      ]
-    }
-    </script>
 </head>
 <body>
 
     <!-- Navigation -->
     <nav class="nav" id="nav">
         <div class="nav__container">
-            <a href="/" class="nav__logo">
+            <a href="#" class="nav__logo">
                 <span class="nav__logo-icon">🌿</span>
                 <span class="nav__logo-text">Verdure & Cie</span>
             </a>
@@ -301,7 +258,7 @@
                     <textarea id="message" name="message" class="form__input form__textarea" required placeholder="Quelques mots sur votre séjour idéal..." rows="5"></textarea>
                 </div>
                 <button type="submit" class="btn btn--primary btn--full">Envoyer la demande</button>
-                <p class="form__footnote">⭐ Vous nous trouvez aussi sur Booking.com et Airbnb</p>
+                <p class="form__footnote">⭐ Vous nous trouvez aussi sur <a href="#">Booking.com</a> et <a href="#">Airbnb</a></p>
             </form>
         </div>
     </section>
@@ -326,8 +283,8 @@
                 <div class="footer__links">
                     <h4>Réservations</h4>
                     <ul>
-                        <li><span>Booking.com</span></li>
-                        <li><span>Airbnb</span></li>
+                        <li><a href="#">Booking.com</a></li>
+                        <li><a href="#">Airbnb</a></li>
                         <li><a href="#contact">Contact direct</a></li>
                     </ul>
                 </div>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page non trouvée — Verdure & Cie</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://verdure.maisonpicard.com/404.html">
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 24px;
+            background: #faf8f3;
+            position: relative;
+        }
+        .error-page__code {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(6rem, 16vw, 10rem);
+            line-height: 1;
+            color: #2d5a27;
+            opacity: 0.15;
+            margin-bottom: -20px;
+        }
+        .error-page__title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: #1a3a1a;
+            margin-bottom: 12px;
+        }
+        .error-page__text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #6a6a6a;
+            margin-bottom: 32px;
+            max-width: 400px;
+        }
+        .error-page__leaf {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+        .btn--home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: #2d5a27;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .btn--home:hover { background: #3a7d3a; }
+    </style>
+</head>
+<body>
+    <div class="error-page">
+        <div class="error-page__leaf">🌿</div>
+        <div class="error-page__code">404</div>
+        <h1 class="error-page__title">Page non trouvée</h1>
+        <p class="error-page__text">Désolé, cette page n'existe pas ou a été déplacée. Le calme de la nature vous attend ailleurs.</p>
+        <a href="/" class="btn--home">← Retour à l'accueil</a>
+    </div>
+</body>
+</html>
