@@ -7,6 +7,7 @@ Site vitrine statique pour la maison de vacances **Verdure & Cie**, propriété 
 - **HTML / CSS / JS** — site statique, responsive, sans backend
 - **Nginx** — servi via `verdure.maisonpicard.com`
 - **Aucune dépendance externe** — zéro build, zéro package
+- **PM2** — processus géré automatiquement (port 3010)
 
 ## Structure
 
@@ -29,11 +30,17 @@ python3 -m http.server 3010
 # → http://localhost:3010
 ```
 
-Ou avec le script intégré :
+## Production (PM2)
 
+Le site est géré par **PM2** avec redémarrage automatique :
+
+```bash
+pm2 status verdure
+pm2 logs verdure
+pm2 restart verdure
 ```
-./serve.sh
-```
+
+La configuration se trouve dans `ecosystem.config.js`.
 
 ## Déploiement
 
