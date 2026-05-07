@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGallery();
   initDates();
   initAvailabilityForm();
+  initBookingCalendar();
   initAdminClientForm();
   initClientPortal();
 });
@@ -487,6 +488,124 @@ function documentCard(type, title, acceptedText, isSigned, link) {
       ${isSigned ? '<p class="signed-badge">Document signé</p>' : ''}
     </article>
   `;
+}
+
+function initBookingCalendar() {
+  const calEl = document.getElementById('bookingCalendar');
+  if (!calEl) return;
+
+  const arrivalInput = document.getElementById('arrival');
+  const departureInput = document.getElementById('departure');
+
+  let startDate = null;
+  let endDate = null;
+  let bookedRanges = [];
+  const now = new Date();
+  let calYear = now.getFullYear();
+  let calMonth = now.getMonth();
+
+  const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+  function toISO(compact) {
+    return `${compact.slice(0,4)}-${compact.slice(4,6)}-${compact.slice(6,8)}`;
+  }
+
+  function todayCompact() {
+    const t = new Date();
+    return `${t.getFullYear()}${String(t.getMonth()+1).padStart(2,'0')}${String(t.getDate()).padStart(2,'0')}`;
+  }
+
+  function isBooked(c) {
+    return bookedRanges.some(r => c >= r.start && c < r.end);
+  }
+
+  function hasBookedInRange(s, e) {
+    return bookedRanges.some(r => r.start < e && r.end > s);
+  }
+
+  function renderMonth(year, month) {
+    const firstDow = new Date(year, month, 1).getDay();
+    const offset = (firstDow + 6) % 7;
+    const days = new Date(year, month + 1, 0).getDate();
+    const today = todayCompact();
+    let html = `<div class="cal-month"><h3 class="cal-month__title">${MONTH_FR[month]} ${year}</h3><div class="cal-grid">`;
+    ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(d => { html += `<div class="cal-head">${d}</div>`; });
+    for (let i = 0; i < offset; i++) html += '<div></div>';
+    for (let d = 1; d <= days; d++) {
+      const compact = `${year}${String(month+1).padStart(2,'0')}${String(d).padStart(2,'0')}`;
+      const past = compact < today;
+      const booked = !past && isBooked(compact);
+      let cls = 'cal-cell';
+      if (past) cls += ' cal-cell--past';
+      else if (booked) cls += ' cal-cell--booked';
+      else cls += ' cal-cell--available';
+      if (!past && !booked && startDate && compact === startDate) cls += ' cal-cell--start';
+      else if (!past && !booked && endDate && compact === endDate) cls += ' cal-cell--end';
+      else if (!past && !booked && startDate && endDate && compact > startDate && compact < endDate) cls += ' cal-cell--range';
+      html += `<div class="${cls}" data-date="${compact}">${d}</div>`;
+    }
+    html += '</div></div>';
+    return html;
+  }
+
+  function render() {
+    let months = '';
+    for (let i = 0; i < 3; i++) {
+      let y = calYear, m = calMonth + i;
+      if (m > 11) { m -= 12; y++; }
+      months += renderMonth(y, m);
+    }
+    calEl.innerHTML = `
+      <div class="cal-wrapper">
+        <div class="cal-nav">
+          <button class="cal-nav__btn" id="calPrev" type="button" aria-label="Mois précédents">&#8592;</button>
+          <span class="cal-nav__label">${MONTH_FR[calMonth]} ${calYear}</span>
+          <button class="cal-nav__btn" id="calNext" type="button" aria-label="Mois suivants">&#8594;</button>
+        </div>
+        <div class="cal-months">${months}</div>
+        <div class="cal-legend">
+          <span class="cal-legend__item"><span class="cal-legend__dot cal-legend__dot--available"></span>Disponible</span>
+          <span class="cal-legend__item"><span class="cal-legend__dot cal-legend__dot--booked"></span>Réservé</span>
+          <span class="cal-legend__item"><span class="cal-legend__dot cal-legend__dot--selected"></span>Vos dates</span>
+        </div>
+      </div>`;
+
+    document.getElementById('calPrev').addEventListener('click', () => {
+      const minYear = now.getFullYear(), minMonth = now.getMonth();
+      if (calYear > minYear || (calYear === minYear && calMonth > minMonth)) {
+        calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
+        render();
+      }
+    });
+    document.getElementById('calNext').addEventListener('click', () => {
+      calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
+      render();
+    });
+
+    calEl.querySelectorAll('.cal-cell--available').forEach(cell => {
+      cell.addEventListener('click', () => {
+        const d = cell.dataset.date;
+        if (!startDate || (startDate && endDate)) {
+          startDate = d; endDate = null;
+        } else if (d <= startDate) {
+          startDate = d; endDate = null;
+        } else if (hasBookedInRange(startDate, d)) {
+          startDate = d; endDate = null;
+        } else {
+          endDate = d;
+        }
+        if (arrivalInput) arrivalInput.value = startDate ? toISO(startDate) : '';
+        if (departureInput) departureInput.value = endDate ? toISO(endDate) : '';
+        render();
+      });
+    });
+  }
+
+  fetch('/api/availability')
+    .then(r => r.json())
+    .then(data => { bookedRanges = (data.events || []).filter(e => e.start && e.end); })
+    .catch(() => {})
+    .finally(() => render());
 }
 
 // Scroll reveal

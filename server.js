@@ -10,6 +10,8 @@ const express = require('express');
 const helmet = require('helmet');
 const path = require('path');
 const crypto = require('crypto');
+const https = require('https');
+const http = require('http');
 const Stripe = require('stripe');
 const db = require('./db');
 
@@ -20,6 +22,8 @@ const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'hello@maisonpicard.com';
 const SITE_URL = process.env.SITE_URL || `http://127.0.0.1:${PORT}`;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
+const ICAL_AIRBNB = process.env.ICAL_AIRBNB || '';
+const ICAL_BOOKING = process.env.ICAL_BOOKING || '';
 const STRIPE_CURRENCY = process.env.STRIPE_CURRENCY || 'eur';
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 
@@ -218,6 +222,65 @@ app.post('/api/send-request', (req, res) => {
   console.log(`   Contact: ${CONTACT_EMAIL}`);
 
   res.json({ success: true });
+});
+
+function fetchUrl(url, redirectsLeft = 5) {
+  return new Promise((resolve, reject) => {
+    if (!url) return reject(new Error('URL vide'));
+    const mod = url.startsWith('https') ? https : http;
+    const req = mod.get(url, { timeout: 10000 }, (res) => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location && redirectsLeft > 0) {
+        return resolve(fetchUrl(res.headers.location, redirectsLeft - 1));
+      }
+      let data = '';
+      res.setEncoding('utf8');
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => resolve(data));
+    });
+    req.on('timeout', () => { req.destroy(); reject(new Error('Timeout iCal')); });
+    req.on('error', reject);
+  });
+}
+
+function parseIcalDate(str) {
+  if (!str) return '';
+  // Remove TZID=... prefix and VALUE=DATE: prefix
+  const val = str.replace(/^.*?:/,'').replace(/[- ]/g,'').trim();
+  // Take first 8 chars = YYYYMMDD
+  return val.slice(0, 8);
+}
+
+function parseIcal(text) {
+  const events = [];
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+    .replace(/\n[ \t]/g, '') // unfold
+    .split('\n');
+  let current = null;
+  for (const line of lines) {
+    if (line === 'BEGIN:VEVENT') { current = {}; }
+    else if (line === 'END:VEVENT') {
+      if (current && current.start && current.end) events.push(current);
+      current = null;
+    } else if (current) {
+      if (line.startsWith('DTSTART')) current.start = parseIcalDate(line.split(':').slice(1).join(':'));
+      else if (line.startsWith('DTEND')) current.end = parseIcalDate(line.split(':').slice(1).join(':'));
+      else if (line.startsWith('SUMMARY:')) current.summary = line.slice(8);
+    }
+  }
+  return events;
+}
+
+app.get('/api/availability', async (req, res) => {
+  const unconfigured = !ICAL_AIRBNB && !ICAL_BOOKING;
+  if (unconfigured) return res.json({ events: [], unconfigured: true });
+
+  const fetches = [ICAL_AIRBNB, ICAL_BOOKING].filter(Boolean).map((url) =>
+    fetchUrl(url).then(parseIcal).catch(() => [])
+  );
+  const results = await Promise.all(fetches);
+  const all = results.flat();
+  const events = all.map((e) => ({ start: e.start, end: e.end }));
+  res.json({ events, unconfigured: false });
 });
 
 app.use((req, res) => {

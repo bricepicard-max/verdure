@@ -1,30 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reservation - Verdure & Cie</title>
-  <meta name="description" content="Demandez une disponibilité pour Verdure & Cie ou consultez les annonces Airbnb et Booking. Pas de paiement Stripe sur le site pour l'instant.">
-  <link rel="canonical" href="https://verdure.maisonpicard.com/reservation"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Réserver — Verdure & Cie</title>
+  <meta name="description" content="Réservez directement Verdure & Cie à Saint-Pierre, La Réunion. Consultez les disponibilités en temps réel et contactez l'hôte sans commission.">
+  <link rel="canonical" href="https://verdure.maisonpicard.com/reservation">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <nav class="nav" aria-label="Navigation principale"><div class="container nav__inner"><a class="nav__brand" href="/">Verdure & Cie</a><button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button><div class="nav__links" id="navLinks"><a data-nav href="/">Accueil</a><a data-nav href="/villa">Villa</a><a data-nav href="/photos">Photos</a><a data-nav href="/equipements">Equipements</a><a data-nav href="/localisation">Localisation</a><a data-nav href="/tarifs">Tarifs</a><a data-nav class="nav__cta" href="/reservation">Reservation</a></div></div></nav>
-  <main>
-    <header class="hero hero--compact"><picture class="hero__media"><img src="/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg" alt="Piscine éclairée de nuit"></picture><div class="hero__shade"></div><div class="container hero__content"><p class="eyebrow eyebrow--light">Reservation</p><h1>Vérifier une disponibilité.</h1><p>Consultez les plateformes pour les prix en temps réel ou envoyez une demande directe pour un premier échange.</p></div></header>
-    <section class="section"><div class="container split"><div><p class="eyebrow">Plateformes</p><h2>Airbnb, Booking ou demande directe.</h2><p class="lead">Les disponibilités les plus à jour sont généralement visibles sur les plateformes. Le formulaire ci-contre permet de poser une question ou de demander une confirmation.</p><div class="actions" style="margin-top:26px"><a class="btn btn--primary" href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Consulter Airbnb</a><a class="btn btn--outline" href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Voir sur Booking</a></div><p class="note" style="margin-top:24px">Aucun paiement Stripe n'est activé sur ce site pour l'instant.</p></div>
-      <form class="form" id="availabilityForm">
-        <div class="form__row"><label><span>Nom</span><input type="text" id="name" name="name" autocomplete="name" required></label><label><span>Email</span><input type="email" id="email" name="email" autocomplete="email" required></label></div>
-        <label><span>Téléphone</span><input type="tel" id="phone" name="phone" autocomplete="tel"></label>
-        <div class="form__row"><label><span>Arrivée</span><input type="date" id="arrival" name="arrival" required></label><label><span>Départ</span><input type="date" id="departure" name="departure" required></label></div>
-        <label><span>Voyageurs</span><select id="guests" name="guests"><option value="2">2 voyageurs</option><option value="3">3 voyageurs</option><option value="4">4 voyageurs</option><option value="5">5 voyageurs</option><option value="6">6 voyageurs</option><option value="7">7 voyageurs</option><option value="8">8 voyageurs</option></select></label>
-        <label><span>Message</span><textarea id="message" name="message" placeholder="Dates souhaitées, contexte du séjour, questions utiles..."></textarea></label>
-        <button class="btn btn--primary btn--full" type="submit" id="submitBtn">Envoyer la demande</button>
-        <p class="form__note">Ce formulaire sert uniquement à vérifier une disponibilité.</p>
-        <p class="form__error" id="formError" hidden></p>
-      </form>
-    </div></section>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <nav class="nav" aria-label="Navigation principale">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="/">Verdure & Cie</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+      <div class="nav__links" id="navLinks">
+        <a data-nav href="/">Accueil</a>
+        <a data-nav href="/villa">Villa</a>
+        <a data-nav href="/photos">Photos</a>
+        <a data-nav href="/equipements">Équipements</a>
+        <a data-nav href="/localisation">Localisation</a>
+        <a data-nav href="/tarifs">Tarifs</a>
+        <a data-nav class="nav__cta" href="/reservation">Réserver</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="contenu">
+    <header class="hero hero--compact">
+      <picture class="hero__media">
+        <img src="/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg" alt="Piscine de Verdure & Cie éclairée de nuit">
+      </picture>
+      <div class="hero__shade"></div>
+      <div class="container hero__content">
+        <p class="eyebrow eyebrow--light">Réservation directe</p>
+        <h1>Réservez en direct.</h1>
+        <p>Sans commission, sans intermédiaire — au meilleur tarif, avec une réponse sous 24h.</p>
+      </div>
+    </header>
+
+    <!-- Calendrier des disponibilités -->
+    <section class="section section--linen">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow">Disponibilités</p>
+          <h2>Choisissez vos dates.</h2>
+          <p class="lead">Cliquez sur une date d'arrivée puis une date de départ. Le formulaire de demande se remplit automatiquement.</p>
+        </div>
+        <div id="bookingCalendar"></div>
+      </div>
+    </section>
+
+    <!-- Formulaire de demande -->
+    <section class="section">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">Demande directe</p>
+          <h2>Envoyez votre demande.</h2>
+          <p class="lead">Précisez vos dates, le nombre de voyageurs et tout élément utile. L'hôte vous répond personnellement sous 24 h.</p>
+          <ul style="margin-top:20px;display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:.92rem">
+            <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--leaf);font-weight:800">✓</span> Pas de commission de plateforme</li>
+            <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--leaf);font-weight:800">✓</span> Réponse personnalisée sous 24 h</li>
+            <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--leaf);font-weight:800">✓</span> Tarif le plus avantageux garanti</li>
+          </ul>
+        </div>
+
+        <form class="form" id="availabilityForm">
+          <div class="form__row">
+            <label><span>Nom</span><input type="text" id="name" name="name" autocomplete="name" required></label>
+            <label><span>Email</span><input type="email" id="email" name="email" autocomplete="email" required></label>
+          </div>
+          <label><span>Téléphone</span><input type="tel" id="phone" name="phone" autocomplete="tel"></label>
+          <div class="form__row">
+            <label><span>Arrivée</span><input type="date" id="arrival" name="arrival" required></label>
+            <label><span>Départ</span><input type="date" id="departure" name="departure" required></label>
+          </div>
+          <label>
+            <span>Voyageurs</span>
+            <select id="guests" name="guests">
+              <option value="2">2 voyageurs</option>
+              <option value="3">3 voyageurs</option>
+              <option value="4">4 voyageurs</option>
+              <option value="5">5 voyageurs</option>
+              <option value="6">6 voyageurs</option>
+              <option value="7">7 voyageurs</option>
+              <option value="8">8 voyageurs</option>
+            </select>
+          </label>
+          <label><span>Message</span><textarea id="message" name="message" placeholder="Dates souhaitées, contexte du séjour, questions utiles…"></textarea></label>
+          <button class="btn btn--primary btn--full" type="submit" id="submitBtn">Envoyer la demande</button>
+          <p class="form__note">Réservation directe — aucun frais de plateforme.</p>
+          <p class="form__error" id="formError" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Pourquoi réserver en direct -->
+    <section class="section section--leaf">
+      <div class="container">
+        <div class="section__head section__head--center" style="color:#fff">
+          <p class="eyebrow eyebrow--light">Pourquoi réserver en direct</p>
+          <h2 style="color:#fff">Trois bonnes raisons.</h2>
+        </div>
+        <div class="direct-benefits">
+          <div class="direct-benefit">
+            <div class="direct-benefit__icon">💸</div>
+            <h3>Pas de commission</h3>
+            <p>Airbnb et Booking prélèvent jusqu'à 18 % de frais. En direct, ces frais n'existent pas.</p>
+          </div>
+          <div class="direct-benefit">
+            <div class="direct-benefit__icon">💬</div>
+            <h3>Réponse directe sous 24 h</h3>
+            <p>Vous échangez directement avec l'hôte — pas d'algorithme, pas de délai de modération.</p>
+          </div>
+          <div class="direct-benefit">
+            <div class="direct-benefit__icon">🏷️</div>
+            <h3>Tarif le plus avantageux</h3>
+            <p>Le tarif proposé en direct est toujours au moins équivalent, souvent inférieur aux plateformes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer class="footer"><div class="container footer__grid"><div><strong>Verdure & Cie</strong><p>Villa de vacances à Saint-Pierre, La Réunion.</p></div><div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Equipements</a></div><div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Reservation</a></div><div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div></div><div class="container footer__bottom">© 2026 Verdure & Cie.</div></footer>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div><strong>Verdure & Cie</strong><p>Villa de vacances à Saint-Pierre, La Réunion.</p></div>
+      <div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Équipements</a></div>
+      <div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Réserver</a></div>
+      <div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="tel:+262692512766">0692 51 27 66</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div>
+    </div>
+    <div class="container footer__bottom">© 2026 Verdure & Cie.</div>
+  </footer>
   <script src="/app.js"></script>
 </body>
 </html>
