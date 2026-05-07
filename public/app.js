@@ -142,38 +142,52 @@ document.addEventListener('DOMContentLoaded', () => {
   initClientPortal();
 });
 
+const galleryGroups = [
+  { id: 'piscine',    label: 'Piscine',                  photoIds: [6, 28, 37, 51, 59, 69, 72, 77, 78, 79, 80, 81, 92, 104, 106, 107] },
+  { id: 'exterieurs', label: 'Extérieurs & Jardin',       photoIds: [67, 68, 48, 1, 2, 11, 39, 40, 41, 45, 57, 73, 74, 82, 87, 88, 93, 94, 103, 105] },
+  { id: 'sejour',     label: 'Séjour',                    photoIds: [3, 18, 25, 42, 96, 58, 34] },
+  { id: 'cuisine',    label: 'Cuisine & Salle à manger',  photoIds: [23, 83, 36, 32, 31, 97, 61, 14, 29, 62] },
+  { id: 'espaces',    label: 'Espaces communs',            photoIds: [20, 71, 16] },
+  { id: 'chambre1',   label: 'Chambre 1',                  photoIds: [60, 65, 15] },
+  { id: 'chambre2',   label: 'Chambre 2',                  photoIds: [19] },
+  { id: 'chambre3',   label: 'Chambre 3',                  photoIds: [26, 46, 54] },
+  { id: 'chambre4',   label: 'Chambre 4',                  photoIds: [43, 22] },
+  { id: 'chambre5',   label: 'Chambre 5',                  photoIds: [8, 13, 21, 24, 44] },
+  { id: 'bain1',      label: 'Salle de bain 1',            photoIds: [38, 4, 99] },
+  { id: 'bain2',      label: 'Salle de bain 2',            photoIds: [33, 86] },
+  { id: 'bain3',      label: 'Salle de bain 3',            photoIds: [50, 63, 27] },
+  { id: 'details',    label: 'Attentions & Accueil',       photoIds: [5, 7, 9, 10, 12, 17, 30, 35, 47, 49, 52, 53, 55, 56, 64, 66, 75, 76, 70, 84, 85, 89, 90, 91, 95, 98, 100, 101, 102] },
+];
+
 function initGallery() {
   const gallery = document.getElementById('photoGallery');
   if (!gallery) return;
 
-  const render = (category) => {
-    const photos = category === 'all'
-      ? photoIndex
-      : photoIndex.filter((photo) => photo.category === category);
+  gallery.innerHTML = galleryGroups.map((group) => {
+    const photos = group.photoIds
+      .map((id) => photoIndex.find((p) => p.id === id))
+      .filter(Boolean);
+    if (!photos.length) return '';
 
-    gallery.innerHTML = photos.map((photo) => `
-      <figure class="gallery-card" data-category="${photo.category}">
+    const cards = photos.map((photo, idx) => `
+      <figure class="gallery-card${idx === 0 ? ' gallery-card--featured' : ''}">
         <button class="gallery-card__button" type="button" data-photo-id="${photo.id}" aria-label="Agrandir : ${photo.title}">
           <img src="/assets/images/${photo.file}" alt="${photo.alt}" loading="lazy">
-          <span class="gallery-card__number">${String(photo.id).padStart(2, '0')}</span>
         </button>
-        <figcaption>
-          <strong>${photo.title}</strong>
-          <span>${categoryLabel(photo.category)}</span>
-        </figcaption>
+        <figcaption>${photo.title}</figcaption>
       </figure>
     `).join('');
-  };
 
-  render('all');
-
-  document.querySelectorAll('[data-filter]').forEach((button) => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('[data-filter]').forEach((item) => item.classList.remove('is-active'));
-      button.classList.add('is-active');
-      render(button.dataset.filter);
-    });
-  });
+    return `
+      <section class="gallery-group" id="group-${group.id}">
+        <header class="gallery-group__header">
+          <h2 class="gallery-group__title">${group.label}</h2>
+          <span class="gallery-group__count">${photos.length} photo${photos.length > 1 ? 's' : ''}</span>
+        </header>
+        <div class="gallery-group__grid">${cards}</div>
+      </section>
+    `;
+  }).join('');
 
   gallery.addEventListener('click', (event) => {
     const button = event.target.closest('[data-photo-id]');
@@ -198,29 +212,50 @@ function openLightbox(photo) {
   const existing = document.querySelector('.lightbox');
   if (existing) existing.remove();
 
+  const allPhotos = galleryGroups.flatMap((g) =>
+    g.photoIds.map((id) => photoIndex.find((p) => p.id === id)).filter(Boolean)
+  );
+  let currentIdx = allPhotos.findIndex((p) => p.id === photo.id);
+  if (currentIdx === -1) currentIdx = 0;
+
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
-  lightbox.innerHTML = `
-    <button class="lightbox__close" type="button" aria-label="Fermer">×</button>
-    <figure>
-      <img src="/assets/images/${photo.file}" alt="${photo.alt}">
-      <figcaption><span>${String(photo.id).padStart(2, '0')}</span>${photo.title}</figcaption>
-    </figure>
-  `;
   document.body.appendChild(lightbox);
   document.body.classList.add('is-lightbox-open');
+
+  const render = (idx) => {
+    const p = allPhotos[idx];
+    lightbox.innerHTML = `
+      <button class="lightbox__close" type="button" aria-label="Fermer">×</button>
+      <button class="lightbox__prev" type="button" aria-label="Photo précédente">‹</button>
+      <button class="lightbox__next" type="button" aria-label="Photo suivante">›</button>
+      <figure>
+        <img src="/assets/images/${p.file}" alt="${p.alt}">
+        <figcaption>${p.title}</figcaption>
+      </figure>
+    `;
+  };
+
+  render(currentIdx);
 
   const close = () => {
     lightbox.remove();
     document.body.classList.remove('is-lightbox-open');
     document.removeEventListener('keydown', onKeydown);
   };
+  const prev = () => { currentIdx = (currentIdx - 1 + allPhotos.length) % allPhotos.length; render(currentIdx); };
+  const next = () => { currentIdx = (currentIdx + 1) % allPhotos.length; render(currentIdx); };
+
   const onKeydown = (event) => {
     if (event.key === 'Escape') close();
+    if (event.key === 'ArrowLeft') prev();
+    if (event.key === 'ArrowRight') next();
   };
 
   lightbox.addEventListener('click', (event) => {
     if (event.target === lightbox || event.target.closest('.lightbox__close')) close();
+    if (event.target.closest('.lightbox__prev')) prev();
+    if (event.target.closest('.lightbox__next')) next();
   });
   document.addEventListener('keydown', onKeydown);
 }
