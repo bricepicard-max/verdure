@@ -299,6 +299,37 @@ h3{font-size:1.45rem;color:var(--leaf)}
   .reveal{opacity:1;transform:none}
 }
 
+/* === MANIFESTE === */
+.section--manifesto{background:#0e1f11;padding:96px 0}
+.manifesto{max-width:820px;margin:0 auto;text-align:center}
+.manifesto > p:first-child{font-family:var(--serif);font-size:clamp(2.2rem,4.5vw,3.8rem);color:#fff;line-height:1.18;margin-bottom:28px}
+.manifesto > p:first-child em{color:#c9d8a0;font-style:italic}
+.manifesto__sub{font-size:clamp(1rem,1.8vw,1.2rem);color:rgba(255,255,255,.58);line-height:1.7;max-width:600px;margin:0 auto 14px}
+
+/* === SCÈNES IMMERSIVES === */
+.section--scenes{background:var(--white);padding:80px 0}
+.scenes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.scene{position:relative;overflow:hidden;border-radius:12px;background:#0e1f11}
+.scene--wide{}
+.scene__media{overflow:hidden;aspect-ratio:3/4}
+.scene--wide .scene__media{aspect-ratio:3/4}
+.scene__media img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;display:block}
+.scene:hover .scene__media img{transform:scale(1.06)}
+.scene__body{padding:22px 24px 26px;background:#fff;border-top:3px solid var(--sun)}
+.scene__body h3{font-family:var(--serif);font-size:1.5rem;color:var(--leaf);line-height:1.2;margin-bottom:10px}
+.scene__body p{color:var(--muted);font-size:.95rem;line-height:1.6}
+
+/* === CHIFFRES FORTS === */
+.section--numbers{background:var(--leaf);padding:64px 0}
+.numbers-grid{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0}
+.number-item{text-align:center;padding:10px 32px}
+.number-item strong{display:block;font-family:var(--serif);font-size:clamp(3.5rem,6vw,5.5rem);color:#fff;line-height:1}
+.number-item span{display:block;font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.52);margin-top:6px}
+.number-sep{width:1px;height:52px;background:rgba(255,255,255,.2);flex-shrink:0}
+
+/* HERO italic */
+.hero h1 em{font-style:italic;color:#f2b06d}
+
 /* === GALERIE GROUPÉE (style Airbnb) === */
 .gallery-nav{position:sticky;top:var(--nav);z-index:10;background:rgba(255,253,248,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
 .gallery-nav__inner{display:flex;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
@@ -350,6 +381,10 @@ h3{font-size:1.45rem;color:var(--leaf)}
   .gallery-group__grid .gallery-card:not(.gallery-card--featured) .gallery-card__button img{height:200px}
   .address-block{grid-template-columns:1fr}
   .equip-groups{grid-template-columns:repeat(2,1fr)}
+  .scenes-grid{grid-template-columns:1fr 1fr}
+  .scene:last-child{grid-column:span 2}
+  .numbers-grid{gap:0}
+  .number-item{padding:10px 22px}
 }
 @media(max-width:620px){
   .gallery-group__grid{grid-template-columns:1fr}
@@ -360,4 +395,12 @@ h3{font-size:1.45rem;color:var(--leaf)}
   .equip-groups{grid-template-columns:1fr}
   .lightbox__prev{left:8px}
   .lightbox__next{right:8px}
+  .scenes-grid{grid-template-columns:1fr}
+  .scene:last-child{grid-column:auto}
+  .scene__media{aspect-ratio:4/3}
+  .numbers-grid{flex-wrap:wrap;gap:0}
+  .number-item{width:50%;padding:16px 8px}
+  .number-sep{display:none}
+  .section--manifesto{padding:64px 0}
+  .manifesto > p:first-child{font-size:2rem}
 }
