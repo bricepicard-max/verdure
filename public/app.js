@@ -108,6 +108,91 @@ const photoIndex = [
   { id: 107, file: 'facebook/facebook-057.jpg', category: 'piscine', title: 'Piscine lumineuse', alt: 'Piscine privée avec eau claire et lumière tropicale' },
 ];
 
+// ─── Chat widget ─────────────────────────────────────────────────────────────
+(function initChat() {
+  const isAdminOrClient = window.location.pathname.startsWith('/admin')
+    || window.location.pathname.startsWith('/espace-client');
+  const bubble = document.createElement('button');
+  bubble.className = 'chat-bubble';
+  bubble.setAttribute('aria-label', 'Ouvrir le chat');
+  bubble.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+  document.body.appendChild(bubble);
+
+  const panel = document.createElement('div');
+  panel.className = 'chat-panel';
+  panel.setAttribute('aria-label', 'Chat Verdure & Cie');
+  panel.innerHTML = `
+    <div class="chat-panel__head">
+      <span>Verdure & Cie — Assistant</span>
+      <button class="chat-panel__close" aria-label="Fermer le chat">×</button>
+    </div>
+    <div class="chat-panel__messages" id="chatMessages">
+      <div class="chat-msg chat-msg--bot">Bonjour ! Je suis l’assistant de Verdure & Cie. Comment puis-je vous aider ?</div>
+    </div>
+    <form class="chat-panel__form" id="chatForm">
+      <input class="chat-panel__input" id="chatInput" type="text" placeholder="Votre question..." autocomplete="off" maxlength="300">
+      <button class="chat-panel__send" type="submit" aria-label="Envoyer">&#8593;</button>
+    </form>
+  `;
+  document.body.appendChild(panel);
+
+  let open = false;
+  const messages = [];
+
+  bubble.addEventListener('click', () => {
+    open = !open;
+    panel.classList.toggle('is-open', open);
+    bubble.classList.toggle('is-active', open);
+    if (open) panel.querySelector('#chatInput').focus();
+  });
+  panel.querySelector('.chat-panel__close').addEventListener('click', () => {
+    open = false;
+    panel.classList.remove('is-open');
+    bubble.classList.remove('is-active');
+  });
+
+  const msgEl = panel.querySelector('#chatMessages');
+  const addMsg = (text, role) => {
+    const div = document.createElement('div');
+    div.className = `chat-msg chat-msg--${role}`;
+    div.textContent = text;
+    msgEl.appendChild(div);
+    msgEl.scrollTop = msgEl.scrollHeight;
+  };
+
+  panel.querySelector('#chatForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = panel.querySelector('#chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMsg(text, 'user');
+    messages.push({ role: 'user', content: text });
+
+    const typing = document.createElement('div');
+    typing.className = 'chat-msg chat-msg--bot chat-msg--typing';
+    typing.textContent = '…';
+    msgEl.appendChild(typing);
+    msgEl.scrollTop = msgEl.scrollHeight;
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages }),
+      });
+      const data = await res.json();
+      typing.remove();
+      const reply = data.reply || 'Désolé, une erreur est survenue.';
+      messages.push({ role: 'assistant', content: reply });
+      addMsg(reply, 'bot');
+    } catch {
+      typing.remove();
+      addMsg('Connexion impossible. Appelez le 0692 51 27 66.', 'bot');
+    }
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
@@ -144,20 +229,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const galleryGroups = [
-  { id: 'piscine',    label: 'Piscine',                  photoIds: [6, 28, 37, 51, 59, 69, 72, 77, 78, 79, 80, 81, 92, 104, 106, 107] },
-  { id: 'exterieurs', label: 'Extérieurs & Jardin',       photoIds: [67, 68, 48, 1, 2, 11, 39, 40, 41, 45, 57, 73, 74, 82, 87, 88, 93, 94, 103, 105] },
-  { id: 'sejour',     label: 'Séjour',                    photoIds: [3, 18, 25, 42, 96, 58, 34] },
-  { id: 'cuisine',    label: 'Cuisine & Salle à manger',  photoIds: [23, 83, 36, 32, 31, 97, 61, 14, 29, 62] },
-  { id: 'espaces',    label: 'Espaces communs',            photoIds: [20, 71, 16] },
-  { id: 'chambre1',   label: 'Chambre 1',                  photoIds: [60, 65, 15] },
-  { id: 'chambre2',   label: 'Chambre 2',                  photoIds: [19] },
-  { id: 'chambre3',   label: 'Chambre 3',                  photoIds: [26, 46, 54] },
-  { id: 'chambre4',   label: 'Chambre 4',                  photoIds: [43, 22] },
-  { id: 'chambre5',   label: 'Chambre 5',                  photoIds: [8, 13, 21, 24, 44] },
-  { id: 'bain1',      label: 'Salle de bain 1',            photoIds: [38, 4, 99] },
-  { id: 'bain2',      label: 'Salle de bain 2',            photoIds: [33, 86] },
-  { id: 'bain3',      label: 'Salle de bain 3',            photoIds: [50, 63, 27] },
-  { id: 'details',    label: 'Attentions & Accueil',       photoIds: [5, 7, 9, 10, 12, 17, 30, 35, 47, 49, 52, 53, 55, 56, 64, 66, 75, 76, 70, 84, 85, 89, 90, 91, 95, 98, 100, 101, 102] },
+  { id: 'piscine',    label: 'Piscine',                  photoIds: [6, 28, 59, 51, 72, 92, 104, 107] },
+  { id: 'exterieurs', label: 'Extérieurs & Jardin',       photoIds: [67, 68, 48, 1, 2, 11, 39, 41, 45, 57, 73, 74, 87, 88, 103, 105] },
+  { id: 'sejour',     label: 'Séjour & Espaces communs',  photoIds: [3, 18, 25, 42, 58, 34, 96, 20, 71, 16] },
+  { id: 'cuisine',    label: 'Cuisine & Salle à manger',  photoIds: [23, 36, 32, 31, 83, 97, 61, 14, 29, 62] },
+  { id: 'chambres',   label: 'Chambres',                  photoIds: [60, 65, 15, 19, 26, 46, 54, 43, 22, 8, 13, 21, 24, 44] },
+  { id: 'bains',      label: 'Salles de bain',            photoIds: [50, 63, 38, 4, 99, 33, 86, 27] },
+  { id: 'details',    label: 'Attentions & Accueil',      photoIds: [5, 7, 9, 10, 12, 17, 30, 35, 47, 49, 52, 53, 55, 56, 64, 66, 75, 76, 95, 100, 101, 102] },
 ];
 
 function initGallery() {
@@ -435,15 +513,27 @@ function renderClientPortal(portal, token, client, signatures) {
     </aside>
 
     <section class="client-documents">
-      ${documentCard('contract', 'Contrat de location', 'Je reconnais avoir lu et accepté le contrat de location Verdure & Cie.', signed.has('contract'))}
-      ${documentCard('etat_des_lieux', 'État des lieux', 'Je reconnais que l’état des lieux sera réalisé à l’arrivée et au départ.', signed.has('etat_des_lieux'))}
-      ${documentCard('reglement', 'Règlement intérieur', 'Je reconnais avoir lu et accepté le règlement intérieur Verdure & Cie.', signed.has('reglement'), '/reglement-interieur')}
+      ${documentCard(‘contract’, ‘Contrat de location’, ‘Je reconnais avoir lu et accepté le contrat de location Verdure & Cie.’, signed.has(‘contract’), null, true)}
+      ${documentCard(‘etat_des_lieux’, ‘État des lieux’, ‘Je reconnais que l’état des lieux sera réalisé à l’arrivée et au départ en présence de l’hôte.’, signed.has(‘etat_des_lieux’))}
+      ${documentCard(‘reglement’, ‘Règlement intérieur’, ‘Je reconnais avoir lu et accepté le règlement intérieur Verdure & Cie.’, signed.has(‘reglement’), ‘/reglement-interieur’)}
     </section>
   `;
 
+  portal.querySelectorAll('[data-view-contract]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('verdure:showContract', { detail: client }));
+    });
+  });
+
   portal.querySelectorAll('[data-sign-document]').forEach((button) => {
     button.addEventListener('click', async () => {
-      await signDocument(token, client, button.dataset.signDocument, button.dataset.acceptedText);
+      const signed = await signDocument(
+        token, client,
+        button.dataset.signDocument,
+        button.dataset.acceptedText,
+        button.closest('.document-sign-card').querySelector('h3').textContent,
+      );
+      if (!signed) return;
       const response = await fetch(`/api/client/${token}`);
       const payload = await response.json();
       renderClientPortal(portal, token, payload.client, payload.signatures || []);
@@ -476,16 +566,17 @@ function renderClientPortal(portal, token, client, signatures) {
   });
 }
 
-function documentCard(type, title, acceptedText, isSigned, link) {
+function documentCard(type, title, acceptedText, isSigned, link, showContractBtn) {
   return `
     <article class="card document-sign-card ${isSigned ? 'is-signed' : ''}">
       <h3>${title}</h3>
       <p>${acceptedText}</p>
-      ${link ? `<a href="${link}" target="_blank" rel="noopener">Lire le document</a>` : ''}
+      ${showContractBtn ? '<button class="btn btn--ghost btn--full" type="button" data-view-contract="1" style="margin-bottom:8px">Lire le contrat complet</button>' : ''}
+      ${link ? `<a class="btn btn--ghost btn--full" href="${link}" target="_blank" rel="noopener" style="margin-bottom:8px">Lire le document</a>` : ''}
       <button class="btn ${isSigned ? 'btn--outline' : 'btn--primary'} btn--full" type="button" data-sign-document="${type}" data-accepted-text="${acceptedText}">
         ${isSigned ? 'Signer à nouveau' : 'Signer ce document'}
       </button>
-      ${isSigned ? '<p class="signed-badge">Document signé</p>' : ''}
+      ${isSigned ? '<p class="signed-badge">✓ Document signé</p>' : ''}
     </article>
   `;
 }
@@ -674,24 +765,127 @@ function initBookingCalendar() {
   }, { passive: true });
 })();
 
-async function signDocument(token, client, documentType, acceptedText) {
-  const signerName = window.prompt('Nom et prénom pour la signature', client.guestName || '');
-  if (!signerName) return;
-  const signerEmail = window.prompt('Email du signataire', client.guestEmail || '');
-  if (!signerEmail) return;
-  const confirmation = window.prompt('Tapez exactement : Lu et approuvé');
-  if (confirmation !== 'Lu et approuvé') {
-    window.alert('La mention doit être exactement : Lu et approuvé');
-    return;
-  }
+function signDocument(token, client, documentType, acceptedText, docTitle) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'sign-modal-overlay';
+    overlay.innerHTML = `
+      <div class="sign-modal" role="dialog" aria-modal="true" aria-labelledby="signModalTitle">
+        <button class="sign-modal__close" type="button" aria-label="Fermer">×</button>
+        <p class="eyebrow">Signature électronique</p>
+        <h2 id="signModalTitle">${docTitle}</h2>
+        <p class="sign-modal__accepted">${acceptedText}</p>
+        <div class="sign-modal__fields">
+          <label>Nom et prénom<input type="text" id="signName" value="${client.guestName || ''}" autocomplete="name" required></label>
+          <label>Email<input type="email" id="signEmail" value="${client.guestEmail || ''}" autocomplete="email" required></label>
+        </div>
+        <div class="sign-modal__canvas-wrap">
+          <p class="sign-modal__canvas-label">Signez dans l'espace ci-dessous</p>
+          <canvas id="signCanvas" width="520" height="160" aria-label="Zone de signature"></canvas>
+          <button class="sign-modal__clear" type="button">Effacer</button>
+        </div>
+        <label class="sign-modal__approve">
+          <input type="checkbox" id="signApprove">
+          <span>Lu et approuvé — j'accepte le contenu de ce document.</span>
+        </label>
+        <p class="form__error" id="signError" hidden></p>
+        <div class="sign-modal__actions">
+          <button class="btn btn--outline" type="button" id="signCancel">Annuler</button>
+          <button class="btn btn--primary" type="button" id="signConfirm">Confirmer la signature</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
 
-  const response = await fetch(`/api/client/${token}/sign`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ documentType, signerName, signerEmail, acceptedText }),
+    const canvas = overlay.querySelector('#signCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#1a2e1c';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    let drawing = false;
+    let hasSigned = false;
+    let lastX = 0, lastY = 0;
+
+    const getPos = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const src = e.touches ? e.touches[0] : e;
+      return [(src.clientX - rect.left) * scaleX, (src.clientY - rect.top) * scaleY];
+    };
+    const start = (e) => { e.preventDefault(); drawing = true; [lastX, lastY] = getPos(e); };
+    const move = (e) => {
+      if (!drawing) return;
+      e.preventDefault();
+      const [x, y] = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      lastX = x; lastY = y;
+      hasSigned = true;
+    };
+    const stop = () => { drawing = false; };
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    canvas.addEventListener('mouseup', stop);
+    canvas.addEventListener('touchstart', start, { passive: false });
+    canvas.addEventListener('touchmove', move, { passive: false });
+    canvas.addEventListener('touchend', stop);
+
+    overlay.querySelector('.sign-modal__clear').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hasSigned = false;
+    });
+
+    const close = (result) => {
+      document.body.removeChild(overlay);
+      resolve(result);
+    };
+
+    overlay.querySelector('.sign-modal__close').addEventListener('click', () => close(false));
+    overlay.querySelector('#signCancel').addEventListener('click', () => close(false));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(false); });
+
+    overlay.querySelector('#signConfirm').addEventListener('click', async () => {
+      const name = overlay.querySelector('#signName').value.trim();
+      const email = overlay.querySelector('#signEmail').value.trim();
+      const approved = overlay.querySelector('#signApprove').checked;
+      const errorEl = overlay.querySelector('#signError');
+      errorEl.hidden = true;
+
+      if (!name) { errorEl.textContent = 'Veuillez saisir votre nom.'; errorEl.hidden = false; return; }
+      if (!email || !email.includes('@')) { errorEl.textContent = 'Veuillez saisir un email valide.'; errorEl.hidden = false; return; }
+      if (!hasSigned) { errorEl.textContent = 'Veuillez signer dans l\'espace prévu.'; errorEl.hidden = false; return; }
+      if (!approved) { errorEl.textContent = 'Veuillez cocher la case "Lu et approuvé".'; errorEl.hidden = false; return; }
+
+      const signatureData = canvas.toDataURL('image/png');
+      const btn = overlay.querySelector('#signConfirm');
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement...';
+
+      try {
+        const response = await fetch(`/api/client/${token}/sign`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ documentType, signerName: name, signerEmail: email, acceptedText, signatureData }),
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          errorEl.textContent = payload.error || 'Signature impossible.';
+          errorEl.hidden = false;
+          btn.disabled = false;
+          btn.textContent = 'Confirmer la signature';
+          return;
+        }
+        close(true);
+      } catch {
+        errorEl.textContent = 'Connexion impossible.';
+        errorEl.hidden = false;
+        btn.disabled = false;
+        btn.textContent = 'Confirmer la signature';
+      }
+    });
   });
-  const payload = await response.json();
-  if (!response.ok) {
-    window.alert(payload.error || 'Signature impossible.');
-  }
 }

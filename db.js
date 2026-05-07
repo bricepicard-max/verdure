@@ -54,6 +54,24 @@ db.exec(`
   );
 `);
 
+// Migrate: add signature_data column if missing
+try { db.exec('ALTER TABLE signatures ADD COLUMN signature_data TEXT'); } catch {}
+// Migrate: add posts table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    platform TEXT NOT NULL DEFAULT 'both',
+    content TEXT NOT NULL,
+    image_hint TEXT,
+    scheduled_at TEXT,
+    published_at TEXT,
+    status TEXT NOT NULL DEFAULT 'draft',
+    meta_post_id TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+`);
+
 const now = () => new Date().toISOString();
 
 function createClient(input) {
@@ -107,14 +125,17 @@ function upsertSignature(client, input, requestMeta) {
   const signedAt = now();
   db.prepare(`
     INSERT INTO signatures (
-      client_id, document_type, signer_name, signer_email, accepted_text, ip_address, user_agent, signed_at
+      client_id, document_type, signer_name, signer_email, accepted_text,
+      signature_data, ip_address, user_agent, signed_at
     ) VALUES (
-      @clientId, @documentType, @signerName, @signerEmail, @acceptedText, @ipAddress, @userAgent, @signedAt
+      @clientId, @documentType, @signerName, @signerEmail, @acceptedText,
+      @signatureData, @ipAddress, @userAgent, @signedAt
     )
     ON CONFLICT(client_id, document_type) DO UPDATE SET
       signer_name = excluded.signer_name,
       signer_email = excluded.signer_email,
       accepted_text = excluded.accepted_text,
+      signature_data = excluded.signature_data,
       ip_address = excluded.ip_address,
       user_agent = excluded.user_agent,
       signed_at = excluded.signed_at
@@ -124,6 +145,7 @@ function upsertSignature(client, input, requestMeta) {
     signerName: input.signerName,
     signerEmail: input.signerEmail,
     acceptedText: input.acceptedText,
+    signatureData: input.signatureData || null,
     ipAddress: requestMeta.ipAddress,
     userAgent: requestMeta.userAgent,
     signedAt,
@@ -148,6 +170,32 @@ function recordPayment(input) {
   });
 }
 
+function createPost(input) {
+  const createdAt = now();
+  const result = db.prepare(`
+    INSERT INTO posts (platform, content, image_hint, scheduled_at, status, created_at, updated_at)
+    VALUES (@platform, @content, @imageHint, @scheduledAt, 'draft', @createdAt, @createdAt)
+  `).run({
+    platform: input.platform || 'both',
+    content: input.content,
+    imageHint: input.imageHint || '',
+    scheduledAt: input.scheduledAt || null,
+    createdAt,
+  });
+  return db.prepare('SELECT * FROM posts WHERE id = ?').get(result.lastInsertRowid);
+}
+
+function listPosts(limit = 50) {
+  return db.prepare('SELECT * FROM posts ORDER BY created_at DESC LIMIT ?').all(limit);
+}
+
+function updatePostStatus(id, status, metaPostId) {
+  const updatedAt = now();
+  db.prepare('UPDATE posts SET status = ?, meta_post_id = ?, published_at = ?, updated_at = ? WHERE id = ?')
+    .run(status, metaPostId || null, status === 'published' ? updatedAt : null, updatedAt, id);
+  return db.prepare('SELECT * FROM posts WHERE id = ?').get(id);
+}
+
 module.exports = {
   createClient,
   getClientByToken,
@@ -155,4 +203,7 @@ module.exports = {
   listSignatures,
   upsertSignature,
   recordPayment,
+  createPost,
+  listPosts,
+  updatePostStatus,
 };

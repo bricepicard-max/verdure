@@ -6,31 +6,102 @@
   <title>Espace client - Verdure & Cie</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <nav class="nav" aria-label="Navigation principale">
+  <nav class="nav" aria-label="Navigation">
     <div class="container nav__inner">
       <a class="nav__brand" href="/">Verdure & Cie</a>
-      <a class="nav__cta" href="/reglement-interieur">Règlement intérieur</a>
+      <a class="btn btn--outline" href="/reglement-interieur" style="padding:7px 14px;font-size:.85rem">Règlement intérieur</a>
     </div>
   </nav>
 
   <main>
-    <section class="section client-portal">
-      <div class="container">
-        <div class="section__head">
-          <p class="eyebrow">Espace client</p>
-          <h1>Documents et paiements.</h1>
-          <p class="lead">Cet espace privé regroupe les documents à signer, l’acompte de réservation et la caution.</p>
+    <section class="section">
+      <div class="container" style="max-width:920px">
+        <div class="section__head" style="margin-bottom:32px">
+          <p class="eyebrow">Espace client privé</p>
+          <h1>Documents & Paiement</h1>
+          <p class="lead">Cet espace regroupe les documents à signer, votre acompte de réservation et la caution. Chaque document doit être signé avant votre arrivée.</p>
         </div>
-
         <div id="clientPortal" class="portal-grid">
-          <article class="card"><h3>Chargement du dossier...</h3><p>Merci de patienter.</p></article>
+          <article class="card"><h3>Chargement du dossier…</h3><p>Merci de patienter.</p></article>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- Contrat modal — affiché avant signature du contrat -->
+  <div id="contractModal" class="sign-modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle">
+    <div class="sign-modal" style="max-width:700px;max-height:90vh;overflow-y:auto">
+      <button class="sign-modal__close" id="contractModalClose" type="button" aria-label="Fermer">×</button>
+      <p class="eyebrow">Contrat de location</p>
+      <h2 id="contractModalTitle">Contrat de Location Courte Durée</h2>
+      <div id="contractContent" class="document-layout" style="margin:20px 0"></div>
+    </div>
+  </div>
+
   <script src="/app.js"></script>
+  <script>
+    // Show contract before signing
+    window.addEventListener('verdure:showContract', (e) => {
+      const client = e.detail;
+      const modal = document.getElementById('contractModal');
+      const content = document.getElementById('contractContent');
+      const euro = (cents) => new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR' }).format((cents||0)/100);
+      content.innerHTML = `
+        <article class="document-card" style="font-size:.92rem;line-height:1.7">
+          <h3>1. Objet du contrat</h3>
+          <p>Le logement est loué meublé à titre de « location courte durée » pour la période indiquée ci-dessous. Le logement est situé au <strong>8 chemin Elie Hoarau, Basse-Terre, 97410 Saint-Pierre, La Réunion</strong>.</p>
+
+          <h3>2. Détails du séjour</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:.9rem">
+            <tr><td style="padding:6px 0;color:var(--muted);width:40%">Locataire</td><td><strong>${client.guestName}</strong></td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Email</td><td>${client.guestEmail}</td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Arrivée</td><td><strong>${client.arrival || 'À préciser'}</strong></td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Départ</td><td><strong>${client.departure || 'À préciser'}</strong></td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Voyageurs</td><td>${client.guests || 1}</td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Montant total</td><td><strong>${euro(client.totalAmountCents)}</strong></td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Acompte 30%</td><td>${euro(client.depositAmountCents)}</td></tr>
+            <tr><td style="padding:6px 0;color:var(--muted)">Caution</td><td>800 € (chèque non encaissé à l'arrivée)</td></tr>
+          </table>
+
+          <h3>3. Conditions de la location</h3>
+          <ul class="document-list">
+            <li>Le séjour est non renouvelable. Le locataire s'engage à libérer le logement à l'heure du check-out.</li>
+            <li>Le locataire doit présenter sa pièce d'identité à l'arrivée.</li>
+            <li>Acompte de 30% dû à la réservation pour confirmer les dates. Sans paiement, le bailleur n'est pas tenu de bloquer les dates.</li>
+            <li>Solde dû au plus tard à J-15 avant l'arrivée. En cas de non-paiement, le bailleur peut annuler sans remboursement des arrhes.</li>
+            <li>Aucun remboursement en cas d'annulation.</li>
+          </ul>
+
+          <h3>4. Caution</h3>
+          <p>800 € de caution demandée à l'arrivée par chèque non encaissé. Restituée 48h après le départ, sous réserve de bon état du logement.</p>
+
+          <h3>5. Obligations du locataire</h3>
+          <ul class="document-list">
+            <li>Pas d'animaux, pas de tabac à l'intérieur.</li>
+            <li>Pas de nuisances sonores susceptibles de gêner les voisins.</li>
+            <li>Utilisation d'Internet conforme aux lois Hadopi.</li>
+            <li>Utilisation raisonnée de la climatisation.</li>
+            <li>Pas de recours contre le bailleur en cas de vol ou de dégradation.</li>
+            <li>Capacité maximale : 10 personnes. Toute personne supplémentaire doit être signalée.</li>
+          </ul>
+
+          <h3>6. Bailleur</h3>
+          <p>Verdure & Cie — 8 chemin Elie Hoarau, 97410 Saint-Pierre, La Réunion<br>
+          Tél : 0692 51 27 66 — Email : hello@maisonpicard.com</p>
+        </article>
+      `;
+      modal.style.display = 'grid';
+    });
+
+    document.getElementById('contractModalClose').addEventListener('click', () => {
+      document.getElementById('contractModal').style.display = 'none';
+    });
+  </script>
 </body>
 </html>

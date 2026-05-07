@@ -15,6 +15,11 @@ const http = require('http');
 const Stripe = require('stripe');
 const db = require('./db');
 
+let Anthropic;
+try { Anthropic = require('@anthropic-ai/sdk'); } catch {}
+const anthropic = (Anthropic && process.env.ANTHROPIC_API_KEY)
+  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }) : null;
+
 const app = express();
 app.set('trust proxy', 'loopback');
 const PORT = process.env.PORT || 3010;
@@ -153,7 +158,13 @@ app.post('/api/client/:token/sign', (req, res) => {
     return res.status(400).json({ error: 'Nom, email et mention de signature requis.' });
   }
 
-  const signatures = db.upsertSignature(client, req.body, {
+  const signatures = db.upsertSignature(client, {
+    documentType: req.body.documentType,
+    signerName: req.body.signerName,
+    signerEmail: req.body.signerEmail,
+    acceptedText: req.body.acceptedText,
+    signatureData: req.body.signatureData || null,
+  }, {
     ipAddress: req.ip,
     userAgent: req.get('user-agent') || '',
   });
@@ -281,6 +292,115 @@ app.get('/api/availability', async (req, res) => {
   const all = results.flat();
   const events = all.map((e) => ({ start: e.start, end: e.end }));
   res.json({ events, unconfigured: false });
+});
+
+const CHAT_SYSTEM = `Tu es l'assistant virtuel de Verdure & Cie, une villa de vacances à Saint-Pierre, La Réunion.
+Tu réponds en français, de façon chaleureuse, précise et concise (2-4 phrases max par réponse).
+Si la question ne concerne pas la villa, redirige poliment vers le sujet.
+
+Informations clés :
+- Adresse : 8 chemin Elie Hoarau, Basse-Terre, 97410 Saint-Pierre, La Réunion
+- Capacité : 10 voyageurs maximum, 5 chambres, 3 salles de bain
+- Équipements : piscine privée chauffée, billard, barbecue, 3 terrasses, jardin tropical, clim, wifi, parking
+- Tarifs indicatifs : dès 120 €/nuit (basse saison), dès 160 € (moyenne), dès 220 € (haute)
+- Caution : 800 € (chèque non encaissé à l'arrivée)
+- Check-in : transmis après confirmation. Check-out : précisé dans le contrat
+- Règlement : pas de fêtes ni nuisances sonores après 22h, non-fumeur intérieur, max 10 personnes, pas d'animaux
+- Réservation directe sur verdure.maisonpicard.com/reservation ou via Airbnb et Booking.com
+- Contact : 0692 51 27 66 ou hello@maisonpicard.com`;
+
+app.post('/api/chat', async (req, res) => {
+  const { messages } = req.body;
+  if (!Array.isArray(messages) || !messages.length) {
+    return res.status(400).json({ error: 'messages requis.' });
+  }
+  if (!anthropic) {
+    return res.json({ reply: 'Le chat est momentanément indisponible. Contactez-nous au 0692 51 27 66.' });
+  }
+  try {
+    const safeMessages = messages.slice(-10).map((m) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').slice(0, 500),
+    }));
+    const response = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 400,
+      system: CHAT_SYSTEM,
+      messages: safeMessages,
+    });
+    res.json({ reply: response.content[0].text });
+  } catch (err) {
+    console.error('Chat error', err.message);
+    res.json({ reply: 'Désolé, une erreur est survenue. Contactez-nous au 0692 51 27 66.' });
+  }
+});
+
+const META_PAGE_TOKEN = process.env.META_PAGE_TOKEN || '';
+const META_PAGE_ID = process.env.META_PAGE_ID || '';
+const META_IG_ID = process.env.META_IG_ID || '';
+
+app.get('/api/admin/posts', requireAdmin, (req, res) => {
+  res.json({ posts: db.listPosts() });
+});
+
+app.post('/api/admin/posts', requireAdmin, async (req, res) => {
+  const { content, platform, imageHint, scheduledAt, generateAi } = req.body;
+  let finalContent = (content || '').trim();
+
+  if (generateAi && anthropic && !finalContent) {
+    try {
+      const hint = imageHint || 'la villa';
+      const msg = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        messages: [{
+          role: 'user',
+          content: `Écris une publication courte (max 200 mots) pour Facebook/Instagram pour Verdure & Cie, une villa de vacances à Saint-Pierre, La Réunion. Thème : ${hint}. Style : chaleureux, évocateur, invite à rêver. Inclus 3-5 hashtags pertinents en fin de message.`,
+        }],
+      });
+      finalContent = msg.content[0].text;
+    } catch {}
+  }
+
+  if (!finalContent) return res.status(400).json({ error: 'Contenu requis ou génération IA impossible.' });
+
+  const post = db.createPost({ platform: platform || 'both', content: finalContent, imageHint, scheduledAt });
+  res.status(201).json({ post });
+});
+
+app.post('/api/admin/posts/:id/publish', requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  const post = db.listPosts(500).find((p) => p.id === id);
+  if (!post) return res.status(404).json({ error: 'Post introuvable.' });
+
+  if (!META_PAGE_TOKEN || !META_PAGE_ID) {
+    return res.status(503).json({ error: 'META_PAGE_TOKEN et META_PAGE_ID non configurés.' });
+  }
+
+  try {
+    const fbRes = await fetchUrl(
+      `https://graph.facebook.com/v19.0/${META_PAGE_ID}/feed`,
+    );
+    const body = JSON.stringify({ message: post.content, access_token: META_PAGE_TOKEN });
+    const fbPost = await new Promise((resolve, reject) => {
+      const req2 = https.request(`https://graph.facebook.com/v19.0/${META_PAGE_ID}/feed`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+      }, (r) => {
+        let d = '';
+        r.on('data', (c) => { d += c; });
+        r.on('end', () => resolve(JSON.parse(d)));
+      });
+      req2.on('error', reject);
+      req2.write(body);
+      req2.end();
+    });
+    if (fbPost.error) return res.status(400).json({ error: fbPost.error.message });
+    const updated = db.updatePostStatus(id, 'published', fbPost.id);
+    res.json({ post: updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.use((req, res) => {
