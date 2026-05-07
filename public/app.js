@@ -454,6 +454,72 @@ function documentCard(type, title, acceptedText, isSigned, link) {
   `;
 }
 
+// Scroll reveal
+(function initReveal() {
+  if (!('IntersectionObserver' in window)) return;
+  const sel = '.section__head, .card, .stat, .review-panel, .copy, .actions, .note, .rate-card, .contact-card, .form, .intro-grid > div, .intro-grid > aside';
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const sibs = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const idx = Math.max(0, sibs.indexOf(entry.target));
+      entry.target.style.transitionDelay = `${idx * 0.1}s`;
+      entry.target.classList.add('is-visible');
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -24px 0px' });
+
+  document.querySelectorAll(sel).forEach(el => {
+    if (el.getBoundingClientRect().top > window.innerHeight * 0.88) {
+      el.classList.add('reveal');
+      io.observe(el);
+    }
+  });
+})();
+
+// Animation des compteurs
+(function initCounters() {
+  if (!('IntersectionObserver' in window)) return;
+  const animate = (el) => {
+    const raw = el.textContent.trim();
+    const target = parseFloat(raw.replace(',', '.'));
+    if (isNaN(target)) return;
+    const hasComma = raw.includes(',');
+    const start = performance.now();
+    el.dataset.final = raw;
+    const tick = (now) => {
+      const t = Math.min((now - start) / 1200, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = hasComma
+        ? (target * eased).toFixed(1).replace('.', ',')
+        : Math.round(target * eased);
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = el.dataset.final;
+    };
+    requestAnimationFrame(tick);
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      animate(entry.target);
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.review-panel strong, .stat strong').forEach(el => io.observe(el));
+})();
+
+// Parallaxe hero
+(function initParallax() {
+  const media = document.querySelector('.hero__media');
+  if (!media) return;
+  const heroEl = media.closest('.hero');
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+    if (sy > heroEl.offsetHeight) return;
+    media.style.transform = `translateY(${sy * 0.12}px)`;
+  }, { passive: true });
+})();
+
 async function signDocument(token, client, documentType, acceptedText) {
   const signerName = window.prompt('Nom et prénom pour la signature', client.guestName || '');
   if (!signerName) return;

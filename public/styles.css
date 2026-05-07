@@ -211,4 +211,90 @@ h3{font-size:1.45rem;color:var(--leaf)}
   .split__media--stack{grid-template-columns:1fr}
   .nav__toggle{right:max(16px,calc(100vw - 374px))}
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+/* === ANIMATIONS D'ENTRÉE HERO === */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero__content .eyebrow { animation: heroFadeUp .65s ease .1s  both }
+.hero__content h1       { animation: heroFadeUp 1s   ease .28s both }
+.hero__content > p      { animation: heroFadeUp .65s ease .56s both }
+.hero__facts            { animation: heroFadeUp .65s ease .74s both }
+.hero__actions          { animation: heroFadeUp .65s ease .9s  both }
+.hero__scroll           { animation: heroFadeUp .65s ease 1.1s both }
+
+/* === INDICATEUR DE SCROLL === */
+.hero__scroll {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.hero__scroll span {
+  display: block;
+  width: 26px;
+  height: 44px;
+  border: 2px solid rgba(255,255,255,.42);
+  border-radius: 14px;
+  position: relative;
+}
+.hero__scroll span::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  background: rgba(255,255,255,.9);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  animation: scrollDot 2s ease infinite;
+}
+@keyframes scrollDot {
+  0%   { top: 7px;  opacity: 1 }
+  70%  { top: 24px; opacity: 0 }
+  100% { top: 7px;  opacity: 0 }
+}
+
+/* === SCROLL REVEAL === */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === HOVER CARTES === */
+.card {
+  transition: transform .35s ease, box-shadow .35s ease, border-color .3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 28px 64px rgba(24,32,26,.15);
+  border-color: rgba(24,64,37,.22);
+}
+.card--image img {
+  transition: transform .55s ease;
+}
+.card--image:hover img {
+  transform: scale(1.06);
+}
+
+/* === PARALLAXE === */
+.hero__media {
+  top: -12%;
+}
+
+/* === TITRE HERO GRAND ÉCRAN === */
+@media(min-width:981px) {
+  h1 { font-size: 7.4rem }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+  .reveal{opacity:1;transform:none}
+}
