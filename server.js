@@ -48,10 +48,12 @@ const pages = new Map([
   ['/reservation', 'reservation.html'],
   ['/contact', 'contact.html'],
   ['/reglement-interieur', 'reglement-interieur.html'],
+  ['/mentions-legales', 'mentions-legales.html'],
+  ['/politique-confidentialite', 'politique-confidentialite.html'],
   ['/admin', 'admin.html'],
 ]);
 
-app.get(['/index.html', '/villa.html', '/photos.html', '/equipements.html', '/localisation.html', '/tarifs.html', '/reservation.html', '/contact.html', '/reglement-interieur.html', '/admin.html'], (req, res) => {
+app.get(['/index.html', '/villa.html', '/photos.html', '/equipements.html', '/localisation.html', '/tarifs.html', '/reservation.html', '/contact.html', '/reglement-interieur.html', '/mentions-legales.html', '/politique-confidentialite.html', '/admin.html'], (req, res) => {
   const cleanPath = req.path === '/index.html' ? '/' : req.path.replace(/\.html$/, '');
   res.redirect(301, cleanPath);
 });

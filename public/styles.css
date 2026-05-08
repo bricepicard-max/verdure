@@ -565,3 +565,117 @@ h3 { letter-spacing: -0.01em; }
   .chat-panel { width: calc(100vw - 32px); right: 16px; }
   .chat-bubble { bottom: 20px; right: 16px; }
 }
+
+/* ===== HERO REEL — KEN BURNS SLIDESHOW ===================================== */
+.hero__reel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--leaf);
+}
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.6s cubic-bezier(.4,0,.2,1);
+}
+.hero__slide.is-active { opacity: 1; }
+.hero__slide-img {
+  position: absolute;
+  inset: -8%;
+  background-size: cover;
+  background-position: center;
+}
+/* Ken Burns keyframes — 4 directions */
+@keyframes kb-zoom-in  { from { transform: scale(1.18) translate(1.5%,1%); } to { transform: scale(1) translate(0,0); } }
+@keyframes kb-zoom-out { from { transform: scale(1)    translate(0,0);      } to { transform: scale(1.18) translate(-1.5%,-1%); } }
+@keyframes kb-pan-r    { from { transform: scale(1.1)  translate(-2.5%,0);  } to { transform: scale(1.1)  translate(2.5%,0);   } }
+@keyframes kb-pan-l    { from { transform: scale(1.1)  translate(2.5%,0);   } to { transform: scale(1.1)  translate(-2.5%,0);  } }
+
+/* Each slide gets its own animation — starts only when .is-active */
+.hero__slide.is-active:nth-child(1) .hero__slide-img { animation: kb-zoom-in  7.5s ease forwards; }
+.hero__slide.is-active:nth-child(2) .hero__slide-img { animation: kb-pan-r    7.5s ease forwards; }
+.hero__slide.is-active:nth-child(3) .hero__slide-img { animation: kb-zoom-out 7.5s ease forwards; }
+.hero__slide.is-active:nth-child(4) .hero__slide-img { animation: kb-pan-l    7.5s ease forwards; }
+
+/* Dots indicator */
+.hero__dots {
+  position: absolute;
+  bottom: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+.hero__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.38);
+  border: none; cursor: pointer; padding: 0;
+  transition: background .3s, transform .3s;
+}
+.hero__dot.is-active {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .hero__slide { transition: none; }
+  .hero__slide.is-active .hero__slide-img { animation: none !important; }
+}
+
+/* ===== COOKIE CONSENT BANNER =============================================== */
+.cookie-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 2100;
+  background: rgba(14,24,16,.97);
+  backdrop-filter: blur(14px);
+  color: rgba(255,255,255,.82);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 2px solid rgba(201,121,61,.55);
+  transform: translateY(110%);
+  transition: transform .45s cubic-bezier(.16,1,.3,1);
+}
+.cookie-bar.is-visible { transform: translateY(0); }
+.cookie-bar p { font-size: .9rem; line-height: 1.55; max-width: 680px; margin: 0; }
+.cookie-bar a { color: #f2b06d; text-decoration: underline; }
+.cookie-bar a:hover { color: #fff; }
+.cookie-bar__actions { display: flex; gap: 10px; flex-shrink: 0; }
+.cookie-bar .btn { min-height: 40px; padding: 9px 18px; font-size: .85rem; }
+.cookie-bar .btn--outline { color: rgba(255,255,255,.72); border-color: rgba(255,255,255,.3); background: transparent; }
+.cookie-bar .btn--outline:hover { color: #fff; border-color: rgba(255,255,255,.7); }
+@media(max-width:640px) {
+  .cookie-bar { flex-direction: column; align-items: stretch; padding: 18px 20px; gap: 14px; }
+  .cookie-bar__actions { justify-content: flex-end; }
+}
+
+/* ===== FOOTER LEGAL LINKS ================================================== */
+.footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center; }
+.footer__legal { display: flex; gap: 16px; }
+.footer__legal a { color: rgba(255,255,255,.4); font-size: .82rem; transition: color .2s; }
+.footer__legal a:hover { color: rgba(255,255,255,.75); }
+
+/* ===== PAGES LÉGALES ======================================================= */
+.legal-page { max-width: 760px; margin: 0 auto; padding: 80px 0 100px; }
+.legal-page h1 { font-size: clamp(2.2rem,4vw,3.4rem); margin-bottom: 10px; }
+.legal-page h2 { font-size: 1.45rem; margin-top: 44px; margin-bottom: 14px; }
+.legal-page h3 { font-size: 1.1rem; margin-top: 28px; margin-bottom: 10px; color: var(--leaf); }
+.legal-page p, .legal-page li { color: var(--muted); line-height: 1.75; margin-bottom: 12px; }
+.legal-page ul { padding-left: 20px; list-style: disc; }
+.legal-page ul li::marker { color: var(--sun); }
+.legal-page a { color: var(--leaf); text-decoration: underline; }
+.legal-page a:hover { color: var(--leaf-2); }
+.legal-page strong { color: var(--ink); }
+.legal-meta { font-size: .82rem; color: var(--muted); margin-top: 4px; margin-bottom: 40px; }
+.legal-toc { background: var(--linen); border-radius: 12px; padding: 24px 28px; margin-bottom: 44px; }
+.legal-toc h2 { font-size: 1rem; font-family: var(--sans); font-weight: 800; text-transform: uppercase; letter-spacing: .1em; margin: 0 0 12px; color: var(--sun); }
+.legal-toc ol { padding-left: 18px; list-style: decimal; }
+.legal-toc li { margin-bottom: 6px; }
+.legal-toc a { text-decoration: none; color: var(--leaf); font-weight: 700; }
+.legal-toc a:hover { text-decoration: underline; }

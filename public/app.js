@@ -220,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  initHeroReel();
   initGallery();
   initDates();
   initAvailabilityForm();
@@ -753,16 +754,78 @@ function initBookingCalendar() {
   document.querySelectorAll('.review-panel strong, .stat strong').forEach(el => io.observe(el));
 })();
 
-// Parallaxe hero
+// Parallaxe hero (compatible ancienne <picture> et nouveau .hero__reel)
 (function initParallax() {
-  const media = document.querySelector('.hero__media');
-  if (!media) return;
-  const heroEl = media.closest('.hero');
+  const target = document.querySelector('.hero__reel') || document.querySelector('.hero__media');
+  if (!target) return;
+  const heroEl = target.closest('.hero');
   window.addEventListener('scroll', () => {
     const sy = window.scrollY;
     if (sy > heroEl.offsetHeight) return;
-    media.style.transform = `translateY(${sy * 0.12}px)`;
+    target.style.transform = `translateY(${sy * 0.10}px)`;
   }, { passive: true });
+})();
+
+// ─── Hero Reel — Ken Burns ──────────────────────────────────────────────────
+function initHeroReel() {
+  const reel = document.getElementById('heroReel');
+  if (!reel) return;
+  const slides = Array.from(reel.querySelectorAll('.hero__slide'));
+  const dots = Array.from(document.querySelectorAll('.hero__dot'));
+  if (!slides.length) return;
+
+  let current = 0;
+
+  const activate = (idx) => {
+    slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+  };
+
+  activate(0);
+
+  // Interval — new slide every 5.5 s
+  setInterval(() => {
+    current = (current + 1) % slides.length;
+    activate(current);
+  }, 5500);
+
+  // Manual dot navigation
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      current = idx;
+      activate(current);
+    });
+  });
+}
+
+// ─── Cookie Consent Banner (RGPD) ──────────────────────────────────────────
+(function initCookieBanner() {
+  const KEY = 'verdure_cookies';
+  if (localStorage.getItem(KEY)) return;
+
+  const bar = document.createElement('div');
+  bar.className = 'cookie-bar';
+  bar.setAttribute('role', 'region');
+  bar.setAttribute('aria-label', 'Consentement aux cookies');
+  bar.innerHTML = `
+    <p>Nous utilisons des cookies techniques indispensables au fonctionnement du site. Avec votre accord, des cookies analytiques anonymes nous aident à améliorer votre expérience. <a href="/politique-confidentialite">En savoir plus</a>.</p>
+    <div class="cookie-bar__actions">
+      <button class="btn btn--outline cookie-bar__refuse" type="button">Refuser</button>
+      <button class="btn btn--primary cookie-bar__accept" type="button">Accepter</button>
+    </div>
+  `;
+  document.body.appendChild(bar);
+  // Slight delay so it doesn't flash immediately on load
+  setTimeout(() => bar.classList.add('is-visible'), 900);
+
+  const dismiss = (value) => {
+    localStorage.setItem(KEY, value);
+    bar.classList.remove('is-visible');
+    setTimeout(() => bar.remove(), 500);
+  };
+
+  bar.querySelector('.cookie-bar__accept').addEventListener('click', () => dismiss('accepted'));
+  bar.querySelector('.cookie-bar__refuse').addEventListener('click', () => dismiss('refused'));
 })();
 
 function signDocument(token, client, documentType, acceptedText, docTitle) {
