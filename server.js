@@ -12,6 +12,7 @@ const path = require('path');
 const crypto = require('crypto');
 const https = require('https');
 const http = require('http');
+const { execFile } = require('child_process');
 const Stripe = require('stripe');
 const db = require('./db');
 
@@ -31,12 +32,18 @@ const ICAL_AIRBNB = process.env.ICAL_AIRBNB || '';
 const ICAL_BOOKING = process.env.ICAL_BOOKING || '';
 const STRIPE_CURRENCY = process.env.STRIPE_CURRENCY || 'eur';
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || '';
+const DEPLOY_BRANCH = process.env.DEPLOY_BRANCH || 'main';
 
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
 }));
-app.use(express.json());
+app.use(express.json({
+  verify: (req, _res, buf) => {
+    if (req.path === '/api/webhook/github') req.rawBody = buf;
+  },
+}));
 
 const pages = new Map([
   ['/', 'index.html'],
@@ -403,6 +410,28 @@ app.post('/api/admin/posts/:id/publish', requireAdmin, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.post('/api/webhook/github', (req, res) => {
+  if (!WEBHOOK_SECRET) return res.status(503).json({ error: 'WEBHOOK_SECRET non configuré.' });
+
+  const sig = req.get('x-hub-signature-256') || '';
+  const expected = 'sha256=' + crypto.createHmac('sha256', WEBHOOK_SECRET).update(req.rawBody || '').digest('hex');
+  if (sig.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) {
+    return res.status(401).json({ error: 'Signature invalide.' });
+  }
+
+  const branch = (req.body.ref || '').replace('refs/heads/', '');
+  if (branch !== DEPLOY_BRANCH) return res.json({ skipped: true, branch });
+
+  res.json({ deploying: true, branch });
+  console.log(`[deploy] git pull origin ${DEPLOY_BRANCH}…`);
+
+  execFile('git', ['-C', '/opt/verdure', 'pull', 'origin', DEPLOY_BRANCH], (err, stdout) => {
+    if (err) { console.error('[deploy] git pull error', err.message); return; }
+    console.log('[deploy]', stdout.trim());
+    setTimeout(() => process.exit(0), 300);
+  });
 });
 
 app.use((req, res) => {
