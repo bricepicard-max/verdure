@@ -29,6 +29,11 @@
     "alternateName": "Villa Verdure Saint-Pierre Réunion",
     "description": "Villa de vacances entière 5 chambres avec piscine privée chauffée à Saint-Pierre, La Réunion. Jusqu'à 10 voyageurs. Jardin tropical, terrasse couverte, billard, climatisation, linge inclus.",
     "url": "https://verdure.maisonpicard.com",
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "Airbnb",
+      "value": "https://www.airbnb.fr/rooms/1422924658519050376"
+    },
     "telephone": "+262692512766",
     "email": "verdure@maisonpicard.com",
     "address": {
@@ -74,11 +79,36 @@
       {"@type": "LocationFeatureSpecification", "name": "Baignoire îlot", "value": true}
     ],
     "containsPlace": [
-      {"@type": "Room", "name": "Chambre 1 – Suite parentale avec baignoire îlot"},
-      {"@type": "Room", "name": "Chambre 2 – Chambre avec douche parapluie"},
-      {"@type": "Room", "name": "Chambre 3 – Chambre avec terrasse"},
-      {"@type": "Room", "name": "Chambre 4 – Chambre avec terrasse"},
-      {"@type": "Room", "name": "Chambre 5 – Chambre cosy"}
+      {
+        "@type": "Room",
+        "name": "Chambre 1 – Suite parentale avec baignoire îlot",
+        "occupancy": {"@type": "QuantitativeValue", "maxValue": 2},
+        "bed": {"@type": "BedDetails", "typeOfBed": "Double"}
+      },
+      {
+        "@type": "Room",
+        "name": "Chambre 2 – Chambre avec douche parapluie",
+        "occupancy": {"@type": "QuantitativeValue", "maxValue": 2},
+        "bed": {"@type": "BedDetails", "typeOfBed": "Double"}
+      },
+      {
+        "@type": "Room",
+        "name": "Chambre 3 – Chambre avec terrasse",
+        "occupancy": {"@type": "QuantitativeValue", "maxValue": 2},
+        "bed": {"@type": "BedDetails", "typeOfBed": "Double"}
+      },
+      {
+        "@type": "Room",
+        "name": "Chambre 4 – Chambre avec terrasse",
+        "occupancy": {"@type": "QuantitativeValue", "maxValue": 2},
+        "bed": {"@type": "BedDetails", "typeOfBed": "Double"}
+      },
+      {
+        "@type": "Room",
+        "name": "Chambre 5 – Chambre cosy",
+        "occupancy": {"@type": "QuantitativeValue", "maxValue": 2},
+        "bed": {"@type": "BedDetails", "typeOfBed": "Double"}
+      }
     ],
     "tourBookingPage": "https://verdure.maisonpicard.com/reservation",
     "hasMap": "https://maps.google.com/?q=8+chemin+Elie+Hoarau+Saint-Pierre+Reunion"
