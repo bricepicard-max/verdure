@@ -24,6 +24,7 @@ const photoIndex = [
   { id: 23, file: '54332482-041a-4545-a8eb-ef03270b7f47.jpeg', category: 'pieces', title: 'Cuisine équipée', alt: 'Cuisine équipée noire et blanche avec table ronde' },
   { id: 24, file: '575d1ab7-e46b-4e97-b11d-b33298680e85.jpeg', category: 'chambres', title: 'Chambre chaleureuse', alt: 'Chambre mansardée avec lampe et coussins orange' },
   { id: 25, file: '58581d8b-1a5d-4777-99fe-909938c8b1e5.jpeg', category: 'pieces', title: 'Détail salon', alt: 'Détail de canapé et table basse dans le salon' },
+  { id: 26, file: '5e91cb71-3dda-43be-b526-57c3ba724240.jpeg', category: 'chambres', title: 'Chambre bleue', alt: 'Lit double avec parure bleue et petit-déjeuner' },
   { id: 27, file: '6512a789-03e2-44b3-a898-1e262b4e3446.jpeg', category: 'bains', title: 'Peignoirs', alt: 'Peignoirs suspendus dans une salle d’eau' },
   { id: 28, file: '6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg', category: 'piscine', title: 'Piscine de nuit', alt: 'Piscine privée éclairée de nuit' },
   { id: 29, file: '70556232-55c0-4add-8582-d039709d5974.jpeg', category: 'pieces', title: 'Repas intérieur', alt: 'Salle à manger ouverte sur le salon' },
@@ -34,6 +35,7 @@ const photoIndex = [
   { id: 34, file: '881d8516-0b9c-47e7-a17c-0e1c5b57c93b.jpeg', category: 'pieces', title: 'Vue salon repas', alt: 'Vue large du salon et de la salle à manger' },
   { id: 35, file: '8be27738-86fe-4da4-a417-2cc488b8b080.jpeg', category: 'details', title: 'Carnet d’accueil', alt: 'Carnet d’accueil Verdure et Cie' },
   { id: 36, file: '8f63657b-90ab-4bad-a850-fb4e4e266daa.jpeg', category: 'pieces', title: 'Cuisine complète', alt: 'Cuisine équipée avec four et plaques de cuisson' },
+  { id: 37, file: '9612f8e9-7aeb-4614-b4bd-3fab5d9cac3c.jpeg', category: 'piscine', title: 'Serviettes piscine', alt: 'Serviettes vertes au bord de la piscine' },
   { id: 38, file: '9c19b279-96a8-4fb8-8e94-db75dd29da17.jpeg', category: 'bains', title: 'Salle d’eau claire', alt: 'Salle d’eau avec douche et meuble vasque' },
   { id: 39, file: 'a286e9f4-6334-452e-a4dc-90d5a7495bcd.jpeg', category: 'exterieurs', title: 'Chauffage extérieur', alt: 'Chauffage de terrasse dans le jardin' },
   { id: 40, file: 'a4b4d537-1e38-4aea-8b34-d71e0a83bf1a.jpeg', category: 'exterieurs', title: 'Terrasse cosy', alt: 'Salon extérieur décoré avec coussins et table basse' },
@@ -61,6 +63,7 @@ const photoIndex = [
   { id: 62, file: 'f0bd3d0d-222c-40f4-8c3b-3a51a8c3b13d.jpeg', category: 'pieces', title: 'Repas et salon', alt: 'Salle à manger ouverte vers le salon' },
   { id: 63, file: 'f370c62e-dba7-45b6-bf3d-48c3b550de6b.jpeg', category: 'bains', title: 'Suite avec baignoire', alt: 'Suite avec chambre bleue et baignoire îlot' },
   { id: 64, file: 'f37d6862-3269-4ab1-8e40-e7121628f875.jpeg', category: 'details', title: 'Berceau suspendu', alt: 'Berceau suspendu en bois et tissu sur la terrasse' },
+  { id: 65, file: 'f991c03d-1e67-42c8-89bb-55872989d8f2.jpeg', category: 'chambres', title: 'Fauteuil jaune', alt: 'Fauteuil de lecture avec coussin jaune' },
   { id: 66, file: 'f9bca146-a6c6-45a5-b13a-75cfb762da86.jpeg', category: 'details', title: 'Ambiance café', alt: 'Tasses et décorations sur table claire' },
   { id: 67, file: 'fb9bacde-eaa3-4e7c-8a52-986b688a2e6b.jpeg', category: 'exterieurs', title: 'Table conviviale', alt: 'Grande table de terrasse orientée vers la piscine' },
   { id: 68, file: 'ff93c392-67d3-4ab4-8bda-f715ad4e4f99.jpeg', category: 'exterieurs', title: 'Salon extérieur couvert', alt: 'Salon extérieur couvert avec fauteuils clairs et table basse' },
@@ -73,16 +76,26 @@ const photoIndex = [
   { id: 75, file: 'facebook/facebook-010.jpg', category: 'details', title: 'Accueil près de la piscine', alt: 'Plateau d’accueil Verdure et Cie près de la piscine' },
   { id: 76, file: 'facebook/facebook-011.jpg', category: 'details', title: 'Attention de bienvenue', alt: 'Verres et plateau d’accueil préparés pour les voyageurs' },
   { id: 77, file: 'facebook/facebook-012.jpg', category: 'piscine', title: 'Piscine et accueil', alt: 'Vue de la piscine avec plateau d’accueil au premier plan' },
+  { id: 78, file: 'facebook/facebook-013.jpg', category: 'piscine', title: 'Piscine le soir', alt: 'Piscine privée éclairée en début de soirée' },
+  { id: 79, file: 'facebook/facebook-014.jpg', category: 'piscine', title: 'Reflets nocturnes', alt: 'Piscine de nuit avec éclairage et reflets dans l’eau' },
+  { id: 80, file: 'facebook/facebook-015.jpg', category: 'piscine', title: 'Bain de nuit', alt: 'Piscine éclairée de nuit avec ambiance tropicale' },
+  { id: 81, file: 'facebook/facebook-017.jpg', category: 'piscine', title: 'Soirée piscine', alt: 'Piscine privée illuminée avec terrasse autour du bassin' },
   { id: 82, file: 'facebook/facebook-021.jpg', category: 'exterieurs', title: 'Floraison tropicale', alt: 'Fleurs tropicales colorées dans le jardin' },
   { id: 83, file: 'facebook/facebook-022.jpg', category: 'pieces', title: 'Cuisine en détail', alt: 'Plan de travail et équipements de la cuisine de la villa' },
   { id: 84, file: 'facebook/facebook-023.jpg', category: 'details', title: 'Pause café', alt: 'Machine à café et tasse dans la cuisine' },
+  { id: 85, file: 'facebook/facebook-024.jpg', category: 'details', title: 'Café Verdure', alt: 'Tasse et machine à café avec détail Verdure et Cie' },
   { id: 86, file: 'facebook/facebook-025.jpg', category: 'bains', title: 'Marbre et vasque', alt: 'Détail de salle d’eau avec vasque et finition marbrée' },
   { id: 87, file: 'facebook/facebook-026.jpg', category: 'exterieurs', title: 'Repos au jardin', alt: 'Hamac et espace détente dans le jardin' },
   { id: 88, file: 'facebook/facebook-027.jpg', category: 'exterieurs', title: 'Coin jeux extérieur', alt: 'Espace extérieur avec pelouse et équipements de détente' },
   { id: 89, file: 'facebook/facebook-028.jpg', category: 'details', title: 'Verre de bienvenue', alt: 'Verre servi dans une ambiance d’accueil conviviale' },
+  { id: 90, file: 'facebook/facebook-031.jpg', category: 'details', title: 'Café face au sud', alt: 'Tasse Verdure et Cie avec vue dégagée vers l’extérieur' },
   { id: 91, file: 'facebook/facebook-032.jpg', category: 'details', title: 'Rideaux et lumière', alt: 'Détail textile et lumière naturelle dans la villa' },
+  { id: 92, file: 'facebook/facebook-034.jpg', category: 'piscine', title: 'Piscine depuis la terrasse', alt: 'Piscine privée vue depuis la terrasse couverte' },
   { id: 93, file: 'facebook/facebook-036.jpg', category: 'exterieurs', title: 'Parasol au jardin', alt: 'Parasol clair installé dans le jardin tropical' },
   { id: 94, file: 'facebook/facebook-037.jpg', category: 'exterieurs', title: 'Chaise aux volets verts', alt: 'Chaise extérieure devant les volets verts de la villa' },
+  { id: 95, file: 'facebook/facebook-038.jpg', category: 'details', title: 'Berceau suspendu', alt: 'Berceau suspendu dans un espace extérieur couvert' },
+  { id: 96, file: 'facebook/facebook-039.jpg', category: 'pieces', title: 'Salon chaleureux', alt: 'Salon de la villa avec canapé, coussins et table basse' },
+  { id: 97, file: 'facebook/facebook-040.jpg', category: 'pieces', title: 'Cuisine ouverte', alt: 'Cuisine ouverte équipée avec rangements et plan de travail' },
   { id: 98, file: 'facebook/facebook-041.jpg', category: 'details', title: 'Bocaux et épices', alt: 'Bocaux, épices et éléments de cuisine à disposition' },
   { id: 99, file: 'facebook/facebook-042.jpg', category: 'bains', title: 'Salle d’eau contemporaine', alt: 'Salle d’eau claire avec vasque et miroir' },
   { id: 100, file: 'facebook/facebook-043.jpg', category: 'details', title: 'Peignoir brodé', alt: 'Peignoir Verdure et Cie suspendu dans la villa' },
@@ -93,11 +106,6 @@ const photoIndex = [
   { id: 105, file: 'facebook/facebook-055.jpg', category: 'exterieurs', title: 'Façade et terrasse', alt: 'Extérieur de la villa avec terrasse et ouverture sur le jardin' },
   { id: 106, file: 'facebook/facebook-056.jpg', category: 'piscine', title: 'Détail piscine', alt: 'Détail de l’eau et du rebord de la piscine privée' },
   { id: 107, file: 'facebook/facebook-057.jpg', category: 'piscine', title: 'Piscine lumineuse', alt: 'Piscine privée avec eau claire et lumière tropicale' },
-  { id: 108, file: 'proprio-piscine.jpg', category: 'proprietaires', title: 'Brice & Anne-Sophie au bord de la piscine', alt: 'Les propriétaires devant la piscine' },
-  { id: 109, file: 'proprio-salon.jpg', category: 'proprietaires', title: 'Brice & Anne-Sophie dans le salon', alt: 'Les propriétaires dans le salon' },
-  { id: 110, file: 'proprio-repas.jpg', category: 'proprietaires', title: 'Repas en famille sous la pergola', alt: 'Repas convivial sous la pergola' },
-  { id: 111, file: 'proprio-cuisine.jpg', category: 'proprietaires', title: 'En cuisine', alt: 'Les propriétaires en cuisine' },
-  { id: 112, file: 'proprio-nuit.jpg', category: 'proprietaires', title: 'Baignade nocturne', alt: 'Les propriétaires dans la piscine la nuit' },
 ];
 
 // ─── Chat widget ─────────────────────────────────────────────────────────────
@@ -217,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   initHeroReel();
-  initVideoBar();
   initGallery();
   initDates();
   initAvailabilityForm();
@@ -227,20 +234,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const galleryGroups = [
-  { id: 'piscine',       label: 'Piscine',                    cover: 108, photoIds: [108, 6, 51, 69, 72, 77, 92, 104, 106, 107] },
-  { id: 'piscine-nuit',  label: 'Piscine de nuit',            cover: 112, photoIds: [112, 28, 59] },
-  { id: 'facade',        label: 'Façade & Entrée',            cover: 1,   photoIds: [1, 2, 11, 45, 57, 94, 103, 105] },
-  { id: 'terrasse',      label: 'Terrasse & Repas',           cover: 110, photoIds: [110, 40, 48, 64, 67, 68, 82] },
-  { id: 'jardin',        label: 'Jardin',                     cover: 87,  photoIds: [39, 41, 73, 74, 87, 88, 93] },
-  { id: 'sejour',        label: 'Séjour',                     cover: 109, photoIds: [109, 3, 16, 18, 25, 34, 42, 58] },
-  { id: 'billard',       label: 'Billard & Divertissements',  cover: 20,  photoIds: [8, 20, 71] },
-  { id: 'cuisine',       label: 'Cuisine & Salle à manger',  cover: 111, photoIds: [111, 14, 23, 29, 31, 32, 36, 61, 62, 83, 97] },
-  { id: 'suite',         label: 'Suite parentale',            cover: 50,  photoIds: [50, 60, 63, 15] },
-  { id: 'chambres',      label: 'Chambres',                   cover: 46,  photoIds: [13, 19, 21, 22, 24, 43, 44, 46, 54] },
-  { id: 'bains',         label: 'Salles de bain',             cover: 33,  photoIds: [4, 27, 33, 38, 86, 99] },
-  { id: 'accueil',       label: 'Accueil & Bienvenue',        cover: 9,   photoIds: [9, 10, 17, 35, 53, 55, 75, 76, 89, 100] },
-  { id: 'details',       label: 'Détails & Décoration',       cover: 30,  photoIds: [5, 7, 30, 47, 49, 52, 56, 66, 84, 91, 98, 101, 102] },
-  { id: 'proprietaires', label: 'Nos propriétaires',          cover: 108, photoIds: [108, 109, 110, 111, 112] },
+  { id: 'piscine',    label: 'Piscine',                  photoIds: [6, 28, 59, 51, 72, 92, 104, 107] },
+  { id: 'exterieurs', label: 'Extérieurs & Jardin',       photoIds: [67, 68, 48, 1, 2, 11, 39, 41, 45, 57, 73, 74, 87, 88, 103, 105] },
+  { id: 'sejour',     label: 'Séjour & Espaces communs',  photoIds: [3, 18, 25, 42, 58, 34, 96, 20, 71, 16] },
+  { id: 'cuisine',    label: 'Cuisine & Salle à manger',  photoIds: [23, 36, 32, 31, 83, 97, 61, 14, 29, 62] },
+  { id: 'chambres',   label: 'Chambres',                  photoIds: [60, 65, 15, 19, 26, 46, 54, 43, 22, 8, 13, 21, 24, 44] },
+  { id: 'bains',      label: 'Salles de bain',            photoIds: [50, 63, 38, 4, 99, 33, 86, 27] },
+  { id: 'details',    label: 'Attentions & Accueil',      photoIds: [5, 7, 9, 10, 12, 17, 30, 35, 47, 49, 52, 53, 55, 56, 64, 66, 75, 76, 95, 100, 101, 102] },
 ];
 
 function initGallery() {
@@ -514,12 +514,7 @@ function initClientPortal() {
   const portal = document.getElementById('clientPortal');
   if (!portal) return;
 
-  const _parts = window.location.pathname.split('/').filter(Boolean);
-  const token = _parts.length >= 2 ? _parts[_parts.length - 1] : null;
-  if (!token || token === 'espace-client') {
-    portal.innerHTML = '<article class="card" style="max-width:460px;margin:0 auto;text-align:center"><h3>Accéder à votre dossier</h3><p>Saisissez le code reçu par e-mail.</p><input id="tokenInput" type="text" placeholder="Code de réservation" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:12px 0"><button onclick="(function(){var t=document.getElementById(\"tokenInput\").value.trim();if(t)window.location=\"/espace-client/\"+t})()" class="btn btn--primary btn--full">Accéder</button><p style="margin-top:12px;font-size:.85rem;color:#888">Ce code figure dans votre e-mail de confirmation d’hôte.</p></article>';
-    return;
-  }
+  const token = window.location.pathname.split('/').filter(Boolean).pop();
 
   const load = async () => {
     const response = await fetch(`/api/client/${token}`);
@@ -862,19 +857,6 @@ function initHeroReel() {
   } else {
     video.addEventListener('loadeddata', tryPlay, { once: true });
   }
-
-  const soundBtn = document.getElementById('heroSound');
-  if (soundBtn && video) {
-    soundBtn.addEventListener('click', function() {
-      video.muted = !video.muted;
-      soundBtn.classList.toggle('is-unmuted', !video.muted);
-      soundBtn.setAttribute('aria-label', video.muted ? 'Activer le son' : 'Couper le son');
-      var xLines = soundBtn.querySelectorAll('.sound-x-1, .sound-x-2');
-      var wave = soundBtn.querySelector('.sound-wave');
-      xLines.forEach(function(el) { el.style.display = video.muted ? '' : 'none'; });
-      if (wave) wave.style.display = video.muted ? 'none' : '';
-    });
-  }
 }
 
 // ─── Cookie Consent Banner (RGPD) ──────────────────────────────────────────
@@ -1030,93 +1012,4 @@ function signDocument(token, client, documentType, acceptedText, docTitle) {
       }
     });
   });
-}
-
-
-function initVideoBar() {
-  const video = document.getElementById('heroVideo');
-  const btnPlay = document.getElementById('vPlayPause');
-  const btnBack = document.getElementById('vBack');
-  const btnFwd = document.getElementById('vFwd');
-  const btnMute = document.getElementById('vMute');
-  const volSlider = document.getElementById('vVolume');
-  const played = document.getElementById('vPlayed');
-  const progress = document.getElementById('vProgress');
-  if (!video || !btnPlay) return;
-
-  // Play / Pause
-  btnPlay.addEventListener('click', () => {
-    if (video.paused) { video.play(); } else { video.pause(); }
-  });
-  video.addEventListener('play', () => {
-    btnPlay.querySelector('.icon-pause').style.display = '';
-    btnPlay.querySelector('.icon-play').style.display = 'none';
-    btnPlay.setAttribute('aria-label', 'Pause');
-  });
-  video.addEventListener('pause', () => {
-    btnPlay.querySelector('.icon-pause').style.display = 'none';
-    btnPlay.querySelector('.icon-play').style.display = '';
-    btnPlay.setAttribute('aria-label', 'Lancer');
-  });
-
-  // Seek -10s / +10s
-  btnBack.addEventListener('click', () => {
-    video.currentTime = Math.max(0, video.currentTime - 10);
-  });
-  btnFwd.addEventListener('click', () => {
-    video.currentTime = Math.min(video.duration || 0, video.currentTime + 10);
-  });
-
-  // Progress bar update
-  video.addEventListener('timeupdate', () => {
-    if (video.duration) {
-      played.style.width = (video.currentTime / video.duration * 100) + '%';
-    }
-  });
-  // Click on progress bar to seek
-  progress.addEventListener('click', (e) => {
-    const rect = progress.getBoundingClientRect();
-    const ratio = (e.clientX - rect.left) / rect.width;
-    video.currentTime = ratio * (video.duration || 0);
-  });
-
-  // Mute toggle — unlock audio context + set volume
-  btnMute.addEventListener('click', () => {
-    video.muted = !video.muted;
-    if (!video.muted) {
-      // Forcer le volume à la valeur du slider (>0 pour entendre quelque chose)
-      const targetVol = volSlider ? parseFloat(volSlider.value) : 1;
-      video.volume = targetVol > 0 ? targetVol : 1;
-      if (volSlider && targetVol === 0) { volSlider.value = 1; video.volume = 1; }
-      // Relancer la lecture pour débloquer l'audio sur iOS/Safari
-      if (video.paused) { video.play().catch(function(){}); }
-    }
-    updateMuteUI();
-  });
-
-  function updateMuteUI() {
-    const m = video.muted;
-    btnMute.querySelector('.icon-muted').style.display = m ? '' : 'none';
-    btnMute.querySelector('.icon-sound').style.display = m ? 'none' : '';
-    btnMute.classList.toggle('is-unmuted', !m);
-    btnMute.setAttribute('aria-label', m ? 'Activer le son' : 'Couper le son');
-  }
-
-  // Volume slider
-  if (volSlider) {
-    volSlider.addEventListener('input', () => {
-      const v = parseFloat(volSlider.value);
-      video.volume = v;
-      if (v > 0 && video.muted) {
-        video.muted = false;
-        updateMuteUI();
-      } else if (v === 0) {
-        video.muted = true;
-        updateMuteUI();
-      }
-    });
-  }
-
-  // Init UI state (video starts muted for autoplay)
-  updateMuteUI();
 }

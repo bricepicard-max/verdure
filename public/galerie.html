@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galerie photos — Villa Verdure & Cie à Saint-Pierre, La Réunion</title>
+  <meta name="description" content="Photos de la villa Verdure & Cie : piscine, chambres, cuisine, jardin, terrasse. 14 rubriques pour découvrir chaque espace de cette villa de vacances à La Réunion.">
+  <meta name="keywords" content="photos villa Réunion, galerie location saisonnière Saint-Pierre, images villa piscine Réunion">
+  <link rel="canonical" href="https://verdure.maisonpicard.com/galerie">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=2">
+  <style>
+    /* ── Intro ───────────────────────────────────────────── */
+    .gal-intro {
+      padding: 48px 0 32px;
+      text-align: center;
+    }
+    .gal-intro h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .gal-intro p { color: #666; font-size: 1rem; }
+
+    /* ── Grille 14 rubriques ─────────────────────────────── */
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding-bottom: 60px;
+    }
+    @media(max-width:860px) { .rooms-grid { grid-template-columns: repeat(2,1fr); gap:14px; } }
+    @media(max-width:480px) { .rooms-grid { grid-template-columns: 1fr; gap:12px; } }
+
+    .room-card {
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--linen);
+      box-shadow: 0 2px 12px rgba(24,32,26,.08);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .room-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(24,32,26,.14); }
+
+    .room-card__img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .room-card__img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .3s;
+      display: block;
+    }
+    .room-card:hover .room-card__img img { transform: scale(1.04); }
+
+    .room-card__body {
+      padding: 14px 16px 16px;
+    }
+    .room-card__title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .room-card__count {
+      font-size: .8rem;
+      color: #888;
+    }
+
+    /* ── Overlay plein écran ─────────────────────────────── */
+    .room-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: #fff;
+      overflow-y: auto;
+    }
+    .room-overlay.open { display: block; }
+
+    .room-overlay__header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 10;
+    }
+    .room-overlay__close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+      flex-shrink: 0;
+    }
+    .room-overlay__close:hover { background: #f0f0f0; }
+    .room-overlay__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--ink);
+    }
+
+    .room-overlay__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    @media(max-width:640px) { .room-overlay__grid { grid-template-columns: repeat(2,1fr); padding: 14px; } }
+
+    .room-overlay__grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity .18s;
+      display: block;
+    }
+    .room-overlay__grid img:hover { opacity: .85; }
+
+    /* ── Lightbox ────────────────────────────────────────── */
+    .lb {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(0,0,0,.92);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb.open { display: flex; }
+    .lb__img {
+      max-width: 90vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .lb__caption {
+      color: #ccc;
+      margin-top: 14px;
+      font-size: .9rem;
+      text-align: center;
+      max-width: 600px;
+      padding: 0 16px;
+    }
+    .lb__close {
+      position: fixed; top: 18px; right: 22px;
+      color: #fff; font-size: 2rem;
+      background: none; border: none; cursor: pointer; z-index: 10;
+      line-height: 1; padding: 4px 8px;
+    }
+    .lb__prev, .lb__next {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      color: #fff; font-size: 2.6rem;
+      background: rgba(0,0,0,.3); border: none; cursor: pointer;
+      padding: 6px 14px; border-radius: 6px; z-index: 10;
+      transition: background .15s;
+    }
+    .lb__prev:hover, .lb__next:hover { background: rgba(0,0,0,.55); }
+    .lb__prev { left: 14px; }
+    .lb__next { right: 14px; }
+    .lb__counter {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      color: #aaa; font-size: .85rem; background: rgba(0,0,0,.4);
+      padding: 4px 14px; border-radius: 20px;
+    }
+  </style>
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Verdure &amp; Cie">
+  <meta property="og:url" content="https://verdure.maisonpicard.com/galerie">
+  <meta property="og:title" content="Galerie photos — Villa Verdure & Cie à Saint-Pierre, La Réunion">
+  <meta property="og:description" content="Photos de la villa Verdure & Cie : piscine, chambres, cuisine, jardin, terrasse. 14 rubriques pour découvrir chaque espace de cette villa de vacances à La Réunion.">
+  <meta property="og:image" content="https://verdure.maisonpicard.com/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg">
+  <meta property="og:locale" content="fr_FR">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Galerie photos — Villa Verdure & Cie à Saint-Pierre, La Réunion">
+  <meta name="twitter:description" content="Photos de la villa Verdure & Cie : piscine, chambres, cuisine, jardin, terrasse. 14 rubriques pour découvrir chaque espace de cette villa de vacances à La Réunion.">
+  <meta name="twitter:image" content="https://verdure.maisonpicard.com/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg">
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "https://verdure.maisonpicard.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Galerie",
+      "item": "https://verdure.maisonpicard.com/galerie"
+    }
+  ]
+}
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Accueil","item":"https://verdure.maisonpicard.com/"},
+    {"@type":"ListItem","position":2,"name":"Galerie","item":"https://verdure.maisonpicard.com/galerie"}
+  ]
+}
+</script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <nav class="nav" aria-label="Navigation principale">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure &amp; Cie" aria-hidden="true"><span>Verdure &amp; Cie</span></a>
+      <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+      <div class="nav__links" id="navLinks">
+        <a data-nav href="/">Accueil</a>
+        <a data-nav href="/villa">Villa</a>
+        <a data-nav href="/galerie" class="active">Galerie</a>
+        <a data-nav href="/equipements">Équipements</a>
+        <a data-nav href="/localisation">Localisation</a>
+        <a data-nav href="/tarifs">Tarifs</a>
+        <a data-nav class="nav__client" href="/espace-client">Mon espace</a>
+        <a data-nav class="nav__cta" href="/reservation">Réserver</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="contenu">
+    <div class="gal-intro container">
+      <p class="eyebrow">Galerie</p>
+      <h1>Verdure &amp; Cie en images</h1>
+      <p>Cliquez sur une rubrique pour voir toutes les photos de cet espace.</p>
+    </div>
+
+    <div class="container">
+      <div class="rooms-grid" id="roomsGrid">
+        <!-- rempli par JS depuis galleryGroups -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Overlay rubrique -->
+  <div class="room-overlay" id="roomOverlay" role="dialog" aria-modal="true">
+    <div class="room-overlay__header">
+      <button class="room-overlay__close" id="overlayClose" aria-label="Fermer">✕</button>
+      <span class="room-overlay__title" id="overlayTitle"></span>
+    </div>
+    <div class="room-overlay__grid" id="overlayGrid"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true">
+    <button class="lb__close" onclick="lbClose()" aria-label="Fermer">✕</button>
+    <button class="lb__prev" onclick="lbStep(-1)" aria-label="Précédent">‹</button>
+    <img class="lb__img" id="lbImg" src="" alt="Photo villa Verdure &amp; Cie — Saint-Pierre, La Réunion">
+    <p class="lb__caption" id="lbCaption"></p>
+    <button class="lb__next" onclick="lbStep(1)" aria-label="Suivant">›</button>
+    <div class="lb__counter" id="lbCounter"></div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <span>© 2025 Verdure &amp; Cie — Saint-Pierre, La Réunion</span>
+      <nav class="footer__links">
+        <a href="/villa">La villa</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/tarifs">Tarifs</a>
+        <span class="footer__sep">|</span>
+        <a href="tel:+262692512766">0692 51 27 66</a>
+        <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a>
+        <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking</a>
+        <span class="footer__sep">|</span>
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/politique-confidentialite">Confidentialité</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    // ── Construction grille des rubriques ────────────────────────────────────
+    (function buildGrid() {
+      const grid = document.getElementById('roomsGrid');
+      if (!grid || typeof galleryGroups === 'undefined' || typeof photoIndex === 'undefined') return;
+
+      galleryGroups.forEach(group => {
+        // Photo de couverture = photo dont l'id == group.cover
+        const coverPhoto = photoIndex.find(p => p.id === group.cover)
+          || photoIndex.find(p => group.photoIds.includes(p.id));
+        if (!coverPhoto) return;
+
+        const card = document.createElement('div');
+        card.className = 'room-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', group.label);
+        card.innerHTML = `
+          <div class="room-card__img">
+            <img src="/assets/images/${coverPhoto.file}"
+                 alt="${coverPhoto.alt || group.label}"
+                 loading="lazy">
+          </div>
+          <div class="room-card__body">
+            <div class="room-card__title">${group.label}</div>
+            <div class="room-card__count">${group.photoIds.length} photo${group.photoIds.length > 1 ? 's' : ''}</div>
+          </div>`;
+
+        card.addEventListener('click', () => openRoom(group));
+        card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openRoom(group); });
+        grid.appendChild(card);
+      });
+    })();
+
+    // ── Overlay d'une rubrique ───────────────────────────────────────────────
+    let lbPhotos = [];
+    let lbIndex  = 0;
+
+    function openRoom(group) {
+      const overlay    = document.getElementById('roomOverlay');
+      const title      = document.getElementById('overlayTitle');
+      const overlayGrid = document.getElementById('overlayGrid');
+
+      title.textContent = group.label;
+      overlayGrid.innerHTML = '';
+
+      const photos = group.photoIds
+        .map(id => photoIndex.find(p => p.id === id))
+        .filter(Boolean);
+
+      lbPhotos = photos;
+
+      photos.forEach((photo, idx) => {
+        const img = document.createElement('img');
+        img.src     = '/assets/images/' + photo.file;
+        img.alt     = photo.alt || photo.title || group.label;
+        img.loading = 'lazy';
+        img.addEventListener('click', () => lbOpen(idx));
+        overlayGrid.appendChild(img);
+      });
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    document.getElementById('overlayClose').addEventListener('click', closeRoom);
+
+    function closeRoom() {
+      document.getElementById('roomOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Lightbox ─────────────────────────────────────────────────────────────
+    function lbOpen(idx) {
+      lbIndex = idx;
+      lbShow();
+      document.getElementById('lb').classList.add('open');
+    }
+
+    function lbClose() {
+      document.getElementById('lb').classList.remove('open');
+    }
+
+    function lbStep(dir) {
+      lbIndex = (lbIndex + dir + lbPhotos.length) % lbPhotos.length;
+      lbShow();
+    }
+
+    function lbShow() {
+      const photo = lbPhotos[lbIndex];
+      document.getElementById('lbImg').src     = '/assets/images/' + photo.file;
+      document.getElementById('lbImg').alt     = photo.alt || photo.title || '';
+      document.getElementById('lbCaption').textContent = photo.title || '';
+      document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${lbPhotos.length}`;
+    }
+
+    // ── Clavier ──────────────────────────────────────────────────────────────
+    document.addEventListener('keydown', e => {
+      if (document.getElementById('lb').classList.contains('open')) {
+        if (e.key === 'ArrowLeft')  lbStep(-1);
+        if (e.key === 'ArrowRight') lbStep(1);
+        if (e.key === 'Escape')     lbClose();
+      } else if (document.getElementById('roomOverlay').classList.contains('open')) {
+        if (e.key === 'Escape') closeRoom();
+      }
+    });
+
+    // ── Nav mobile ───────────────────────────────────────────────────────────
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', () => {
+        const open = navLinks.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', open);
+        navToggle.textContent = open ? '✕' : '☰';
+      });
+    }
+  </script>
+</body>
+</html>

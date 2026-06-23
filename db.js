@@ -56,6 +56,18 @@ db.exec(`
 
 // Migrate: add signature_data column if missing
 try { db.exec('ALTER TABLE signatures ADD COLUMN signature_data TEXT'); } catch {}
+// Auth & upload migrations
+try { db.exec('ALTER TABLE clients ADD COLUMN login TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN password_hash TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 1'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN session_token TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN session_expires TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN id_doc_filename TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN id_doc_uploaded_at TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN payment_confirmed INTEGER NOT NULL DEFAULT 0'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN payment_confirmed_at TEXT'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN payment_paid INTEGER NOT NULL DEFAULT 0'); } catch {}
+try { db.exec('ALTER TABLE clients ADD COLUMN payment_paid_at TEXT'); } catch {}
 // Migrate: add posts table
 db.exec(`
   CREATE TABLE IF NOT EXISTS posts (
@@ -196,6 +208,54 @@ function updatePostStatus(id, status, metaPostId) {
   return db.prepare('SELECT * FROM posts WHERE id = ?').get(id);
 }
 
+
+function setClientLogin(id, login) {
+  db.prepare('UPDATE clients SET login = ?, updated_at = ? WHERE id = ?').run(login, now(), id);
+}
+
+function setClientPassword(id, hash, mustChange) {
+  db.prepare('UPDATE clients SET password_hash = ?, must_change_password = ?, updated_at = ? WHERE id = ?')
+    .run(hash, mustChange ? 1 : 0, now(), id);
+}
+
+function setClientSession(id, sessionToken, expiresAt) {
+  db.prepare('UPDATE clients SET session_token = ?, session_expires = ?, updated_at = ? WHERE id = ?')
+    .run(sessionToken, expiresAt, now(), id);
+}
+
+function clearClientSession(id) {
+  db.prepare('UPDATE clients SET session_token = NULL, session_expires = NULL WHERE id = ?').run(id);
+}
+
+function getClientBySession(sessionToken) {
+  if (!sessionToken) return null;
+  return db.prepare('SELECT * FROM clients WHERE session_token = ?').get(sessionToken);
+}
+
+function getClientByLogin(login) {
+  if (!login) return null;
+  return db.prepare('SELECT * FROM clients WHERE login = ?').get(login.toLowerCase());
+}
+
+function setClientIdDoc(id, filename) {
+  db.prepare('UPDATE clients SET id_doc_filename = ?, id_doc_uploaded_at = ?, updated_at = ? WHERE id = ?')
+    .run(filename, now(), now(), id);
+}
+
+function setClientPaymentConfirmed(id) {
+  db.prepare('UPDATE clients SET payment_confirmed = 1, payment_confirmed_at = ?, updated_at = ? WHERE id = ?')
+    .run(now(), now(), id);
+}
+
+function setClientPaymentPaid(id) {
+  db.prepare('UPDATE clients SET payment_paid = 1, payment_paid_at = ?, status = ?, updated_at = ? WHERE id = ?')
+    .run(now(), 'active', now(), id);
+}
+
+function updateClientStatus(id, status) {
+  db.prepare('UPDATE clients SET status = ?, updated_at = ? WHERE id = ?').run(status, now(), id);
+}
+
 module.exports = {
   createClient,
   getClientByToken,
@@ -206,4 +266,14 @@ module.exports = {
   createPost,
   listPosts,
   updatePostStatus,
+  setClientLogin,
+  setClientPassword,
+  setClientSession,
+  clearClientSession,
+  getClientBySession,
+  getClientByLogin,
+  setClientIdDoc,
+  setClientPaymentConfirmed,
+  setClientPaymentPaid,
+  updateClientStatus,
 };

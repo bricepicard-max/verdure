@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Verdure & Cie</title>
+  <meta name="description" content="Administration du site Verdure & Cie — gestion des réservations et clients.">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav class="nav" style="position:sticky;top:0;z-index:100">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="/">Verdure & Cie</a>
+      <div style="display:flex;gap:16px;align-items:center">
+        <a href="/reglement-interieur" style="font-size:.85rem;color:var(--muted)">Règlement</a>
+        <a href="/" class="btn btn--outline" style="padding:6px 14px;font-size:.85rem">← Site</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="section" style="min-height:100vh">
+    <div class="container" style="max-width:900px">
+
+      <!-- Tab navigation -->
+      <div style="display:flex;gap:8px;margin-bottom:36px;border-bottom:2px solid var(--line);padding-bottom:0">
+        <button class="admin-tab is-active" data-tab="clients">Dossiers clients</button>
+        <button class="admin-tab" data-tab="posts">Publications réseaux</button>
+      </div>
+
+      <!-- ── CLIENTS TAB ─────────────────────────────── -->
+      <div id="tab-clients">
+        <div class="section__head" style="margin-bottom:28px">
+          <p class="eyebrow">Administration</p>
+          <h1>Nouveau dossier client</h1>
+          <p class="lead">Crée un dossier, puis transmets le lien privé au voyageur pour signer les documents, payer l'acompte et déposer la caution.</p>
+        </div>
+
+        <form class="form" id="adminClientForm">
+          <label><span>Token admin</span><input type="password" name="adminToken" id="adminToken" autocomplete="off" required></label>
+          <div class="form__row">
+            <label><span>Nom client</span><input type="text" name="guestName" required></label>
+            <label><span>Email client</span><input type="email" name="guestEmail" required></label>
+          </div>
+          <label><span>Téléphone</span><input type="tel" name="guestPhone"></label>
+          <div class="form__row">
+            <label><span>Arrivée</span><input type="date" name="arrival"></label>
+            <label><span>Départ</span><input type="date" name="departure"></label>
+          </div>
+          <div class="form__row">
+            <label><span>Voyageurs</span><input type="number" min="1" max="10" name="guests" value="2"></label>
+            <label><span>Montant total séjour (€)</span><input type="number" min="0" step="0.01" name="totalAmount" placeholder="Ex : 1200"></label>
+          </div>
+          <label><span>Lien Swikly caution</span><input type="url" name="swiklyUrl" placeholder="https://..."></label>
+          <label><span>Notes internes</span><textarea name="notes" rows="3" placeholder="Précisions, demandes spéciales..."></textarea></label>
+          <button class="btn btn--primary btn--full" type="submit">Créer le dossier client</button>
+          <p class="form__error" id="adminError" hidden></p>
+        </form>
+
+        <div class="result-card" id="adminResult" hidden></div>
+
+        <div style="margin-top:48px">
+          <h2 style="font-size:1.1rem;margin-bottom:16px">Dossiers récents</h2>
+          <div id="clientList"><p class="note">Entrez le token admin et cliquez sur "Charger" pour voir les dossiers.</p></div>
+          <button class="btn btn--outline" id="loadClients" style="margin-top:12px" type="button">Charger les dossiers</button>
+        </div>
+      </div>
+
+      <!-- ── POSTS TAB ────────────────────────────────── -->
+      <div id="tab-posts" hidden>
+        <div class="section__head" style="margin-bottom:28px">
+          <p class="eyebrow">Réseaux sociaux</p>
+          <h1>File de publications</h1>
+          <p class="lead">Rédige ou génère automatiquement des posts Facebook & Instagram. Publie manuellement ou configure Meta API pour l'automatisation.</p>
+        </div>
+
+        <form class="form" id="postForm">
+          <label><span>Token admin</span><input type="password" name="postToken" id="postToken" autocomplete="off" required></label>
+          <label>
+            <span>Plateforme</span>
+            <select name="platform">
+              <option value="both">Facebook + Instagram</option>
+              <option value="facebook">Facebook uniquement</option>
+              <option value="instagram">Instagram uniquement</option>
+            </select>
+          </label>
+          <label>
+            <span>Thème / sujet (pour génération IA)</span>
+            <input type="text" name="imageHint" placeholder="Ex: piscine de nuit, petit-déjeuner sur la terrasse...">
+          </label>
+          <label>
+            <span>Texte du post (laissez vide pour génération IA automatique)</span>
+            <textarea name="content" rows="5" placeholder="Saisissez votre texte ici, ou laissez vide pour laisser l'IA le générer à partir du thème ci-dessus..."></textarea>
+          </label>
+          <label>
+            <span>Date de publication souhaitée (optionnel)</span>
+            <input type="datetime-local" name="scheduledAt">
+          </label>
+          <div style="display:flex;gap:12px">
+            <button class="btn btn--primary" type="submit" id="postSubmit">Ajouter à la file</button>
+            <button class="btn btn--outline" type="submit" id="postGenerate" name="generate" value="1">✨ Générer avec l'IA</button>
+          </div>
+          <p class="form__error" id="postError" hidden></p>
+        </form>
+
+        <div style="margin-top:48px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h2 style="font-size:1.1rem;margin:0">Posts en attente</h2>
+            <button class="btn btn--outline" id="loadPosts" type="button" style="font-size:.82rem;padding:7px 14px">Actualiser</button>
+          </div>
+          <div id="postList"><p class="note">Entrez le token admin et cliquez sur "Actualiser" pour voir les posts.</p></div>
+        </div>
+
+        <div class="note" style="margin-top:32px">
+          <strong>Publication automatique</strong> — Pour que le bouton "Publier sur Facebook" fonctionne, ajoutez dans <code>/opt/verdure/.env</code> sur le serveur :<br>
+          <code>META_PAGE_TOKEN=votre_token_page</code><br>
+          <code>META_PAGE_ID=votre_page_id</code><br>
+          Obtenez ces valeurs sur <a href="https://developers.facebook.com" target="_blank" rel="noopener">developers.facebook.com</a>.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    // Tab switching
+    document.querySelectorAll('.admin-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach((t) => t.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        ['clients', 'posts'].forEach((id) => {
+          document.getElementById(`tab-${id}`).hidden = id !== tab.dataset.tab;
+        });
+      });
+    });
+
+    // Load clients
+    document.getElementById('loadClients').addEventListener('click', async () => {
+      const token = document.getElementById('adminToken').value;
+      if (!token) { alert('Entrez le token admin d\'abord.'); return; }
+      const res = await fetch('/api/admin/clients', { headers: { 'x-admin-token': token } });
+      const data = await res.json();
+      const el = document.getElementById('clientList');
+      if (!res.ok) { el.innerHTML = `<p class="form__error">${data.error}</p>`; return; }
+      if (!data.clients.length) { el.innerHTML = '<p class="note">Aucun dossier client.</p>'; return; }
+      el.innerHTML = data.clients.map((c) => `
+        <div class="card" style="margin-bottom:12px;padding:16px 20px">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
+            <div>
+              <strong>${c.guestName}</strong> — ${c.arrival || '?'} → ${c.departure || '?'}
+              <br><small style="color:var(--muted)">${c.guestEmail} · ${c.guests} voyageurs · ${(c.totalAmountCents/100).toFixed(0)} €</small>
+            </div>
+            <a class="btn btn--outline" href="${c.clientUrl}" target="_blank" rel="noopener" style="white-space:nowrap;font-size:.8rem;padding:6px 12px">Ouvrir →</a>
+          </div>
+        </div>
+      `).join('');
+    });
+
+    // Load posts
+    const loadPosts = async () => {
+      const token = document.getElementById('postToken').value;
+      if (!token) { document.getElementById('postList').innerHTML = '<p class="note">Token admin requis.</p>'; return; }
+      const res = await fetch('/api/admin/posts', { headers: { 'x-admin-token': token } });
+      const data = await res.json();
+      const el = document.getElementById('postList');
+      if (!res.ok) { el.innerHTML = `<p class="form__error">${data.error}</p>`; return; }
+      if (!data.posts.length) { el.innerHTML = '<p class="note">Aucun post en attente.</p>'; return; }
+      el.innerHTML = data.posts.map((p) => `
+        <div class="card" style="margin-bottom:12px;padding:16px 20px">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
+            <div style="flex:1">
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <span class="eyebrow" style="font-size:.7rem">${p.platform}</span>
+                <span class="eyebrow" style="font-size:.7rem;color:${p.status==='published'?'var(--leaf)':'var(--sun)'}">${p.status}</span>
+                ${p.scheduled_at ? `<span class="eyebrow" style="font-size:.7rem">📅 ${p.scheduled_at.slice(0,10)}</span>` : ''}
+              </div>
+              <p style="white-space:pre-wrap;font-size:.88rem;color:var(--copy);margin:0">${p.content}</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+              ${p.status !== 'published' ? `<button class="btn btn--primary" data-publish="${p.id}" style="font-size:.78rem;padding:6px 12px">Publier</button>` : `<span style="color:var(--leaf);font-size:.8rem;font-weight:700">✓ Publié</span>`}
+              <button class="btn btn--outline" onclick="navigator.clipboard.writeText(${JSON.stringify(p.content)})" style="font-size:.78rem;padding:6px 12px">Copier</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      el.querySelectorAll('[data-publish]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.publish;
+          const token2 = document.getElementById('postToken').value;
+          btn.disabled = true; btn.textContent = '...';
+          const r = await fetch(`/api/admin/posts/${id}/publish`, { method: 'POST', headers: { 'x-admin-token': token2 } });
+          const d = await r.json();
+          if (!r.ok) { alert(d.error); btn.disabled = false; btn.textContent = 'Publier'; return; }
+          await loadPosts();
+        });
+      });
+    };
+    document.getElementById('loadPosts').addEventListener('click', loadPosts);
+
+    // Post form
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const isGenerate = e.submitter?.name === 'generate';
+      const formData = new FormData(e.target);
+      const token = formData.get('postToken');
+      const payload = {
+        platform: formData.get('platform'),
+        content: formData.get('content'),
+        imageHint: formData.get('imageHint'),
+        scheduledAt: formData.get('scheduledAt') || null,
+        generateAi: isGenerate,
+      };
+      const submitBtn = document.getElementById(isGenerate ? 'postGenerate' : 'postSubmit');
+      submitBtn.disabled = true;
+      const orig = submitBtn.textContent;
+      submitBtn.textContent = isGenerate ? '✨ Génération...' : 'Ajout...';
+      const err = document.getElementById('postError');
+      err.hidden = true;
+      const res = await fetch('/api/admin/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      submitBtn.disabled = false; submitBtn.textContent = orig;
+      if (!res.ok) { err.textContent = data.error; err.hidden = false; return; }
+      e.target.querySelector('textarea[name="content"]').value = '';
+      e.target.querySelector('input[name="imageHint"]').value = '';
+      await loadPosts();
+    });
+  </script>
+</body>
+</html>

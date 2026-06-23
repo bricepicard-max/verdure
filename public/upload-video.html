@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload vidéo — Verdure & Cie</title>
+  <link rel="stylesheet" href="/styles.css?v=2">
+  <style>
+    .upload-main{max-width:520px;margin:80px auto;padding:0 20px;text-align:center}
+    .upload-main h1{margin-bottom:8px}
+    .upload-main p{color:var(--muted);margin-bottom:32px}
+    .upload-zone{border:2px dashed var(--line);border-radius:12px;padding:48px 20px;cursor:pointer;transition:.2s;background:var(--white)}
+    .upload-zone:hover,.upload-zone.dragover{border-color:var(--leaf);background:rgba(177,185,112,.06)}
+    .upload-zone svg{width:48px;height:48px;color:var(--muted);margin-bottom:12px}
+    .upload-zone p{font-size:.95rem;color:var(--muted);margin:0}
+    .upload-zone .file-name{display:none;margin-top:12px;font-weight:600;color:var(--leaf)}
+    .upload-progress{display:none;margin-top:24px}
+    .upload-progress progress{width:100%;height:6px;border-radius:3px;border:none}
+    .upload-progress progress::-webkit-progress-value{background:var(--leaf);border-radius:3px}
+    .upload-status{margin-top:16px;font-size:.9rem}
+    .upload-status.success{color:var(--leaf)}
+    .upload-status.error{color:#c0392b}
+    .btn{display:inline-block;margin-top:24px}
+    .preview{display:none;margin-top:32px}
+    .preview video{max-width:100%;border-radius:8px;box-shadow:var(--shadow)}
+  </style>
+</head>
+<body>
+  <nav class="nav" style="position:static">
+    <a class="nav__logo" href="/">Verdure &amp; Cie</a>
+  </nav>
+
+  <main class="upload-main">
+    <h1>Mettre à jour la vidéo</h1>
+    <p>Remplace la vidéo d'accueil du site. MP4 ou WebM, max 50 Mo.</p>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="upload-zone" id="dropZone">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        <p>Clique ou glisse-dépose ta vidéo ici</p>
+        <p class="file-name" id="fileName"></p>
+        <input type="file" id="fileInput" name="video" accept="video/mp4,video/webm" hidden>
+      </div>
+
+      <div class="upload-progress" id="progressArea">
+        <progress id="progressBar" value="0" max="100"></progress>
+        <p class="upload-status" id="statusMsg">Traitement en cours…</p>
+      </div>
+
+      <button class="btn btn--primary" type="submit" id="submitBtn" style="display:none">Envoyer la vidéo</button>
+    </form>
+
+    <div class="preview" id="previewArea">
+      <video id="previewVideo" controls width="100%"></video>
+      <button class="btn btn--outline" id="useVideoBtn" style="margin-top:16px">Utiliser sur le site →</button>
+    </div>
+  </main>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const submitBtn = document.getElementById('submitBtn');
+    const progressArea = document.getElementById('progressArea');
+    const progressBar = document.getElementById('progressBar');
+    const statusMsg = document.getElementById('statusMsg');
+    const previewArea = document.getElementById('previewArea');
+    const previewVideo = document.getElementById('previewVideo');
+    const useVideoBtn = document.getElementById('useVideoBtn');
+    const uploadForm = document.getElementById('uploadForm');
+
+    let selectedFile = null;
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+    function handleFile(file) {
+      if (!file.type.startsWith('video/')) { alert('Seulement des fichiers vidéo.'); return; }
+      if (file.size > 50 * 1024 * 1024) { alert('Trop lourd — max 50 Mo.'); return; }
+      selectedFile = file;
+      fileName.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(1) + ' Mo)';
+      fileName.style.display = 'block';
+      document.querySelector('.upload-zone p').textContent = 'Fichier sélectionné';
+      submitBtn.style.display = 'inline-block';
+
+      // Preview
+      const url = URL.createObjectURL(file);
+      previewVideo.src = url;
+      previewArea.style.display = 'block';
+      useVideoBtn.style.display = 'none';
+    }
+
+    uploadForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!selectedFile) return;
+      submitBtn.style.display = 'none';
+      progressArea.style.display = 'block';
+      statusMsg.className = 'upload-status';
+      statusMsg.textContent = 'Upload en cours…';
+
+      const formData = new FormData();
+      formData.append('video', selectedFile);
+
+      try {
+        const res = await fetch('/upload-video', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+          statusMsg.className = 'upload-status success';
+          statusMsg.textContent = '✅ Vidéo mise à jour !';
+          useVideoBtn.style.display = 'inline-block';
+          useVideoBtn.onclick = () => { location.href = '/'; };
+        } else {
+          statusMsg.className = 'upload-status error';
+          statusMsg.textContent = 'Erreur : ' + (data.error || 'Inconnue');
+        }
+      } catch (err) {
+        statusMsg.className = 'upload-status error';
+        statusMsg.textContent = 'Erreur réseau. Réessaie.';
+      }
+      progressBar.value = 100;
+    });
+  </script>
+</body>
+</html>

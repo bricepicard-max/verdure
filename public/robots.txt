@@ -1,3 +1,20 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /espace-client
+Disallow: /api/
+Disallow: /upload-photos
+Disallow: /upload-video
+
 Sitemap: https://verdure.maisonpicard.com/sitemap.xml
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /espace-client
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /admin

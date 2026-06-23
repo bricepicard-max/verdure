@@ -4,27 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mentions légales - Verdure & Cie</title>
+  <meta name="description" content="Mentions légales du site Verdure & Cie, villa de vacances à Saint-Pierre, La Réunion.">
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=2">
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <nav class="nav" aria-label="Navigation principale">
     <div class="container nav__inner">
-      <a class="nav__brand" href="/">Verdure & Cie</a>
+      <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure & Cie" aria-hidden="true"><span>Verdure & Cie</span></a>
       <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
       <div class="nav__links" id="navLinks">
         <a data-nav href="/">Accueil</a>
         <a data-nav href="/villa">Villa</a>
-        <a data-nav href="/photos">Photos</a>
+        <a data-nav href="/galerie">Galerie</a>
         <a data-nav href="/equipements">Équipements</a>
         <a data-nav href="/localisation">Localisation</a>
         <a data-nav href="/tarifs">Tarifs</a>
-        <a data-nav class="nav__cta" href="/reservation">Réserver</a>
+        <a data-nav class="nav__client" href="/espace-client">Mon espace</a><a data-nav class="nav__cta" href="/reservation">Réserver</a>
       </div>
     </div>
   </nav>
@@ -56,7 +57,7 @@
             <li><strong>Nom :</strong> Brice Picard</li>
             <li><strong>Adresse :</strong> 8 chemin Elie Hoarau, Basse-Terre, 97410 Saint-Pierre, La Réunion</li>
             <li><strong>Téléphone :</strong> <a href="tel:+262692512766">0692 51 27 66</a></li>
-            <li><strong>Email :</strong> <a href="mailto:hello@maisonpicard.com">hello@maisonpicard.com</a></li>
+            <li><strong>Email :</strong> <a href="mailto:verdure@maisonpicard.com">verdure@maisonpicard.com</a></li>
             <li><strong>Statut :</strong> Particulier loueur meublé de tourisme</li>
           </ul>
           <p>Directeur de la publication : Brice Picard.</p>
@@ -82,7 +83,7 @@
         <section id="donnees">
           <h2>4. Protection des données personnelles</h2>
           <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés du 6 janvier 1978 modifiée, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition au traitement de vos données personnelles.</p>
-          <p>Pour exercer ces droits ou pour toute question sur le traitement de vos données, contactez : <a href="mailto:hello@maisonpicard.com">hello@maisonpicard.com</a></p>
+          <p>Pour exercer ces droits ou pour toute question sur le traitement de vos données, contactez : <a href="mailto:verdure@maisonpicard.com">verdure@maisonpicard.com</a></p>
           <p>Pour plus d'informations sur la façon dont nous collectons et utilisons vos données, consultez notre <a href="/politique-confidentialite">Politique de confidentialité</a>.</p>
           <p>Vous disposez également du droit d'introduire une réclamation auprès de la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a></p>
         </section>
@@ -111,18 +112,21 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container footer__grid">
-      <div><strong>Verdure & Cie</strong><p>Villa de vacances à Saint-Pierre, La Réunion.</p></div>
-      <div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Équipements</a></div>
-      <div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Réserver</a></div>
-      <div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="tel:+262692512766">0692 51 27 66</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div>
-    </div>
-    <div class="container footer__bottom">
-      <span>© 2026 Verdure & Cie.</span>
-      <nav class="footer__legal" aria-label="Liens légaux">
+    <footer class="footer">
+    <div class="footer__inner">
+      <span>© 2026 Verdure &amp; Cie — Saint-Pierre, La Réunion</span>
+      <nav class="footer__links">
+        <a href="/villa">La villa</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/tarifs">Tarifs</a>
+        <span class="footer__sep">|</span>
+        <a href="tel:+262692512766">0692 51 27 66</a>
+        <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a>
+        <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking</a>
+        <span class="footer__sep">|</span>
         <a href="/mentions-legales">Mentions légales</a>
         <a href="/politique-confidentialite">Confidentialité</a>
+        <a href="/admin" style="color:rgba(255,255,255,.18);font-size:.72rem">Admin</a>
       </nav>
     </div>
   </footer>

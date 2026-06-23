@@ -3,145 +3,549 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Réserver — Verdure & Cie</title>
-  <meta name="description" content="Réservez directement Verdure & Cie à Saint-Pierre, La Réunion. Consultez les disponibilités en temps réel et contactez l'hôte sans commission.">
+  <title>Réserver en direct — Sans commission · Verdure & Cie Saint-Pierre Réunion</title>
+  <meta name="description" content="Réservez directement la villa Verdure & Cie à Saint-Pierre, La Réunion. Sans commission Airbnb ni Booking. Réponse sous 48h. Meilleur tarif garanti.">
+  <meta name="keywords" content="réserver villa Réunion, location directe Saint-Pierre Réunion, réservation sans commission Réunion">
   <link rel="canonical" href="https://verdure.maisonpicard.com/reservation">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=2">
+  <style>
+    /* ── Formulaire de demande ─────────────────────────── */
+    .booking-wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 32px rgba(24,32,26,.07);
+    }
+    @media(max-width:560px){ .booking-wrap { padding: 26px 18px; border-radius: 14px; } }
+
+    .booking-wrap h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      color: var(--ink);
+      margin: 0 0 6px;
+    }
+    .booking-wrap .sub {
+      color: #777;
+      font-size: .92rem;
+      margin-bottom: 28px;
+    }
+
+    .frow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media(max-width:480px){ .frow { grid-template-columns: 1fr; } }
+
+    .fgroup {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+    .fgroup label {
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 6px;
+    }
+    .fgroup input,
+    .fgroup select,
+    .fgroup textarea {
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-size: .95rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--cream);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .fgroup input:focus,
+    .fgroup select:focus,
+    .fgroup textarea:focus {
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 3px rgba(26,46,26,.08);
+    }
+    .fgroup textarea { resize: vertical; min-height: 100px; }
+
+    /* Checkboxes RGPD / RI */
+    .fcheck {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .fcheck input[type="checkbox"] {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      accent-color: var(--leaf);
+      cursor: pointer;
+    }
+    .fcheck label {
+      font-size: .85rem;
+      color: #444;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+    .fcheck a { color: var(--leaf); text-decoration: underline; }
+
+    .fdivider {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 22px 0;
+    }
+
+    /* Submit */
+    .btn--full { width: 100%; justify-content: center; display: flex; }
+
+    /* Messages */
+    .form-error {
+      background: #fff2f2;
+      border: 1px solid #f5c0c0;
+      border-radius: 8px;
+      color: #c0392b;
+      font-size: .87rem;
+      padding: 12px 16px;
+      margin-top: 14px;
+      display: none;
+    }
+    .form-success {
+      background: #f2fbf4;
+      border: 1px solid #a8d5b0;
+      border-radius: 12px;
+      color: #1a6630;
+      padding: 28px 24px;
+      text-align: center;
+      display: none;
+    }
+    .form-success .tick {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .form-success h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .form-success p { color: #444; font-size: .95rem; line-height: 1.6; }
+
+    /* Avantages */
+    .benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .benefit__icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .benefit__text strong { display: block; font-size: .95rem; color: var(--ink); margin-bottom: 2px; }
+    .benefit__text span { font-size: .85rem; color: #666; }
+  </style>
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Verdure &amp; Cie">
+  <meta property="og:url" content="https://verdure.maisonpicard.com/reservation">
+  <meta property="og:title" content="Réserver en direct — Sans commission · Verdure & Cie Saint-Pierre Réunion">
+  <meta property="og:description" content="Réservez directement la villa Verdure & Cie à Saint-Pierre, La Réunion. Sans commission Airbnb ni Booking. Réponse sous 48h. Meilleur tarif garanti.">
+  <meta property="og:image" content="https://verdure.maisonpicard.com/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg">
+  <meta property="og:locale" content="fr_FR">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Réserver en direct — Sans commission · Verdure & Cie Saint-Pierre Réunion">
+  <meta name="twitter:description" content="Réservez directement la villa Verdure & Cie à Saint-Pierre, La Réunion. Sans commission Airbnb ni Booking. Réponse sous 48h. Meilleur tarif garanti.">
+  <meta name="twitter:image" content="https://verdure.maisonpicard.com/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg">
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "https://verdure.maisonpicard.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Réserver",
+      "item": "https://verdure.maisonpicard.com/reservation"
+    }
+  ]
+}
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Accueil","item":"https://verdure.maisonpicard.com/"},
+    {"@type":"ListItem","position":2,"name":"Réserver","item":"https://verdure.maisonpicard.com/reservation"}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ReservationAction",
+  "name": "Réserver la villa Verdure & Cie directement",
+  "description": "Réservation directe sans commission. Villa 5 chambres, piscine privée, Saint-Pierre La Réunion.",
+  "target": {
+    "@type": "EntryPoint",
+    "urlTemplate": "https://verdure.maisonpicard.com/reservation",
+    "actionPlatform": ["http://schema.org/DesktopWebPlatform","http://schema.org/MobileWebPlatform"]
+  }
+}
+</script>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <nav class="nav" aria-label="Navigation principale">
     <div class="container nav__inner">
-      <a class="nav__brand" href="/">Verdure & Cie</a>
+      <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure &amp; Cie" aria-hidden="true"><span>Verdure &amp; Cie</span></a>
       <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
       <div class="nav__links" id="navLinks">
         <a data-nav href="/">Accueil</a>
         <a data-nav href="/villa">Villa</a>
-        <a data-nav href="/photos">Photos</a>
+        <a data-nav href="/galerie">Galerie</a>
         <a data-nav href="/equipements">Équipements</a>
         <a data-nav href="/localisation">Localisation</a>
         <a data-nav href="/tarifs">Tarifs</a>
-        <a data-nav class="nav__cta" href="/reservation">Réserver</a>
+        <a data-nav class="nav__client" href="/espace-client">Mon espace</a>
+        <a data-nav class="nav__cta active" href="/reservation">Réserver</a>
       </div>
     </div>
   </nav>
 
   <main id="contenu">
+    <!-- Hero -->
     <header class="hero hero--compact">
       <picture class="hero__media">
-        <img src="/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg" alt="Piscine de Verdure & Cie éclairée de nuit">
+        <img src="/assets/images/fb9bacde-eaa3-4e7c-8a52-986b688a2e6b.jpeg" alt="Terrasse et table de Verdure &amp; Cie">
       </picture>
       <div class="hero__shade"></div>
       <div class="container hero__content">
         <p class="eyebrow eyebrow--light">Réservation directe</p>
-        <h1>Réservez en direct.</h1>
-        <p>Sans commission, sans intermédiaire — au meilleur tarif, avec une réponse sous 24h.</p>
+        <h1>Réservez en direct,<br><em>sans commission.</em></h1>
+        <p>Réponse personnalisée sous 48h · tarif le plus avantageux garanti.</p>
       </div>
     </header>
 
-    <!-- Calendrier des disponibilités -->
-    <section class="section section--linen">
-      <div class="container">
-        <div class="section__head">
-          <p class="eyebrow">Disponibilités</p>
-          <h2>Choisissez vos dates.</h2>
-          <p class="lead">Cliquez sur une date d'arrivée puis une date de départ. Le formulaire de demande se remplit automatiquement.</p>
-        </div>
-        <div id="bookingCalendar"></div>
-      </div>
-    </section>
-
-    <!-- Formulaire de demande -->
-    <section class="section">
+    <!-- Formulaire + avantages -->
+    <section class="section section--cream">
       <div class="container split">
+
+        <!-- Avantages côté gauche -->
         <div>
-          <p class="eyebrow">Demande directe</p>
-          <h2>Envoyez votre demande.</h2>
-          <p class="lead">Précisez vos dates, le nombre de voyageurs et tout élément utile. L'hôte vous répond personnellement sous 24 h.</p>
-          <ul style="margin-top:20px;display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:.92rem">
-            <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--leaf);font-weight:800">✓</span> Pas de commission de plateforme</li>
-            <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--leaf);font-weight:800">✓</span> Réponse personnalisée sous 24 h</li>
-            <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--leaf);font-weight:800">✓</span> Tarif le plus avantageux garanti</li>
-          </ul>
+          <p class="eyebrow">Pourquoi réserver en direct ?</p>
+          <h2>Pas d'intermédiaire,<br>pas de frais cachés.</h2>
+          <div class="benefits">
+            <div class="benefit">
+              <span class="benefit__icon">💸</span>
+              <div class="benefit__text">
+                <strong>Pas de commission</strong>
+                <span>Airbnb et Booking prélèvent jusqu'à 18 %. En direct, c'est zéro.</span>
+              </div>
+            </div>
+            <div class="benefit">
+              <span class="benefit__icon">💬</span>
+              <div class="benefit__text">
+                <strong>Réponse sous 48h</strong>
+                <span>Vous échangez directement avec Brice &amp; Anne-Sophie, les propriétaires.</span>
+              </div>
+            </div>
+            <div class="benefit">
+              <span class="benefit__icon">🏷️</span>
+              <div class="benefit__text">
+                <strong>Meilleur tarif garanti</strong>
+                <span>10 % sous les plateformes — voir la <a href="/tarifs">grille tarifaire</a>.</span>
+              </div>
+            </div>
+            <div class="benefit">
+              <span class="benefit__icon">📅</span>
+              <div class="benefit__text">
+                <strong>Disponibilités en cours</strong>
+                <span>Notre calendrier Airbnb &amp; Booking est en cours de mise en ligne. Contactez-nous pour vérifier vos dates.</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <form class="form" id="availabilityForm">
-          <div class="form__row">
-            <label><span>Nom</span><input type="text" id="name" name="name" autocomplete="name" required></label>
-            <label><span>Email</span><input type="email" id="email" name="email" autocomplete="email" required></label>
+        <!-- Formulaire -->
+        <div>
+          <div class="booking-wrap">
+            <h2>Votre demande</h2>
+            <p class="sub">Tous les champs marqués * sont obligatoires.</p>
+
+            <!-- Succès (masqué par défaut) -->
+            <div class="form-success" id="formSuccess">
+              <span class="tick">✅</span>
+              <h3>Demande envoyée !</h3>
+              <p>
+                Votre demande a bien été reçue.<br>
+                Brice &amp; Anne-Sophie vous répondront <strong>sous 48h maximum</strong> à l'adresse indiquée.<br><br>
+                <em>Merci de votre confiance — à très bientôt à Verdure &amp; Cie !</em>
+              </p>
+            </div>
+
+            <form id="bookingForm" novalidate>
+              <!-- Identité -->
+              <div class="frow">
+                <div class="fgroup">
+                  <label for="firstname">Prénom *</label>
+                  <input type="text" id="firstname" name="firstname" autocomplete="given-name" required placeholder="Anne">
+                </div>
+                <div class="fgroup">
+                  <label for="name">Nom *</label>
+                  <input type="text" id="name" name="name" autocomplete="family-name" required placeholder="Dupont">
+                </div>
+              </div>
+
+              <!-- Contact -->
+              <div class="frow">
+                <div class="fgroup">
+                  <label for="email">Email *</label>
+                  <input type="email" id="email" name="email" autocomplete="email" required placeholder="anne@exemple.fr">
+                </div>
+                <div class="fgroup">
+                  <label for="phone">Téléphone *</label>
+                  <input type="tel" id="phone" name="phone" autocomplete="tel" required placeholder="+33 6 12 34 56 78">
+                </div>
+              </div>
+
+              <!-- Dates -->
+              <div class="frow">
+                <div class="fgroup">
+                  <label for="arrival">Arrivée *</label>
+                  <input type="date" id="arrival" name="arrival" required>
+                </div>
+                <div class="fgroup">
+                  <label for="departure">Départ *</label>
+                  <input type="date" id="departure" name="departure" required>
+                </div>
+              </div>
+
+              <!-- Voyageurs -->
+              <div class="fgroup">
+                <label for="guests">Nombre de voyageurs *</label>
+                <select id="guests" name="guests">
+                  <option value="1">1 voyageur</option>
+                  <option value="2" selected>2 voyageurs</option>
+                  <option value="3">3 voyageurs</option>
+                  <option value="4">4 voyageurs</option>
+                  <option value="5">5 voyageurs</option>
+                  <option value="6">6 voyageurs</option>
+                  <option value="7">7 voyageurs</option>
+                  <option value="8">8 voyageurs</option>
+                  <option value="9">9 voyageurs</option>
+                  <option value="10">10 voyageurs</option>
+                </select>
+              </div>
+
+              <!-- Message -->
+              <div class="fgroup">
+                <label for="message">Message (optionnel)</label>
+                <textarea id="message" name="message" placeholder="Précisez le contexte de votre séjour, une demande particulière…"></textarea>
+              </div>
+
+              <hr class="fdivider">
+
+              <!-- Règlement intérieur -->
+              <div class="fcheck">
+                <input type="checkbox" id="checkRI" name="checkRI" required>
+                <label for="checkRI">
+                  J'ai pris connaissance du
+                  <a href="/reglement-interieur" target="_blank">règlement intérieur</a>
+                  de Verdure &amp; Cie et j'accepte ses conditions. *
+                </label>
+              </div>
+
+              <!-- RGPD -->
+              <div class="fcheck">
+                <input type="checkbox" id="checkRGPD" name="checkRGPD" required>
+                <label for="checkRGPD">
+                  J'autorise Verdure &amp; Cie à collecter et traiter mes données personnelles
+                  (nom, prénom, email, téléphone) dans le seul but de traiter ma demande de réservation,
+                  conformément au <a href="/politique-confidentialite" target="_blank">Règlement Général sur la Protection des Données (RGPD)</a>.
+                  Ces données ne seront pas transmises à des tiers et seront supprimées après traitement. *
+                </label>
+              </div>
+
+              <div class="form-error" id="formError"></div>
+
+              <button class="btn btn--primary btn--full" type="submit" id="submitBtn" style="margin-top:8px;font-size:1rem;padding:15px 24px;">
+                Envoyer ma demande
+              </button>
+            </form>
           </div>
-          <label><span>Téléphone</span><input type="tel" id="phone" name="phone" autocomplete="tel"></label>
-          <div class="form__row">
-            <label><span>Arrivée</span><input type="date" id="arrival" name="arrival" required></label>
-            <label><span>Départ</span><input type="date" id="departure" name="departure" required></label>
-          </div>
-          <label>
-            <span>Voyageurs</span>
-            <select id="guests" name="guests">
-              <option value="2">2 voyageurs</option>
-              <option value="3">3 voyageurs</option>
-              <option value="4">4 voyageurs</option>
-              <option value="5">5 voyageurs</option>
-              <option value="6">6 voyageurs</option>
-              <option value="7">7 voyageurs</option>
-              <option value="8">8 voyageurs</option>
-            </select>
-          </label>
-          <label><span>Message</span><textarea id="message" name="message" placeholder="Dates souhaitées, contexte du séjour, questions utiles…"></textarea></label>
-          <button class="btn btn--primary btn--full" type="submit" id="submitBtn">Envoyer la demande</button>
-          <p class="form__note">Réservation directe — aucun frais de plateforme.</p>
-          <p class="form__error" id="formError" hidden></p>
-        </form>
+        </div>
       </div>
     </section>
 
-    <!-- Pourquoi réserver en direct -->
+    <!-- Section feuille bas -->
     <section class="section section--leaf">
-      <div class="container">
-        <div class="section__head section__head--center" style="color:#fff">
-          <p class="eyebrow eyebrow--light">Pourquoi réserver en direct</p>
-          <h2 style="color:#fff">Trois bonnes raisons.</h2>
-        </div>
-        <div class="direct-benefits">
-          <div class="direct-benefit">
-            <div class="direct-benefit__icon">💸</div>
-            <h3>Pas de commission</h3>
-            <p>Airbnb et Booking prélèvent jusqu'à 18 % de frais. En direct, ces frais n'existent pas.</p>
-          </div>
-          <div class="direct-benefit">
-            <div class="direct-benefit__icon">💬</div>
-            <h3>Réponse directe sous 24 h</h3>
-            <p>Vous échangez directement avec l'hôte — pas d'algorithme, pas de délai de modération.</p>
-          </div>
-          <div class="direct-benefit">
-            <div class="direct-benefit__icon">🏷️</div>
-            <h3>Tarif le plus avantageux</h3>
-            <p>Le tarif proposé en direct est toujours au moins équivalent, souvent inférieur aux plateformes.</p>
-          </div>
+      <div class="container" style="text-align:center">
+        <p class="eyebrow eyebrow--light">Une question ?</p>
+        <h2>On vous répond directement.</h2>
+        <p class="lead" style="margin:0 auto 28px">
+          Préférez-vous nous appeler ou nous écrire ? L'hôte répond en personne.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+          <a class="btn btn--secondary" href="tel:+262692512766">📞 0692 51 27 66</a>
+          <a class="btn btn--ghost" href="/contact">Envoyer un message</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="container footer__grid">
-      <div><strong>Verdure & Cie</strong><p>Villa de vacances à Saint-Pierre, La Réunion.</p></div>
-      <div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Équipements</a></div>
-      <div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Réserver</a></div>
-      <div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="tel:+262692512766">0692 51 27 66</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div>
-    </div>
-    <div class="container footer__bottom">
-      <span>© 2026 Verdure & Cie.</span>
-      <nav class="footer__legal" aria-label="Liens légaux">
+    <div class="footer__inner">
+      <span>© 2025 Verdure &amp; Cie — Saint-Pierre, La Réunion</span>
+      <nav class="footer__links">
+        <a href="/villa">La villa</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/tarifs">Tarifs</a>
+        <span class="footer__sep">|</span>
+        <a href="tel:+262692512766">0692 51 27 66</a>
+        <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a>
+        <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking</a>
+        <span class="footer__sep">|</span>
         <a href="/mentions-legales">Mentions légales</a>
         <a href="/politique-confidentialite">Confidentialité</a>
+        <a href="/admin" style="color:rgba(255,255,255,.18);font-size:.72rem">Admin</a>
       </nav>
     </div>
   </footer>
+
   <script src="/app.js"></script>
+  <script>
+    // Dates min
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('arrival').min   = today;
+    document.getElementById('departure').min = today;
+
+    document.getElementById('arrival').addEventListener('change', function() {
+      if (!this.value) return;
+      const minDep = new Date(this.value + 'T12:00:00');
+      minDep.setDate(minDep.getDate() + 2);
+      const minDepStr = minDep.toISOString().split('T')[0];
+      const depEl = document.getElementById('departure');
+      depEl.min = minDepStr;
+      if (depEl.value && depEl.value < minDepStr) depEl.value = '';
+    });
+
+    // Soumission
+    document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const errEl  = document.getElementById('formError');
+      const btn    = document.getElementById('submitBtn');
+      errEl.style.display = 'none';
+
+      // Validation manuelle
+      const firstname = document.getElementById('firstname').value.trim();
+      const name      = document.getElementById('name').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const phone     = document.getElementById('phone').value.trim();
+      const arrival   = document.getElementById('arrival').value;
+      const departure = document.getElementById('departure').value;
+      const guests    = document.getElementById('guests').value;
+      const message   = document.getElementById('message').value.trim();
+      const checkRI   = document.getElementById('checkRI').checked;
+      const checkRGPD = document.getElementById('checkRGPD').checked;
+
+      if (!firstname || !name || !email || !phone || !arrival || !departure) {
+        errEl.textContent = 'Veuillez remplir tous les champs obligatoires (*).';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (!checkRI) {
+        errEl.textContent = 'Vous devez accepter le règlement intérieur pour continuer.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (!checkRGPD) {
+        errEl.textContent = 'Vous devez accepter la politique de confidentialité (RGPD) pour continuer.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (arrival && departure && departure <= arrival) {
+        errEl.textContent = 'La date de départ doit être après la date d\'arrivée (minimum 2 nuits).';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Envoi en cours…';
+
+      try {
+        const res = await fetch('/api/send-request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: `${firstname} ${name}`,
+            firstname,
+            email,
+            phone,
+            arrival,
+            departure,
+            guests,
+            message,
+            rgpd: true,
+            reglement: true
+          })
+        });
+
+        if (!res.ok) throw new Error('Erreur serveur');
+
+        // Succès : masquer formulaire, afficher confirmation
+        document.getElementById('bookingForm').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+
+      } catch (err) {
+        errEl.textContent = 'Une erreur est survenue. Veuillez réessayer ou nous contacter directement au 0692 51 27 66.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Envoyer ma demande';
+      }
+    });
+
+    // Nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', () => {
+        const open = navLinks.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', open);
+        navToggle.textContent = open ? '✕' : '☰';
+      });
+    }
+  </script>
 </body>
 </html>
