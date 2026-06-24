@@ -602,6 +602,9 @@ h3 { letter-spacing: -0.01em; }
  object-fit:cover;
  object-position:center 55%;
  display:block;
+ z-index:1;
+ filter:saturate(1.08) contrast(1.04);
+ background:var(--leaf);
 }
 .hero__slide {
   position: absolute;
@@ -610,6 +613,14 @@ h3 { letter-spacing: -0.01em; }
   transition: opacity 1.6s cubic-bezier(.4,0,.2,1);
 }
 .hero__slide.is-active { opacity: 1; }
+.hero__reel--video .hero__slide,
+.hero__reel--video .hero__slide.is-active {
+  opacity: 0;
+  pointer-events: none;
+}
+.hero__reel--video .hero__dots {
+  display: none;
+}
 .hero__slide-img {
   position: absolute;
   inset: -8%;

@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=2">
+  <link rel="stylesheet" href="/styles.css?v=3">
 
   <!-- Open Graph / Social -->
   <meta property="og:type" content="website">
@@ -174,7 +174,10 @@
 
     <!-- HERO -->
     <header class="hero">
-      <div class="hero__reel" id="heroReel" aria-hidden="true">
+      <div class="hero__reel hero__reel--video" id="heroReel" aria-hidden="true">
+        <video id="heroVideo" class="hero__video" autoplay muted loop playsinline preload="metadata" poster="/assets/images/26e34c49-0570-4b30-9990-ca682e0186d9.jpeg">
+          <source src="/assets/video/hero.mp4" type="video/mp4">
+        </video>
         <div class="hero__slide is-active">
           <div class="hero__slide-img" style="background-image:url('/assets/images/26e34c49-0570-4b30-9990-ca682e0186d9.jpeg')"></div>
         </div>
@@ -471,6 +474,6 @@
       </nav>
     </div>
   </footer>
-  <script src="/app.js"></script>
+  <script src="/app.js?v=3"></script>
 </body>
 </html>

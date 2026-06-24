@@ -856,6 +856,32 @@ function initBookingCalendar() {
 function initHeroReel() {
   const reel = document.getElementById('heroReel');
   if (!reel) return;
+  const video = reel.querySelector('video');
+  if (video) {
+    const tryPlay = () => {
+      video.play().catch(function() {});
+    };
+    if (video.readyState >= 2) {
+      tryPlay();
+    } else {
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+    }
+
+    const soundBtn = document.getElementById('heroSound');
+    if (soundBtn) {
+      soundBtn.addEventListener('click', function() {
+        video.muted = !video.muted;
+        soundBtn.classList.toggle('is-unmuted', !video.muted);
+        soundBtn.setAttribute('aria-label', video.muted ? 'Activer le son' : 'Couper le son');
+        var xLines = soundBtn.querySelectorAll('.sound-x-1, .sound-x-2');
+        var wave = soundBtn.querySelector('.sound-wave');
+        xLines.forEach(function(el) { el.style.display = video.muted ? '' : 'none'; });
+        if (wave) wave.style.display = video.muted ? 'none' : '';
+      });
+    }
+    return;
+  }
+
   const slides = Array.from(reel.querySelectorAll('.hero__slide'));
   if (slides.length > 1) {
     const dots = document.createElement('div');
@@ -887,29 +913,6 @@ function initHeroReel() {
     return;
   }
 
-  const video = reel.querySelector('video');
-  if (!video) return;
-  const tryPlay = () => {
-    video.play().catch(function() {});
-  };
-  if (video.readyState >= 2) {
-    tryPlay();
-  } else {
-    video.addEventListener('loadeddata', tryPlay, { once: true });
-  }
-
-  const soundBtn = document.getElementById('heroSound');
-  if (soundBtn && video) {
-    soundBtn.addEventListener('click', function() {
-      video.muted = !video.muted;
-      soundBtn.classList.toggle('is-unmuted', !video.muted);
-      soundBtn.setAttribute('aria-label', video.muted ? 'Activer le son' : 'Couper le son');
-      var xLines = soundBtn.querySelectorAll('.sound-x-1, .sound-x-2');
-      var wave = soundBtn.querySelector('.sound-wave');
-      xLines.forEach(function(el) { el.style.display = video.muted ? '' : 'none'; });
-      if (wave) wave.style.display = video.muted ? 'none' : '';
-    });
-  }
 }
 
 // ─── Cookie Consent Banner (RGPD) ──────────────────────────────────────────
