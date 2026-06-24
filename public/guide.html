@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide des voyageurs - Verdure & Cie</title>
+  <meta name="description" content="Guide de séjour pour les voyageurs de Verdure & Cie à Saint-Pierre, La Réunion.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=2">
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <nav class="nav" aria-label="Navigation principale">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure & Cie" aria-hidden="true"><span>Verdure & Cie</span></a>
+      <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+      <div class="nav__links" id="navLinks">
+        <a data-nav href="/">Accueil</a>
+        <a data-nav href="/villa">Villa</a>
+        <a data-nav href="/galerie">Galerie</a>
+        <a data-nav href="/equipements">Équipements</a>
+        <a data-nav href="/localisation">Localisation</a>
+        <a data-nav href="/tarifs">Tarifs</a>
+        <a data-nav class="nav__cta" href="/reservation">Réserver</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="contenu">
+    <!-- HERO -->
+    <header class="hero hero--compact">
+      <picture class="hero__media">
+        <img src="/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg" alt="Piscine privée Verdure & Cie">
+      </picture>
+      <div class="hero__shade"></div>
+      <div class="container hero__content">
+        <p class="eyebrow eyebrow--light">Bienvenue chez vous</p>
+        <h1>Bienvenue à<br><em>Verdure & Cie</em></h1>
+        <p>Tout ce qu'il faut savoir pour un séjour parfait.</p>
+      </div>
+    </header>
+
+    <!-- VOTRE SÉJOUR -->
+    <section class="section section--linen" id="sejourSection">
+      <div class="container">
+        <div class="section__head section__head--wide">
+          <p class="eyebrow">Votre séjour</p>
+          <h2 id="clientName">Chargement de vos informations…</h2>
+        </div>
+        <div class="stats" id="sejourStats" style="display:none">
+          <div class="stat">
+            <span class="stat__value" id="arrivalDate">—</span>
+            <span class="stat__label">Arrivée</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value" id="departureDate">—</span>
+            <span class="stat__label">Départ</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value" id="guestCount">—</span>
+            <span class="stat__label">Voyageurs</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value" id="stayNights">—</span>
+            <span class="stat__label">Nuits</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARRIVÉE & DÉPART -->
+    <section class="section">
+      <div class="container">
+        <div class="section__head section__head--wide">
+          <p class="eyebrow">Arrivée & départ</p>
+          <h2>Infos pratiques</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px">
+          <div style="background:#fff;padding:24px;border-radius:12px;border:1px solid var(--line)">
+            <p style="font-weight:800;margin:0 0 6px;font-size:1.1rem">🕓 Check-in · à partir de 16h00</p>
+            <p style="margin:0;color:var(--muted)">Clés dans la boîte sécurisée. Le code vous est communiqué par l'hôte.</p>
+          </div>
+          <div style="background:#fff;padding:24px;border-radius:12px;border:1px solid var(--line)">
+            <p style="font-weight:800;margin:0 0 6px;font-size:1.1rem">🕙 Check-out · avant 11h00</p>
+            <p style="margin:0;color:var(--muted)">Merci de laisser les clés sur la table de la cuisine.</p>
+          </div>
+          <div style="background:#fff;padding:24px;border-radius:12px;border:1px solid var(--line);grid-column:1/-1">
+            <p style="font-weight:800;margin:0 0 6px;font-size:1.1rem">🚗 Parking</p>
+            <p style="margin:0;color:var(--muted)">Place privée incluse devant la villa.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LA VILLA -->
+    <section class="section section--linen">
+      <div class="container">
+        <div class="section__head section__head--wide">
+          <p class="eyebrow">La villa</p>
+          <h2>Tout ce qu'il faut savoir</h2>
+        </div>
+        <div class="grid" style="margin-top:16px">
+          <article class="card">
+            <h3>🏊 Piscine</h3>
+            <p>Chauffée à 28°C, nettoyage automatique chaque matin. Serviettes fournies.</p>
+          </article>
+          <article class="card">
+            <h3>📶 Wifi</h3>
+            <p>Réseau <strong>VerdureCie</strong> — mot de passe dans le carnet d'accueil sur le comptoir.</p>
+          </article>
+          <article class="card">
+            <h3>🎱 Billard</h3>
+            <p>Dernier étage. Queues et boules dans l'armoire en bois à côté de la table.</p>
+          </article>
+          <article class="card">
+            <h3>🍳 Cuisine</h3>
+            <p>Four, micro-ondes, Nespresso, machine à laver, congélateur.</p>
+          </article>
+          <article class="card">
+            <h3>🌿 Jardin</h3>
+            <p>Hamac, chauffage extérieur, arrosage automatique.</p>
+          </article>
+          <article class="card">
+            <h3>🛁 Salles de bain</h3>
+            <p>Peignoirs et serviettes brodés Verdure & Cie fournis.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- À NE PAS MANQUER -->
+    <section class="section section--leaf">
+      <div class="container">
+        <div class="section__head section__head--wide">
+          <p class="eyebrow eyebrow--light">Les environs</p>
+          <h2 style="color:#fff">À ne pas manquer</h2>
+        </div>
+        <div class="grid" style="margin-top:16px">
+          <article class="card" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)">
+            <h3 style="color:#fff">🏖️ Plage de Grande Anse</h3>
+            <p style="color:rgba(255,255,255,.8)">5 minutes en voiture, eau calme, idéale pour les enfants.</p>
+          </article>
+          <article class="card" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)">
+            <h3 style="color:#fff">🍽️ Le Reflet des Îles</h3>
+            <p style="color:rgba(255,255,255,.8)">Restaurant créole à Saint-Pierre. Réservez le soir.</p>
+          </article>
+          <article class="card" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)">
+            <h3 style="color:#fff">🛒 Grand Marché</h3>
+            <p style="color:rgba(255,255,255,.8)">Samedi matin à Saint-Pierre. Produits locaux et artisanat.</p>
+          </article>
+          <article class="card" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)">
+            <h3 style="color:#fff">🌋 Piton de la Fournaise</h3>
+            <p style="color:rgba(255,255,255,.8)">Départ 5h du matin. Compter 1h30 de route.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="section section--cream">
+      <div class="container" style="text-align:center">
+        <p class="eyebrow">Contacts utiles</p>
+        <h2>On reste joignable</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:24px">
+          <div style="background:#fff;padding:20px 28px;border-radius:12px;border:1px solid var(--line);text-align:center;min-width:220px">
+            <p style="font-weight:800;margin:0 0 4px">Hôte · Brice</p>
+            <a href="tel:+262692512766" style="color:var(--leaf);font-weight:700;font-size:1.1rem">0692 51 27 66</a>
+            <p style="margin:4px 0 0;font-size:.85rem;color:var(--muted)">Disponible 7j/7</p>
+          </div>
+          <div style="background:#fff;padding:20px 28px;border-radius:12px;border:1px solid var(--line);text-align:center;min-width:220px">
+            <p style="font-weight:800;margin:0 0 6px">Urgences</p>
+            <p style="margin:0;color:var(--muted)">SAMU 15 · Pompiers 18 · Police 17 · 112</p>
+          </div>
+          <div style="background:#fff;padding:20px 28px;border-radius:12px;border:1px solid var(--line);text-align:center;min-width:220px">
+            <p style="font-weight:800;margin:0 0 4px">Taxi Saint-Pierre</p>
+            <p style="margin:0;color:var(--muted)">0692 XX XX XX (à compléter)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAS DE PAGE -->
+    <section class="section">
+      <div class="container" style="text-align:center">
+        <p class="eyebrow">Documents de séjour</p>
+        <h2>Voir vos documents</h2>
+        <p class="lead" style="margin:0 auto 28px">Accédez à votre contrat, état des lieux et toutes les informations de votre réservation.</p>
+        <a class="btn btn--primary" id="documentsLink" href="#">Mes documents de réservation</a>
+      </div>
+    </section>
+  </main>
+
+    <footer class="footer">
+    <div class="footer__inner">
+      <span>© 2026 Verdure &amp; Cie — Saint-Pierre, La Réunion</span>
+      <nav class="footer__links">
+        <a href="/villa">La villa</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/tarifs">Tarifs</a>
+        <span class="footer__sep">|</span>
+        <a href="tel:+262692512766">0692 51 27 66</a>
+        <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a>
+        <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking</a>
+        <span class="footer__sep">|</span>
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/politique-confidentialite">Confidentialité</a>
+        <a href="/admin" style="color:rgba(255,255,255,.18);font-size:.72rem">Admin</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="/app.js"></script>
+  <script>
+    (function initGuide() {
+      var token = window.location.pathname.split('/').pop();
+      if (!token) return;
+      fetch('/api/client/' + token)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var c = data.client;
+          if (!c) return;
+          var nameEl = document.getElementById('clientName');
+          nameEl.textContent = c.guestName;
+          var fmt = function(d) {
+            return new Date(d).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+          };
+          document.getElementById('arrivalDate').textContent = fmt(c.arrival);
+          document.getElementById('departureDate').textContent = fmt(c.departure);
+          document.getElementById('guestCount').textContent = c.guests + ' voyageur' + (c.guests > 1 ? 's' : '');
+          var n = Math.round((new Date(c.departure) - new Date(c.arrival)) / 86400000);
+          document.getElementById('stayNights').textContent = n + ' nuit' + (n > 1 ? 's' : '');
+          document.getElementById('sejourStats').style.display = 'grid';
+          document.getElementById('documentsLink').href = '/espace-client/' + token;
+        })
+        .catch(function() {
+          document.getElementById('clientName').textContent = 'Bienvenue à la villa Verdure & Cie';
+        });
+    })();
+  </script>
+</body>
+</html>

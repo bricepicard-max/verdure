@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload photos propriétaires</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; background: #f5f5f0; }
+    h1 { color: #2d5a27; }
+    .slot { background: white; border: 2px dashed #ccc; border-radius: 12px; padding: 24px; margin: 16px 0; text-align: center; cursor: pointer; transition: border-color .2s; }
+    .slot:hover, .slot.drag { border-color: #2d5a27; background: #f0f7f0; }
+    .slot label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
+    .slot small { color: #888; }
+    .slot input { display: none; }
+    .slot .preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 12px; }
+    .status { padding: 8px 16px; border-radius: 8px; margin-top: 8px; font-size: .9rem; display: none; }
+    .status.ok { background: #d4edda; color: #155724; display: block; }
+    .status.err { background: #f8d7da; color: #721c24; display: block; }
+    .token-field { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px; font-size: 1rem; }
+    p.info { background: #fff3cd; padding: 12px; border-radius: 8px; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <h1>📷 Upload photos propriétaires</h1>
+  <p class="info">⚠️ Colle ton token admin ci-dessous, puis glisse ou clique chaque photo pour l'uploader.</p>
+  <input class="token-field" id="adminToken" type="password" placeholder="Token admin (voir /admin)">
+
+  <div id="slots"></div>
+
+  <script>
+    const photos = [
+      { filename: 'proprio-piscine.jpg',  label: '📸 Photo 1 — Couple devant la piscine (portrait)' },
+      { filename: 'proprio-salon.jpg',    label: '📸 Photo 2 — Couple sur le canapé / salon' },
+      { filename: 'proprio-repas.jpg',    label: '📸 Photo 3 — Repas en famille sous la pergola' },
+      { filename: 'proprio-cuisine.jpg',  label: '📸 Photo 4 — Couple en cuisine' },
+      { filename: 'proprio-nuit.jpg',     label: '📸 Photo 5 — Baignade nocturne dans la piscine' },
+    ];
+
+    const container = document.getElementById('slots');
+    const adminToken = document.getElementById('adminToken');
+
+    if (window.ADMIN_TOKEN) {
+      adminToken.value = window.ADMIN_TOKEN;
+      adminToken.style.display = 'none';
+    }
+
+    photos.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'slot';
+      div.innerHTML = `
+        <label>${p.label}</label>
+        <small>Clique ici ou glisse ta photo</small>
+        <input type="file" accept="image/*">
+        <img class="preview" style="display:none">
+        <div class="status"></div>
+      `;
+      container.appendChild(div);
+
+      const input = div.querySelector('input');
+      const preview = div.querySelector('.preview');
+      const status = div.querySelector('.status');
+
+      div.addEventListener('click', () => input.click());
+      div.addEventListener('dragover', e => { e.preventDefault(); div.classList.add('drag'); });
+      div.addEventListener('dragleave', () => div.classList.remove('drag'));
+      div.addEventListener('drop', e => { e.preventDefault(); div.classList.remove('drag'); input.files = e.dataTransfer.files; upload(input.files[0]); });
+      input.addEventListener('change', () => upload(input.files[0]));
+
+      function upload(file) {
+        if (!file) return;
+        const token = adminToken.value.trim();
+        if (!token) { status.className='status err'; status.textContent='⚠️ Entre le token admin d\'abord !'; return; }
+
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        status.className = 'status'; status.textContent = '⏳ Upload en cours...'; status.style.display='block';
+
+        const fd = new FormData();
+        fd.append('filename', p.filename);
+        fd.append('photo', file);
+
+        fetch('/admin/upload-photo', { method: 'POST', headers: { 'x-admin-token': token }, body: fd })
+          .then(r => r.json())
+          .then(data => {
+            if (data.success) { status.className='status ok'; status.textContent='✅ Uploadé : ' + data.file; }
+            else { status.className='status err'; status.textContent='❌ Erreur : ' + (data.error || 'inconnue'); }
+          })
+          .catch(() => { status.className='status err'; status.textContent='❌ Erreur réseau'; });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=2">
 </head>
 <body>
   <nav class="nav" style="position:sticky;top:0;z-index:100">
     <div class="container nav__inner">
-      <a class="nav__brand" href="/">Verdure & Cie</a>
+      <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure & Cie" aria-hidden="true"><span>Verdure & Cie</span></a>
       <div style="display:flex;gap:16px;align-items:center">
         <a href="/reglement-interieur" style="font-size:.85rem;color:var(--muted)">Règlement</a>
         <a href="/" class="btn btn--outline" style="padding:6px 14px;font-size:.85rem">← Site</a>
@@ -25,13 +25,14 @@
   <main class="section" style="min-height:100vh">
     <div class="container" style="max-width:900px">
 
-      <!-- Tab navigation -->
-      <div style="display:flex;gap:8px;margin-bottom:36px;border-bottom:2px solid var(--line);padding-bottom:0">
-        <button class="admin-tab is-active" data-tab="clients">Dossiers clients</button>
-        <button class="admin-tab" data-tab="posts">Publications réseaux</button>
+      <!-- Onglets -->
+      <div style="display:flex;gap:4px;margin-bottom:36px;border-bottom:2px solid var(--line);overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <button class="admin-tab is-active" data-tab="clients" style="white-space:nowrap">Dossiers clients</button>
+        <button class="admin-tab" data-tab="posts" style="white-space:nowrap">Publications réseaux</button>
+        <button class="admin-tab" data-tab="ged" style="white-space:nowrap">GED / Dossiers</button>
       </div>
 
-      <!-- ── CLIENTS TAB ─────────────────────────────── -->
+      <!-- ── CLIENTS ── -->
       <div id="tab-clients">
         <div class="section__head" style="margin-bottom:28px">
           <p class="eyebrow">Administration</p>
@@ -40,7 +41,6 @@
         </div>
 
         <form class="form" id="adminClientForm">
-          <label><span>Token admin</span><input type="password" name="adminToken" id="adminToken" autocomplete="off" required></label>
           <div class="form__row">
             <label><span>Nom client</span><input type="text" name="guestName" required></label>
             <label><span>Email client</span><input type="email" name="guestEmail" required></label>
@@ -64,21 +64,19 @@
 
         <div style="margin-top:48px">
           <h2 style="font-size:1.1rem;margin-bottom:16px">Dossiers récents</h2>
-          <div id="clientList"><p class="note">Entrez le token admin et cliquez sur "Charger" pour voir les dossiers.</p></div>
-          <button class="btn btn--outline" id="loadClients" style="margin-top:12px" type="button">Charger les dossiers</button>
+          <div id="clientList"><div class="spinner-wrap" style="padding:40px"><div class="spinner"></div></div></div>
         </div>
       </div>
 
-      <!-- ── POSTS TAB ────────────────────────────────── -->
+      <!-- ── PUBLICATIONS ── -->
       <div id="tab-posts" hidden>
         <div class="section__head" style="margin-bottom:28px">
           <p class="eyebrow">Réseaux sociaux</p>
           <h1>File de publications</h1>
-          <p class="lead">Rédige ou génère automatiquement des posts Facebook & Instagram. Publie manuellement ou configure Meta API pour l'automatisation.</p>
+          <p class="lead">Rédige ou génère automatiquement des posts Facebook & Instagram.</p>
         </div>
 
         <form class="form" id="postForm">
-          <label><span>Token admin</span><input type="password" name="postToken" id="postToken" autocomplete="off" required></label>
           <label>
             <span>Plateforme</span>
             <select name="platform">
@@ -92,8 +90,8 @@
             <input type="text" name="imageHint" placeholder="Ex: piscine de nuit, petit-déjeuner sur la terrasse...">
           </label>
           <label>
-            <span>Texte du post (laissez vide pour génération IA automatique)</span>
-            <textarea name="content" rows="5" placeholder="Saisissez votre texte ici, ou laissez vide pour laisser l'IA le générer à partir du thème ci-dessus..."></textarea>
+            <span>Texte du post</span>
+            <textarea name="content" rows="5" placeholder="Saisissez votre texte, ou laissez vide pour que l'IA le génère..."></textarea>
           </label>
           <label>
             <span>Date de publication souhaitée (optionnel)</span>
@@ -109,17 +107,26 @@
         <div style="margin-top:48px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
             <h2 style="font-size:1.1rem;margin:0">Posts en attente</h2>
-            <button class="btn btn--outline" id="loadPosts" type="button" style="font-size:.82rem;padding:7px 14px">Actualiser</button>
+            <button class="btn btn--outline" id="loadPostsBtn" type="button" style="font-size:.82rem;padding:7px 14px">Actualiser</button>
           </div>
-          <div id="postList"><p class="note">Entrez le token admin et cliquez sur "Actualiser" pour voir les posts.</p></div>
+          <div id="postList"><p class="note">Chargement...</p></div>
         </div>
 
         <div class="note" style="margin-top:32px">
-          <strong>Publication automatique</strong> — Pour que le bouton "Publier sur Facebook" fonctionne, ajoutez dans <code>/opt/verdure/.env</code> sur le serveur :<br>
-          <code>META_PAGE_TOKEN=votre_token_page</code><br>
-          <code>META_PAGE_ID=votre_page_id</code><br>
+          <strong>Publication automatique</strong> — Configurez dans <code>/opt/verdure/.env</code> :<br>
+          <code>META_PAGE_TOKEN=...</code> &nbsp; <code>META_PAGE_ID=...</code><br>
           Obtenez ces valeurs sur <a href="https://developers.facebook.com" target="_blank" rel="noopener">developers.facebook.com</a>.
         </div>
+      </div>
+
+      <!-- ── GED ── -->
+      <div id="tab-ged" hidden>
+        <div class="section__head" style="margin-bottom:28px">
+          <p class="eyebrow">Gestion électronique des documents</p>
+          <h1>GED — Dossiers signés</h1>
+          <p class="lead">Archives des contrats, règlements et états des lieux signés. PDF générés automatiquement à chaque signature.</p>
+        </div>
+        <div id="gedList"><div class="spinner-wrap" style="padding:40px"><div class="spinner"></div></div></div>
       </div>
 
     </div>
@@ -127,49 +134,144 @@
 
   <script src="/app.js"></script>
   <script>
-    // Tab switching
-    document.querySelectorAll('.admin-tab').forEach((tab) => {
+    // ── Onglets ──────────────────────────────────────────────────────
+    document.querySelectorAll('.admin-tab').forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.admin-tab').forEach((t) => t.classList.remove('is-active'));
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('is-active'));
         tab.classList.add('is-active');
-        ['clients', 'posts'].forEach((id) => {
-          document.getElementById(`tab-${id}`).hidden = id !== tab.dataset.tab;
+        ['clients','posts','ged'].forEach(id => {
+          document.getElementById('tab-' + id).hidden = id !== tab.dataset.tab;
         });
+        if (tab.dataset.tab === 'ged')   loadGed();
+        if (tab.dataset.tab === 'posts') loadPosts();
       });
     });
 
-    // Load clients
-    document.getElementById('loadClients').addEventListener('click', async () => {
-      const token = document.getElementById('adminToken').value;
-      if (!token) { alert('Entrez le token admin d\'abord.'); return; }
-      const res = await fetch('/api/admin/clients', { headers: { 'x-admin-token': token } });
-      const data = await res.json();
+    // ── Helpers ──────────────────────────────────────────────────────
+    function adminHeaders() {
+      return { 'x-admin-token': window.ADMIN_TOKEN, 'Content-Type': 'application/json' };
+    }
+
+    function statusLabel(s) {
+      return { created:'Créé', active:'Actif', cancelled:'Annulé', completed:'Terminé' }[s] || s;
+    }
+
+    function copyLink(path) {
+      navigator.clipboard.writeText(location.origin + path)
+        .then(() => alert('Lien copié : ' + location.origin + path));
+    }
+
+    // ── Clients ──────────────────────────────────────────────────────
+    async function loadClients() {
       const el = document.getElementById('clientList');
+      const res = await fetch('/api/admin/clients', { headers: { 'x-admin-token': window.ADMIN_TOKEN } });
+      const data = await res.json();
       if (!res.ok) { el.innerHTML = `<p class="form__error">${data.error}</p>`; return; }
       if (!data.clients.length) { el.innerHTML = '<p class="note">Aucun dossier client.</p>'; return; }
-      el.innerHTML = data.clients.map((c) => `
-        <div class="card" style="margin-bottom:12px;padding:16px 20px">
-          <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
-            <div>
-              <strong>${c.guestName}</strong> — ${c.arrival || '?'} → ${c.departure || '?'}
-              <br><small style="color:var(--muted)">${c.guestEmail} · ${c.guests} voyageurs · ${(c.totalAmountCents/100).toFixed(0)} €</small>
-            </div>
-            <a class="btn btn--outline" href="${c.clientUrl}" target="_blank" rel="noopener" style="white-space:nowrap;font-size:.8rem;padding:6px 12px">Ouvrir →</a>
+      el.innerHTML = data.clients.map(c => `
+        <article class="client-card">
+          <div class="client-card__head">
+            <strong>${c.guestName}</strong>
+            <span class="status-badge status-badge--${c.status}">${statusLabel(c.status)}</span>
           </div>
-        </div>
-      `).join('');
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px">
+            ${c.hasCredentials
+              ? '<span style="font-size:.72rem;background:#f0f6ff;border:1px solid #b8d0f0;border-radius:20px;padding:2px 8px;color:#2a5080">🔑 Accès créé</span>'
+              : '<span style="font-size:.72rem;background:#fff8e1;border:1px solid #f0d080;border-radius:20px;padding:2px 8px;color:#886600">⚠️ Pas d\'accès</span>'}
+            ${c.idDocUploaded ? '<span style="font-size:.72rem;background:#f0faf0;border:1px solid #b8ddb8;border-radius:20px;padding:2px 8px;color:#1a6b1a">🪪 ID reçue</span>' : ''}
+            ${c.paymentPaid
+              ? '<span style="font-size:.72rem;background:#f0faf0;border:1px solid #b8ddb8;border-radius:20px;padding:2px 8px;color:#1a6b1a">💶 Payé</span>'
+              : c.paymentConfirmed
+                ? '<span style="font-size:.72rem;background:#fff8e1;border:1px solid #f0d080;border-radius:20px;padding:2px 8px;color:#886600">💶 Virement signalé</span>'
+                : ''}
+          </div>
+          <div class="client-card__details">
+            <span>📅 ${c.arrival||'?'} → ${c.departure||'?'}</span>
+            <span>👥 ${c.guests} voyageur${c.guests>1?'s':''}</span>
+            <span>💶 ${(c.totalAmountCents/100).toFixed(0)} € · acompte ${(c.depositAmountCents/100).toFixed(0)} €</span>
+            ${c.guestEmail ? `<span>✉️ ${c.guestEmail}</span>` : ''}
+          </div>
+          <div class="client-card__actions">
+            <button class="btn btn--outline" style="font-size:.8rem;min-height:36px" onclick="copyLink('/espace-client')">📋 Lien espace client</button>
+            <button class="btn btn--outline" style="font-size:.8rem;min-height:36px" onclick="copyLink('/guide/${c.token}')">🗺️ Lien guide</button>
+            <button class="btn btn--outline" style="font-size:.8rem;min-height:36px;background:#f0faf0;border-color:#b8ddb8"
+              onclick="sendCredentials('${c.token}','${c.guestName.replace(/'/g,"\\'")}','${c.guestEmail}')">
+              🔑 ${c.hasCredentials ? 'Réinitialiser accès' : 'Envoyer accès'}
+            </button>
+            ${c.idDocUploaded ? `<a class="btn btn--outline" style="font-size:.8rem;min-height:36px;background:#f0f4ff" href="/api/admin/id-doc/${c.token}?token=${window.ADMIN_TOKEN}" target="_blank">🪪 Pièce d'identité</a>` : ''}
+            ${(c.paymentConfirmed && !c.paymentPaid) ? `<button class="btn btn--primary" style="font-size:.8rem;min-height:36px" onclick="markPaid('${c.token}','${c.guestName.replace(/'/g,"\\'")}')">✅ Marquer payé</button>` : ''}
+          </div>
+        </article>`).join('');
+    }
+    loadClients();
+
+    document.getElementById('adminClientForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true;
+      const res = await fetch('/api/admin/clients', {
+        method: 'POST',
+        headers: { 'x-admin-token': window.ADMIN_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      const data = await res.json();
+      btn.disabled = false;
+      const err = document.getElementById('adminError');
+      if (!res.ok) { err.textContent = data.error; err.hidden = false; return; }
+      err.hidden = true;
+      e.target.reset();
+      const result = document.getElementById('adminResult');
+      result.hidden = false;
+      result.innerHTML = `<p>✅ Dossier créé pour <strong>${data.client.guestName}</strong>.<br>
+        Lien espace client : <a href="${data.client.clientUrl}" target="_blank">${data.client.clientUrl}</a></p>`;
+      loadClients();
     });
 
-    // Load posts
-    const loadPosts = async () => {
-      const token = document.getElementById('postToken').value;
-      if (!token) { document.getElementById('postList').innerHTML = '<p class="note">Token admin requis.</p>'; return; }
-      const res = await fetch('/api/admin/posts', { headers: { 'x-admin-token': token } });
-      const data = await res.json();
+    async function sendCredentials(token, name, email) {
+      if (!confirm('Envoyer les identifiants d\'accès à ' + name + ' (' + email + ') ?\nUn mot de passe aléatoire sera généré et envoyé par email.')) return;
+      const r = await fetch('/api/admin/clients/' + token + '/send-credentials', {
+        method: 'POST',
+        headers: { 'x-admin-token': window.ADMIN_TOKEN, 'Content-Type': 'application/json' }
+      });
+      const d = await r.json();
+      if (!r.ok) { alert('Erreur : ' + (d.error || 'inconnue')); return; }
+      alert('✅ Identifiants envoyés à ' + email);
+      loadClients();
+    }
+
+    async function resetPassword(token, name, email) {
+      if (!confirm('Réinitialiser le mot de passe de ' + name + ' (' + email + ') ?\nUn nouveau mot de passe aléatoire sera envoyé par email.')) return;
+      const r = await fetch('/api/admin/clients/' + token + '/reset-password', {
+        method: 'POST',
+        headers: { 'x-admin-token': window.ADMIN_TOKEN, 'Content-Type': 'application/json' }
+      });
+      const d = await r.json();
+      if (!r.ok) { alert('Erreur : ' + (d.error || 'inconnue')); return; }
+      alert('✅ Nouveau mot de passe envoyé à ' + email);
+      loadClients();
+    }
+
+    async function markPaid(token, name) {
+      if (!confirm(`Confirmer la réception du paiement de ${name} ?`)) return;
+      const r = await fetch('/api/admin/clients/' + token + '/mark-paid', {
+        method: 'POST',
+        headers: { 'x-admin-token': window.ADMIN_TOKEN, 'Content-Type': 'application/json' }
+      });
+      const d = await r.json();
+      if (!r.ok) { alert('Erreur : ' + (d.error || 'inconnue')); return; }
+      alert('✅ Paiement marqué reçu.');
+      loadClients();
+    }
+
+    // ── Publications ─────────────────────────────────────────────────
+    async function loadPosts() {
       const el = document.getElementById('postList');
+      const res = await fetch('/api/admin/posts', { headers: { 'x-admin-token': window.ADMIN_TOKEN } });
+      const data = await res.json();
       if (!res.ok) { el.innerHTML = `<p class="form__error">${data.error}</p>`; return; }
-      if (!data.posts.length) { el.innerHTML = '<p class="note">Aucun post en attente.</p>'; return; }
-      el.innerHTML = data.posts.map((p) => `
+      if (!data.posts.length) { el.innerHTML = '<p class="note">Aucun post.</p>'; return; }
+      el.innerHTML = data.posts.map(p => `
         <div class="card" style="margin-bottom:12px;padding:16px 20px">
           <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
             <div style="flex:1">
@@ -181,58 +283,95 @@
               <p style="white-space:pre-wrap;font-size:.88rem;color:var(--copy);margin:0">${p.content}</p>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
-              ${p.status !== 'published' ? `<button class="btn btn--primary" data-publish="${p.id}" style="font-size:.78rem;padding:6px 12px">Publier</button>` : `<span style="color:var(--leaf);font-size:.8rem;font-weight:700">✓ Publié</span>`}
+              ${p.status !== 'published'
+                ? `<button class="btn btn--primary" data-publish="${p.id}" style="font-size:.78rem;padding:6px 12px">Publier</button>`
+                : '<span style="color:var(--leaf);font-size:.8rem;font-weight:700">✓ Publié</span>'}
               <button class="btn btn--outline" onclick="navigator.clipboard.writeText(${JSON.stringify(p.content)})" style="font-size:.78rem;padding:6px 12px">Copier</button>
             </div>
           </div>
-        </div>
-      `).join('');
-
-      el.querySelectorAll('[data-publish]').forEach((btn) => {
+        </div>`).join('');
+      el.querySelectorAll('[data-publish]').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const id = btn.dataset.publish;
-          const token2 = document.getElementById('postToken').value;
           btn.disabled = true; btn.textContent = '...';
-          const r = await fetch(`/api/admin/posts/${id}/publish`, { method: 'POST', headers: { 'x-admin-token': token2 } });
+          const r = await fetch(`/api/admin/posts/${btn.dataset.publish}/publish`, {
+            method: 'POST', headers: { 'x-admin-token': window.ADMIN_TOKEN }
+          });
           const d = await r.json();
           if (!r.ok) { alert(d.error); btn.disabled = false; btn.textContent = 'Publier'; return; }
-          await loadPosts();
+          loadPosts();
         });
       });
-    };
-    document.getElementById('loadPosts').addEventListener('click', loadPosts);
+    }
+    document.getElementById('loadPostsBtn').addEventListener('click', loadPosts);
 
-    // Post form
-    document.getElementById('postForm').addEventListener('submit', async (e) => {
+    document.getElementById('postForm').addEventListener('submit', async e => {
       e.preventDefault();
-      const isGenerate = e.submitter?.name === 'generate';
-      const formData = new FormData(e.target);
-      const token = formData.get('postToken');
-      const payload = {
-        platform: formData.get('platform'),
-        content: formData.get('content'),
-        imageHint: formData.get('imageHint'),
-        scheduledAt: formData.get('scheduledAt') || null,
-        generateAi: isGenerate,
-      };
-      const submitBtn = document.getElementById(isGenerate ? 'postGenerate' : 'postSubmit');
-      submitBtn.disabled = true;
-      const orig = submitBtn.textContent;
-      submitBtn.textContent = isGenerate ? '✨ Génération...' : 'Ajout...';
+      const isGen = e.submitter?.name === 'generate';
+      const fd = new FormData(e.target);
+      const btn = document.getElementById(isGen ? 'postGenerate' : 'postSubmit');
+      btn.disabled = true;
+      const orig = btn.textContent;
+      btn.textContent = isGen ? '✨ Génération...' : 'Ajout...';
       const err = document.getElementById('postError');
       err.hidden = true;
       const res = await fetch('/api/admin/posts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
-        body: JSON.stringify(payload),
+        headers: { 'x-admin-token': window.ADMIN_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          platform: fd.get('platform'),
+          content: fd.get('content'),
+          imageHint: fd.get('imageHint'),
+          scheduledAt: fd.get('scheduledAt') || null,
+          generateAi: isGen,
+        })
       });
       const data = await res.json();
-      submitBtn.disabled = false; submitBtn.textContent = orig;
+      btn.disabled = false; btn.textContent = orig;
       if (!res.ok) { err.textContent = data.error; err.hidden = false; return; }
-      e.target.querySelector('textarea[name="content"]').value = '';
-      e.target.querySelector('input[name="imageHint"]').value = '';
-      await loadPosts();
+      e.target.querySelector('textarea[name=content]').value = '';
+      e.target.querySelector('input[name=imageHint]').value = '';
+      loadPosts();
     });
+
+    // ── GED ──────────────────────────────────────────────────────────
+    const DOC_LABELS = {
+      'contrat_signe.pdf':        '📄 Contrat',
+      'reglement_signe.pdf':      '📋 Règlement',
+      'etat_des_lieux_signe.pdf': '🏠 État des lieux',
+    };
+
+    async function loadGed() {
+      const el = document.getElementById('gedList');
+      const res = await fetch('/api/admin/ged', { headers: { 'x-admin-token': window.ADMIN_TOKEN } });
+      const data = await res.json();
+      if (!res.ok) { el.innerHTML = `<p class="form__error">${data.error}</p>`; return; }
+      if (!data.dossiers.length) { el.innerHTML = '<p class="note">Aucun dossier dans la GED.</p>'; return; }
+      el.innerHTML = data.dossiers.map(d => {
+        const m = d.meta;
+        const docs = ['contrat_signe.pdf','reglement_signe.pdf','etat_des_lieux_signe.pdf'];
+        const signed = docs.filter(f => d.files.includes(f)).length;
+        const idFile = d.files.find(f => f.startsWith('piece_identite'));
+        return `
+        <article class="client-card" style="margin-bottom:14px">
+          <div class="client-card__head">
+            <strong>${m.guestName || d.token}</strong>
+            <span style="font-size:.78rem;background:${signed===3?'#f0faf0':'#fff8e1'};border:1px solid ${signed===3?'#b8ddb8':'#f0d080'};border-radius:20px;padding:3px 10px;color:${signed===3?'#1a6b1a':'#886600'}">${signed}/3 docs signés</span>
+          </div>
+          <div class="client-card__details">
+            <span>📅 ${m.arrival||'?'} → ${m.departure||'?'}</span>
+            <span>✉️ ${m.guestEmail||'—'}</span>
+            ${m.updatedAt ? `<span>🕐 ${new Date(m.updatedAt).toLocaleString('fr-FR')}</span>` : ''}
+          </div>
+          <div class="client-card__actions" style="flex-wrap:wrap;gap:8px;margin-top:12px">
+            ${docs.map(f => d.files.includes(f)
+              ? `<a class="btn btn--outline" style="font-size:.78rem;min-height:34px;background:#f0faf0;border-color:#b8ddb8" href="/api/admin/ged/${d.token}/${f}?token=${window.ADMIN_TOKEN}" target="_blank">${DOC_LABELS[f]}</a>`
+              : `<span style="font-size:.78rem;border:1px dashed #d5d0ca;border-radius:8px;padding:6px 12px;color:#bbb">${DOC_LABELS[f]} (non signé)</span>`
+            ).join('')}
+            ${idFile ? `<a class="btn btn--outline" style="font-size:.78rem;min-height:34px;background:#f0f4ff;border-color:#b8c8f0" href="/api/admin/ged/${d.token}/${idFile}?token=${window.ADMIN_TOKEN}" target="_blank">🪪 Pièce d'identité</a>` : ''}
+          </div>
+        </article>`;
+      }).join('');
+    }
   </script>
 </body>
 </html>

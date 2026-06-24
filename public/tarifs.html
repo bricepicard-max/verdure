@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tarifs - Verdure & Cie</title>
-  <meta name="description" content="Tarifs de Verdure & Cie à Saint-Pierre, La Réunion. Prix indicatifs selon saison — confirmation sur Airbnb, Booking ou en demande directe.">
+  <title>Tarifs — À partir de 295 €/nuit · Villa Verdure & Cie Saint-Pierre Réunion</title>
+  <meta name="description" content="Tarifs de la villa Verdure & Cie à Saint-Pierre. 295 €/nuit en semaine, 350 €/nuit week-end. Réductions long séjour. 10% moins cher qu'Airbnb. Simulation en ligne.">
+  <meta name="keywords" content="tarif location villa Réunion, prix villa piscine Saint-Pierre, tarif séjour Réunion, location pas chère Réunion sud">
   <link rel="canonical" href="https://verdure.maisonpicard.com/tarifs">
   <meta property="og:title" content="Tarifs - Verdure &amp; Cie">
   <meta property="og:description" content="Tarifs de Verdure &amp; Cie à Saint-Pierre, La Réunion. Dès 120 €/nuit en basse saison. Réservation directe sans commission.">
@@ -43,115 +44,669 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=2">
+  <style>
+    /* ── Cartes de prix ──────────────────────────────────── */
+    .price-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 36px;
+    }
+    @media(max-width:520px) { .price-pair { grid-template-columns: 1fr; } }
+
+    .price-tile {
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      background: var(--white);
+    }
+    .price-tile--accent {
+      border-color: var(--sun);
+      background: #fff9f5;
+    }
+    .price-tile__label {
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 12px;
+    }
+    .price-tile--accent .price-tile__label { color: var(--sun-dark); }
+    .price-tile__amount {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.6rem;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .price-tile__sup { font-size: 1.4rem; vertical-align: super; font-family: var(--sans); font-weight: 700; }
+    .price-tile__per { font-size: .85rem; color: #888; margin-top: 4px; }
+    .price-tile__days {
+      margin-top: 16px;
+      font-size: .85rem;
+      color: #666;
+      line-height: 1.75;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    /* ── Réductions ─────────────────────────────────────── */
+    .reduc-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 32px;
+    }
+    @media(max-width:540px) { .reduc-row { grid-template-columns: 1fr; } }
+    .reduc-tile {
+      background: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 24px 18px;
+      text-align: center;
+    }
+    .reduc-tile__pct {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.6rem;
+      color: var(--leaf);
+      line-height: 1;
+    }
+    .reduc-tile__cond {
+      font-size: .82rem;
+      color: #666;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .reduc-tile__cond strong { color: var(--ink); display: block; font-size: .95rem; }
+
+    /* ── Estimateur ─────────────────────────────────────── */
+    .estim-card {
+      background: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: 0 4px 32px rgba(24,32,26,.07);
+    }
+    @media(max-width:560px) { .estim-card { padding: 26px 18px; } }
+
+    .estim-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    @media(max-width:460px) { .estim-fields { grid-template-columns: 1fr; } }
+
+    .estim-field label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 6px;
+    }
+    .estim-field input[type="date"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--cream);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .estim-field input[type="date"]:focus {
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 3px rgba(26,46,26,.08);
+    }
+
+    .estim-error {
+      font-size: .85rem;
+      color: #c0392b;
+      padding: 4px 2px 8px;
+      display: none;
+    }
+
+    /* Breakdown table */
+    .estim-breakdown {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+    .estim-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 7px 0;
+      font-size: .9rem;
+      color: #444;
+      border-bottom: 1px solid rgba(24,32,26,.08);
+    }
+    .estim-line:last-child { border-bottom: none; }
+    .estim-line--discount { color: #2d7a2d; font-weight: 600; }
+    .estim-line--total {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--ink);
+      border-top: 2px solid var(--leaf);
+      border-bottom: none;
+      margin-top: 6px;
+      padding-top: 12px;
+    }
+    .estim-line--total span:last-child {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+    }
+    .estim-placeholder {
+      text-align: center;
+      color: #aaa;
+      font-size: .9rem;
+      padding: 20px 0;
+    }
+
+    .estim-notice {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: #fff8ec;
+      border-left: 3px solid var(--sun);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      font-size: .85rem;
+      color: #6a4e1a;
+      line-height: 1.5;
+    }
+    .estim-notice strong { display: block; color: var(--ink); margin-bottom: 3px; }
+    .estim-cta {
+      margin-top: 22px;
+      text-align: center;
+    }
+  </style>
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Verdure &amp; Cie">
+  <meta property="og:url" content="https://verdure.maisonpicard.com/tarifs">
+  <meta property="og:title" content="Tarifs — À partir de 295 €/nuit · Villa Verdure & Cie Saint-Pierre Réunion">
+  <meta property="og:description" content="Tarifs de la villa Verdure & Cie à Saint-Pierre. 295 €/nuit en semaine, 350 €/nuit week-end. Réductions long séjour. 10% moins cher qu'Airbnb. Simulation en ligne.">
+  <meta property="og:image" content="https://verdure.maisonpicard.com/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg">
+  <meta property="og:locale" content="fr_FR">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tarifs — À partir de 295 €/nuit · Villa Verdure & Cie Saint-Pierre Réunion">
+  <meta name="twitter:description" content="Tarifs de la villa Verdure & Cie à Saint-Pierre. 295 €/nuit en semaine, 350 €/nuit week-end. Réductions long séjour. 10% moins cher qu'Airbnb. Simulation en ligne.">
+  <meta name="twitter:image" content="https://verdure.maisonpicard.com/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg">
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quel est le tarif de la villa Verdure & Cie à Saint-Pierre ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "À partir de 295 € par nuit du dimanche au jeudi, et 350 € les nuits du vendredi et samedi. Des réductions sont appliquées pour les longs séjours : -10% à partir de 9 nuits, -15% à partir de 16 nuits, -20% à partir de 31 nuits. Toutes charges incluses (ménage, linge, accueil)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Combien de personnes peut accueillir la villa ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Verdure & Cie accueille jusqu'à 10 voyageurs grâce à ses 5 chambres. La villa est idéale pour les familles, groupes d'amis et séjours entre collègues à Saint-Pierre, La Réunion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Peut-on réserver Verdure & Cie sans passer par Airbnb ou Booking ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, la réservation directe est disponible via le site verdure.maisonpicard.com. Elle est 10% moins chère que sur Airbnb ou Booking car il n'y a pas de commission. Les propriétaires répondent sous 48h."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "La piscine est-elle privée et chauffée ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, la villa dispose d'une piscine privée chauffée, éclairée la nuit, accessible uniquement aux occupants. Transats et serviettes de piscine sont inclus."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Où se trouve la villa par rapport au centre de Saint-Pierre ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Verdure & Cie est située au 8 chemin Elie Hoarau à Basse-Terre, à moins de 5 minutes du centre-ville de Saint-Pierre et à proximité du lagon. L'aéroport de Roland Garros est à environ 60 km."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quelle est la politique d'annulation ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La réservation se fait par versement d'arrhes (acompte non remboursable). En cas d'annulation moins de 7 jours avant l'arrivée, 100% du montant total reste dû."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "https://verdure.maisonpicard.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tarifs",
+      "item": "https://verdure.maisonpicard.com/tarifs"
+    }
+  ]
+}
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "Verdure & Cie",
+  "url": "https://verdure.maisonpicard.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Saint-Pierre",
+    "addressRegion": "La Réunion",
+    "postalCode": "97410",
+    "addressCountry": "FR"
+  },
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Location saisonnière — tarif basse saison",
+      "description": "Villa entière 5 chambres, piscine privée chauffée, jusqu'à 10 voyageurs. Basse saison.",
+      "priceCurrency": "EUR",
+      "price": "295",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "295",
+        "priceCurrency": "EUR",
+        "unitText": "nuit"
+      },
+      "availability": "https://schema.org/InStock",
+      "url": "https://verdure.maisonpicard.com/reservation"
+    },
+    {
+      "@type": "Offer",
+      "name": "Location saisonnière — tarif haute saison",
+      "description": "Villa entière 5 chambres, piscine privée chauffée, jusqu'à 10 voyageurs. Haute saison (juillet-août, vacances scolaires).",
+      "priceCurrency": "EUR",
+      "price": "495",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "495",
+        "priceCurrency": "EUR",
+        "unitText": "nuit"
+      },
+      "availability": "https://schema.org/InStock",
+      "url": "https://verdure.maisonpicard.com/reservation"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Accueil","item":"https://verdure.maisonpicard.com/"},
+    {"@type":"ListItem","position":2,"name":"Tarifs","item":"https://verdure.maisonpicard.com/tarifs"}
+  ]
+}
+</script>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <nav class="nav" aria-label="Navigation principale">
     <div class="container nav__inner">
-      <a class="nav__brand" href="/">Verdure & Cie</a>
+      <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure &amp; Cie" aria-hidden="true"><span>Verdure &amp; Cie</span></a>
       <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
       <div class="nav__links" id="navLinks">
         <a data-nav href="/">Accueil</a>
         <a data-nav href="/villa">Villa</a>
-        <a data-nav href="/photos">Photos</a>
+        <a data-nav href="/galerie">Galerie</a>
         <a data-nav href="/equipements">Équipements</a>
         <a data-nav href="/localisation">Localisation</a>
-        <a data-nav href="/tarifs">Tarifs</a>
+        <a data-nav href="/tarifs" class="active">Tarifs</a>
+        <a data-nav class="nav__client" href="/espace-client">Mon espace</a>
         <a data-nav class="nav__cta" href="/reservation">Réserver</a>
       </div>
     </div>
   </nav>
 
   <main id="contenu">
+
+    <!-- Hero compact — même structure que villa.html -->
     <header class="hero hero--compact">
       <picture class="hero__media">
-        <img src="/assets/images/c51bdbc0-2402-4cb1-bed6-d405fe1c7205.jpeg" alt="Terrasse extérieure de Verdure & Cie">
+        <img src="/assets/images/6fc1d7c1-0379-45a8-aa00-abe37bc13292.jpeg" alt="Piscine privée de Verdure &amp; Cie éclairée la nuit">
       </picture>
       <div class="hero__shade"></div>
       <div class="container hero__content">
         <p class="eyebrow eyebrow--light">Tarifs</p>
-        <h1>Des prix justes, selon la saison.</h1>
-        <p>Repères indicatifs — le tarif exact est confirmé sur Airbnb, Booking ou directement avec l'hôte selon vos dates.</p>
+        <h1>Des prix justes,<br><em>sans commission.</em></h1>
+        <p>À partir de 295 € / nuit · toutes charges incluses · 10 % sous les plateformes.</p>
       </div>
     </header>
 
-    <section class="section">
+    <!-- Grille tarifaire -->
+    <section class="section section--cream">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow">Grille tarifaire</p>
+          <h2>Le prix varie selon le jour — pas selon la saison.</h2>
+          <p class="lead">Pour une même qualité de prestation, nos tarifs sont <strong>10 % en dessous</strong> d'Airbnb et Booking — parce qu'il n'y a pas de commission à payer.</p>
+        </div>
+
+        <div class="price-pair">
+          <div class="price-tile">
+            <div class="price-tile__label">Du dimanche au jeudi</div>
+            <div class="price-tile__amount">
+              <span class="price-tile__sup">€</span>295
+            </div>
+            <div class="price-tile__per">par nuit</div>
+            <div class="price-tile__days">
+              Nuit dim→lun<br>
+              Nuit lun→mar<br>
+              Nuit mar→mer<br>
+              Nuit mer→jeu<br>
+              Nuit jeu→ven
+            </div>
+          </div>
+          <div class="price-tile price-tile--accent">
+            <div class="price-tile__label">Vendredi &amp; samedi</div>
+            <div class="price-tile__amount">
+              <span class="price-tile__sup">€</span>350
+            </div>
+            <div class="price-tile__per">par nuit</div>
+            <div class="price-tile__days">
+              Nuit ven→sam<br>
+              Nuit sam→dim
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Réductions long séjour -->
+    <section class="section section--linen">
       <div class="container">
         <div class="section__head section__head--center">
-          <p class="eyebrow">Repères de prix</p>
-          <h2>Base indicative par nuit.</h2>
-          <p class="lead">Ces montants varient selon la durée, la période et la plateforme. Contactez l'hôte pour un devis précis sur vos dates.</p>
+          <p class="eyebrow">Long séjour</p>
+          <h2>Plus vous restez, plus vous économisez.</h2>
         </div>
-        <div class="rates">
-          <article class="rate-card reveal">
-            <span>Basse saison</span>
-            <strong>dès 120 €</strong>
-            <p>Par nuit, hors vacances scolaires et jours fériés.</p>
-          </article>
-          <article class="rate-card reveal">
-            <span>Moyenne saison</span>
-            <strong>dès 160 €</strong>
-            <p>Périodes intermédiaires, week-ends prolongés.</p>
-          </article>
-          <article class="rate-card reveal">
-            <span>Haute saison</span>
-            <strong>dès 220 €</strong>
-            <p>Vacances scolaires, Noël, Nouvel An et forte demande.</p>
-          </article>
+        <div class="reduc-row">
+          <div class="reduc-tile">
+            <div class="reduc-tile__pct">−10 %</div>
+            <div class="reduc-tile__cond"><strong>9 nuits et plus</strong>soit plus de 8 nuits</div>
+          </div>
+          <div class="reduc-tile">
+            <div class="reduc-tile__pct">−15 %</div>
+            <div class="reduc-tile__cond"><strong>16 nuits et plus</strong>soit plus de 15 nuits</div>
+          </div>
+          <div class="reduc-tile">
+            <div class="reduc-tile__pct">−20 %</div>
+            <div class="reduc-tile__cond"><strong>31 nuits et plus</strong>soit plus de 30 nuits</div>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Estimateur -->
+    <section class="section section--cream">
+      <div class="container">
+        <div class="section__head section__head--center">
+          <p class="eyebrow">Votre budget en quelques secondes</p>
+          <h2>Combien coûte votre séjour ?</h2>
+          <p class="lead">Choisissez vos dates d'arrivée et de départ — le détail s'affiche immédiatement. Séjour minimum : 2 nuits.</p>
+        </div>
+
+        <div class="estim-card">
+          <div class="estim-fields">
+            <div class="estim-field">
+              <label for="dateArrivee">Arrivée</label>
+              <input type="date" id="dateArrivee">
+            </div>
+            <div class="estim-field">
+              <label for="dateDepart">Départ</label>
+              <input type="date" id="dateDepart">
+            </div>
+          </div>
+
+          <div class="estim-error" id="estError"></div>
+
+          <div id="estResult">
+            <div class="estim-breakdown">
+              <div class="estim-placeholder">Sélectionnez vos dates pour voir l'estimation.</div>
+            </div>
+          </div>
+
+          <div class="estim-notice">
+            <span>📅</span>
+            <div>
+              <strong>Disponibilités à confirmer</strong>
+              Le calendrier en ligne (Airbnb &amp; Booking) est en cours de mise en ligne. Contactez-nous pour vérifier la disponibilité de vos dates.
+            </div>
+          </div>
+
+          <div class="estim-cta">
+            <a class="btn btn--primary" href="/contact">Contacter les propriétaires</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ce qui est inclus -->
     <section class="section section--linen">
       <div class="container split">
-        <div>
-          <p class="eyebrow">Conditions</p>
-          <h2>Simple, transparent, sans mauvaise surprise.</h2>
-          <div class="copy">
-            <p>Le séjour est confirmé selon les règles de la plateforme utilisée ou les conditions communiquées en demande directe. Toutes les charges (ménage, linge, accueil) sont incluses dans le prix affiché.</p>
-            <p>Une caution peut être demandée pour couvrir les dommages éventuels. Son montant et ses modalités sont précisés avant validation de la réservation.</p>
-          </div>
-          <div class="note">Réservation directe disponible sur la page <a href="/reservation">Réserver</a> — sans commission Airbnb ni Booking.</div>
-          <div class="actions" style="margin-top:28px">
-            <a class="btn btn--primary" href="/reservation">Réserver en direct</a>
-            <a class="btn btn--outline" href="/contact">Poser une question</a>
-          </div>
-        </div>
         <div class="split__media">
-          <img src="/assets/images/d04151fa-ed05-41a0-8afb-62de188ccbc3.jpeg" alt="Serviettes brodées Verdure & Cie au bord de la piscine">
+          <img src="/assets/images/d04151fa-ed05-41a0-8afb-62de188ccbc3.jpeg" alt="Serviettes brodées Verdure &amp; Cie au bord de la piscine">
+        </div>
+        <div>
+          <p class="eyebrow">Tout compris</p>
+          <h2>Rien à ajouter au budget.</h2>
+          <div class="copy">
+            <p>Le tarif affiché est le tarif final. Aucun frais cachés, aucun supplément de dernière minute.</p>
+          </div>
+          <ul class="feature-list">
+            <li>Ménage complet fin de séjour</li>
+            <li>Linge de maison &amp; serviettes brodées</li>
+            <li>Accueil personnalisé sur place</li>
+            <li>Rhums arrangés de bienvenue</li>
+            <li>Wifi fibre haut débit</li>
+            <li>Parking privé 3 voitures</li>
+            <li>Piscine privée chauffée</li>
+            <li>Climatisation toutes les chambres</li>
+          </ul>
         </div>
       </div>
     </section>
 
+    <!-- Conditions + CTA -->
     <section class="section section--leaf">
       <div class="container" style="text-align:center">
-        <p class="eyebrow eyebrow--light">Ce qui est inclus</p>
-        <h2>Tout compris, dès l'arrivée.</h2>
-        <p class="lead" style="margin:0 auto 28px">Ménage, linge de maison, serviettes brodées, accueil personnalisé, rhums arrangés de bienvenue, wifi, parking — rien à ajouter au budget.</p>
+        <p class="eyebrow eyebrow--light">Conditions de réservation</p>
+        <h2>Simple &amp; transparent.</h2>
+        <p class="lead" style="margin:0 auto 28px">
+          Réservation confirmée par le versement d'<strong>arrhes</strong> (non remboursables). En cas d'annulation moins de 7 jours avant l'arrivée, 100 % du montant reste dû.
+        </p>
         <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
-          <a class="btn btn--secondary" href="/equipements">Voir les équipements</a>
-          <a class="btn btn--ghost" href="/reservation">Vérifier les disponibilités</a>
+          <a class="btn btn--secondary" href="/contact">Demander la disponibilité</a>
+          <a class="btn btn--ghost" href="/galerie">Voir la galerie</a>
         </div>
       </div>
     </section>
+
   </main>
 
   <footer class="footer">
-    <div class="container footer__grid">
-      <div><strong>Verdure & Cie</strong><p>Villa de vacances à Saint-Pierre, La Réunion.</p></div>
-      <div><h2>Site</h2><a href="/villa">La villa</a><a href="/photos">Photos</a><a href="/equipements">Équipements</a></div>
-      <div><h2>Séjour</h2><a href="/localisation">Localisation</a><a href="/tarifs">Tarifs</a><a href="/reservation">Réserver</a></div>
-      <div><h2>Contact</h2><a href="/contact">Nous contacter</a><a href="tel:+262692512766">0692 51 27 66</a><a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a><a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking.com</a></div>
-    </div>
-    <div class="container footer__bottom">
-      <span>© 2026 Verdure & Cie.</span>
-      <nav class="footer__legal" aria-label="Liens légaux">
+    <div class="footer__inner">
+      <span>© 2025 Verdure &amp; Cie — Saint-Pierre, La Réunion</span>
+      <nav class="footer__links">
+        <a href="/villa">La villa</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/tarifs">Tarifs</a>
+        <span class="footer__sep">|</span>
+        <a href="tel:+262692512766">0692 51 27 66</a>
+        <a href="https://www.airbnb.fr/rooms/1422924658519050376" target="_blank" rel="noopener">Airbnb</a>
+        <a href="https://www.booking.com/hotel/re/verdure-amp-cie.fr.html" target="_blank" rel="noopener">Booking</a>
+        <span class="footer__sep">|</span>
         <a href="/mentions-legales">Mentions légales</a>
         <a href="/politique-confidentialite">Confidentialité</a>
+        <a href="/admin" style="color:rgba(255,255,255,.18);font-size:.72rem">Admin</a>
       </nav>
     </div>
   </footer>
+
   <script src="/app.js"></script>
+  <script>
+    // ── Tarification ─────────────────────────────────────────────────────────
+    // Nuit = jour du coucher (jour d'arrivée pour cette nuit)
+    // 0=dim,1=lun,2=mar,3=mer,4=jeu → 295 € | 5=ven,6=sam → 350 €
+    function nightPrice(date) {
+      return (date.getDay() === 5 || date.getDay() === 6) ? 350 : 295;
+    }
+    function discountRate(n) {
+      if (n > 30) return 0.20;
+      if (n > 15) return 0.15;
+      if (n > 8)  return 0.10;
+      return 0;
+    }
+    function euros(n) {
+      return n.toLocaleString('fr-FR') + ' €';
+    }
+    function fdate(d) {
+      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function renderResult(nights, arr, dep) {
+      let weekN = 0, wkendN = 0, base = 0;
+      const cur = new Date(arr);
+      for (let i = 0; i < nights; i++) {
+        const p = nightPrice(cur);
+        base += p;
+        p === 350 ? wkendN++ : weekN++;
+        cur.setDate(cur.getDate() + 1);
+      }
+      const disc  = discountRate(nights);
+      const saved = Math.round(base * disc);
+      const total = base - saved;
+
+      let html = '<div class="estim-breakdown">';
+      if (weekN > 0) html += `
+        <div class="estim-line">
+          <span>Nuits semaine (dim→jeu) × ${weekN}</span>
+          <span>${euros(weekN * 295)}</span>
+        </div>`;
+      if (wkendN > 0) html += `
+        <div class="estim-line">
+          <span>Nuits week-end (ven-sam) × ${wkendN}</span>
+          <span>${euros(wkendN * 350)}</span>
+        </div>`;
+      if (disc > 0) html += `
+        <div class="estim-line estim-line--discount">
+          <span>Réduction long séjour −${Math.round(disc * 100)} %</span>
+          <span>−${euros(saved)}</span>
+        </div>`;
+      html += `
+        <div class="estim-line estim-line--total">
+          <span>${nights} nuit${nights > 1 ? 's' : ''} · ${fdate(arr)} → ${fdate(dep)}</span>
+          <span>${euros(total)}</span>
+        </div>`;
+      html += '</div>';
+      return html;
+    }
+
+    function updateEstim() {
+      const inEl  = document.getElementById('dateArrivee');
+      const outEl = document.getElementById('dateDepart');
+      const errEl = document.getElementById('estError');
+      const res   = document.getElementById('estResult');
+
+      errEl.style.display = 'none';
+
+      if (!inEl.value || !outEl.value) {
+        res.innerHTML = '<div class="estim-breakdown"><div class="estim-placeholder">Sélectionnez vos dates pour voir l\'estimation.</div></div>';
+        return;
+      }
+
+      const arr    = new Date(inEl.value  + 'T12:00:00');
+      const dep    = new Date(outEl.value + 'T12:00:00');
+      const nights = Math.round((dep - arr) / 86400000);
+
+      if (nights < 2) {
+        errEl.textContent = nights <= 0
+          ? 'La date de départ doit être après l\'arrivée.'
+          : 'Séjour minimum : 2 nuits.';
+        errEl.style.display = 'block';
+        res.innerHTML = '<div class="estim-breakdown"><div class="estim-placeholder">—</div></div>';
+        return;
+      }
+
+      res.innerHTML = renderResult(nights, arr, dep);
+    }
+
+    // Initialisation
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('dateArrivee').min = todayStr;
+    document.getElementById('dateDepart').min  = todayStr;
+
+    document.getElementById('dateArrivee').addEventListener('change', function () {
+      if (!this.value) return;
+      // Mettre à jour le min départ (min 2 nuits)
+      const minDep = new Date(this.value + 'T12:00:00');
+      minDep.setDate(minDep.getDate() + 2);
+      const minDepStr = minDep.toISOString().split('T')[0];
+      document.getElementById('dateDepart').min = minDepStr;
+      // Réinitialiser départ si invalide
+      const depEl = document.getElementById('dateDepart');
+      if (depEl.value && depEl.value < minDepStr) {
+        depEl.value = '';
+        document.getElementById('estResult').innerHTML =
+          '<div class="estim-breakdown"><div class="estim-placeholder">Choisissez maintenant votre date de départ.</div></div>';
+        return;
+      }
+      updateEstim();
+    });
+
+    document.getElementById('dateDepart').addEventListener('change', updateEstim);
+
+    // Nav toggle mobile
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', () => {
+        const open = navLinks.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', open);
+        navToggle.textContent = open ? '✕' : '☰';
+      });
+    }
+  </script>
 </body>
 </html>

@@ -3,105 +3,884 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Espace client - Verdure & Cie</title>
+  <title>Mon espace client — Verdure & Cie</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=2">
+  <style>
+    .ec-page { min-height:calc(100vh - 64px); background:var(--cream,#f8f6f1); padding:48px 24px 80px; }
+    .auth-wrap { max-width:440px; margin:0 auto; }
+    .auth-card { background:#fff; border:1.5px solid var(--line,#e4dfd7); border-radius:20px; padding:48px 40px; box-shadow:0 8px 48px rgba(24,32,26,.09); }
+    @media(max-width:500px){ .auth-card { padding:32px 22px; } }
+    .auth-card .ec-icon { font-size:2.8rem; display:block; text-align:center; margin-bottom:16px; }
+    .auth-card h1 { font-family:'DM Serif Display',serif; font-size:1.65rem; color:var(--ink,#1a2e1a); text-align:center; margin-bottom:6px; }
+    .auth-sub { text-align:center; color:#666; font-size:.9rem; margin-bottom:28px; }
+    .field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+    .field label { font-size:.82rem; font-weight:700; color:var(--ink,#1a2e1a); }
+    .field input { border:1.5px solid #d5d0ca; border-radius:9px; padding:12px 14px; font-size:.96rem; outline:none; transition:border-color .2s; }
+    .field input:focus { border-color:var(--leaf,#2d6a2d); }
+    .btn-full { width:100%; margin-top:8px; }
+    .ec-error { background:#fef2f2; border:1px solid #f5c6c6; border-radius:8px; color:#c0392b; font-size:.85rem; padding:10px 14px; margin-top:12px; display:none; }
+    .ec-success { background:#f0faf0; border:1px solid #b8ddb8; border-radius:8px; color:#1a6b1a; font-size:.85rem; padding:10px 14px; margin-top:12px; display:none; }
+    .dash-wrap { max-width:780px; margin:0 auto; }
+    .booking-bar { background:#fff; border:1.5px solid var(--line,#e4dfd7); border-radius:14px; padding:18px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
+    .booking-bar__info strong { display:block; font-size:1rem; color:var(--ink,#1a2e1a); }
+    .booking-bar__info span { font-size:.83rem; color:#666; }
+    .btn-logout { background:none; border:1.5px solid #d5d0ca; border-radius:8px; padding:8px 16px; font-size:.82rem; color:#888; cursor:pointer; }
+    .progress-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:32px; }
+    @media(max-width:640px){ .progress-strip { grid-template-columns:1fr 1fr; } }
+    .prog-item { background:#fff; border:1.5px solid #e0dbd4; border-radius:10px; padding:10px 12px; font-size:.75rem; color:#999; display:flex; align-items:center; gap:7px; transition:all .3s; }
+    .prog-item .prog-icon { font-size:1rem; flex-shrink:0; }
+    .prog-item.done { border-color:#b8ddb8; background:#f0faf0; color:#1a6b1a; font-weight:700; }
+    .dash-section { background:#fff; border:1.5px solid var(--line,#e4dfd7); border-radius:16px; padding:28px 26px; margin-bottom:20px; }
+    .dash-section h2 { font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--ink,#1a2e1a); margin:0 0 18px; display:flex; align-items:center; gap:10px; }
+    .doc-list { display:flex; flex-direction:column; gap:12px; }
+    .doc-card { border:1.5px solid #e0dbd4; border-radius:12px; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; transition:border-color .2s; }
+    .doc-card.signed { border-color:#b8ddb8; background:#f9fef9; }
+    .doc-card__info h3 { font-size:.95rem; font-weight:800; color:var(--ink,#1a2e1a); margin:0 0 4px; }
+    .doc-card__info p { font-size:.82rem; color:#777; margin:0; }
+    .signed-badge { display:inline-flex; align-items:center; gap:5px; background:#e8f5e8; border:1px solid #b8ddb8; border-radius:20px; color:#1a6b1a; font-size:.75rem; font-weight:700; padding:3px 10px; margin-top:6px; }
+    .upload-zone { border:2px dashed #d0c9c0; border-radius:12px; padding:28px 20px; text-align:center; cursor:pointer; transition:all .2s; background:#fafaf8; }
+    .upload-zone:hover,.upload-zone.dragover { border-color:var(--leaf,#2d6a2d); background:#f0faf0; }
+    .upload-zone .upload-icon { font-size:2.2rem; margin-bottom:8px; }
+    .upload-zone p { margin:0; font-size:.88rem; color:#777; }
+    .id-done { display:flex; align-items:center; gap:12px; background:#f0faf0; border:1.5px solid #b8ddb8; border-radius:12px; padding:16px 20px; }
+    .payment-box { background:#f8f6f1; border:1.5px solid #e0dbd4; border-radius:12px; padding:22px; }
+    .payment-amount { font-family:'DM Serif Display',serif; font-size:2rem; color:var(--ink,#1a2e1a); margin:0 0 4px; }
+    .payment-amount span { font-size:1rem; font-weight:400; color:#888; }
+    .bank-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.88rem; }
+    .bank-table td { padding:8px 10px; border-bottom:1px solid #e8e4df; }
+    .bank-table td:first-child { color:#888; width:38%; }
+    .bank-table td:last-child { font-weight:700; color:var(--ink,#1a2e1a); font-family:monospace; font-size:.84rem; }
+    .bank-ref { background:#fffbf0; border:1px solid #f0d070; border-radius:6px; padding:8px 12px; font-size:.83rem; margin-bottom:16px; }
+    .payment-pending { background:#fffbf0; border:1.5px solid #f0d070; border-radius:12px; padding:16px 20px; font-size:.85rem; color:#886600; }
+    .payment-received { background:#f0faf0; border:1.5px solid #b8ddb8; border-radius:12px; padding:16px 20px; font-size:.85rem; color:#1a6b1a; font-weight:700; }
+    .guide-cta { text-align:center; padding:16px 0 8px; }
+    .guide-cta p { color:#666; font-size:.9rem; margin-bottom:20px; }
+    .spinner-wrap { text-align:center; padding:80px 20px; }
+    .spinner { width:40px; height:40px; border:3px solid #e0dbd4; border-top-color:var(--leaf,#2d6a2d); border-radius:50%; animation:spin .8s linear infinite; display:inline-block; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    /* Modal */
+    .modal { position:fixed; inset:0; z-index:500; display:flex; align-items:flex-start; justify-content:center; padding:20px 16px; background:rgba(0,0,0,.6); overflow-y:auto; }
+    .modal__panel { background:#fff; border-radius:18px; max-width:720px; width:100%; margin:auto; box-shadow:0 24px 80px rgba(0,0,0,.3); }
+    .modal__header { display:flex; align-items:center; justify-content:space-between; padding:22px 26px 16px; border-bottom:1px solid #eee; }
+    .modal__header h2 { font-family:'DM Serif Display',serif; font-size:1.2rem; margin:0; color:var(--ink,#1a2e1a); }
+    .modal__close { background:none; border:none; font-size:1.5rem; cursor:pointer; color:#888; padding:0; line-height:1; }
+    .modal__body { padding:22px 26px 28px; }
+    .doc-scroll { border:1.5px solid #e0dbd4; border-radius:10px; background:#fafaf8; padding:18px 20px; height:300px; overflow-y:auto; font-size:.83rem; line-height:1.8; color:#333; margin-bottom:22px; }
+    .doc-scroll h2 { font-family:'DM Serif Display',serif; font-size:1.05rem; margin:0 0 14px; color:var(--ink,#1a2e1a); border-bottom:1px solid #e0dbd4; padding-bottom:8px; }
+    .doc-scroll h3 { font-size:.88rem; font-weight:800; color:var(--ink,#1a2e1a); margin:16px 0 6px; text-transform:uppercase; letter-spacing:.03em; }
+    .doc-scroll p { margin:0 0 8px; }
+    .doc-scroll ul { padding-left:18px; margin:0 0 10px; }
+    .doc-scroll li { margin-bottom:4px; }
+    .doc-scroll table { width:100%; border-collapse:collapse; margin:12px 0; font-size:.82rem; }
+    .doc-scroll table td { padding:6px 10px; border:1px solid #e0dbd4; }
+    .doc-scroll table td:first-child { font-weight:700; color:#555; width:42%; background:#f4f2ee; }
+    .sig-label { font-size:.85rem; font-weight:700; color:var(--ink,#1a2e1a); margin-bottom:8px; }
+    .sig-wrap { border:2px solid #d5d0ca; border-radius:10px; background:#fff; overflow:hidden; cursor:crosshair; margin-bottom:8px; }
+    #sig-canvas { display:block; touch-action:none; width:100%; }
+    .sig-actions { display:flex; justify-content:flex-end; margin-bottom:14px; }
+    .btn-clear { background:none; border:1px solid #d5d0ca; border-radius:6px; padding:5px 12px; font-size:.78rem; color:#888; cursor:pointer; }
+    .sig-legal { font-size:.78rem; color:#888; font-style:italic; margin:4px 0 18px; }
+    .modal__footer { display:flex; gap:12px; justify-content:flex-end; padding-top:16px; border-top:1px solid #eee; flex-wrap:wrap; }
+    .btn-sm { padding:10px 22px; font-size:.88rem; }
+    .divider { border:none; border-top:1px solid #eee; margin:20px 0; }
+    .sign-check { display:flex; align-items:flex-start; gap:10px; background:#f4f8f2; border:1.5px solid #c8dfc0; border-radius:8px; padding:12px 14px; margin-bottom:14px; cursor:pointer; font-size:.85rem; color:#1a2e1a; }
+    .sign-check input[type=checkbox] { width:18px; height:18px; flex-shrink:0; margin-top:1px; accent-color:#2d6a2d; cursor:pointer; }
+    .upload-progress { display:none; margin-top:12px; }
+    .progress-bar { height:4px; background:#e0dbd4; border-radius:2px; overflow:hidden; }
+    .progress-bar__fill { height:100%; background:var(--leaf,#2d6a2d); width:0; transition:width .3s; }
+  </style>
 </head>
 <body>
-  <nav class="nav" aria-label="Navigation">
-    <div class="container nav__inner">
-      <a class="nav__brand" href="/">Verdure & Cie</a>
-      <a class="btn btn--outline" href="/reglement-interieur" style="padding:7px 14px;font-size:.85rem">Règlement intérieur</a>
-    </div>
-  </nav>
-
-  <main>
-    <section class="section">
-      <div class="container" style="max-width:920px">
-        <div class="section__head" style="margin-bottom:32px">
-          <p class="eyebrow">Espace client privé</p>
-          <h1>Documents & Paiement</h1>
-          <p class="lead">Cet espace regroupe les documents à signer, votre acompte de réservation et la caution. Chaque document doit être signé avant votre arrivée.</p>
-        </div>
-        <div id="clientPortal" class="portal-grid">
-          <article class="card"><h3>Chargement du dossier…</h3><p>Merci de patienter.</p></article>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Contrat modal — affiché avant signature du contrat -->
-  <div id="contractModal" class="sign-modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle">
-    <div class="sign-modal" style="max-width:700px;max-height:90vh;overflow-y:auto">
-      <button class="sign-modal__close" id="contractModalClose" type="button" aria-label="Fermer">×</button>
-      <p class="eyebrow">Contrat de location</p>
-      <h2 id="contractModalTitle">Contrat de Location Courte Durée</h2>
-      <div id="contractContent" class="document-layout" style="margin:20px 0"></div>
+<nav class="nav" aria-label="Navigation principale">
+  <div class="container nav__inner">
+    <a class="nav__brand" href="/"><img src="/logo.png" class="nav__logo" alt="Verdure & Cie" aria-hidden="true"><span>Verdure &amp; Cie</span></a>
+    <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+    <div class="nav__links" id="navLinks">
+      <a data-nav href="/">Accueil</a>
+      <a data-nav href="/villa">Villa</a>
+      <a data-nav href="/galerie">Galerie</a>
+      <a data-nav href="/equipements">Équipements</a>
+      <a data-nav href="/localisation">Localisation</a>
+      <a data-nav href="/tarifs">Tarifs</a>
+      <a data-nav class="nav__client nav__client--active" href="/espace-client">Mon espace</a>
+      <a data-nav class="nav__cta" href="/reservation">Réserver</a>
     </div>
   </div>
+</nav>
 
-  <script src="/app.js"></script>
-  <script>
-    // Show contract before signing
-    window.addEventListener('verdure:showContract', (e) => {
-      const client = e.detail;
-      const modal = document.getElementById('contractModal');
-      const content = document.getElementById('contractContent');
-      const euro = (cents) => new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR' }).format((cents||0)/100);
-      content.innerHTML = `
-        <article class="document-card" style="font-size:.92rem;line-height:1.7">
-          <h3>1. Objet du contrat</h3>
-          <p>Le logement est loué meublé à titre de « location courte durée » pour la période indiquée ci-dessous. Le logement est situé au <strong>8 chemin Elie Hoarau, Basse-Terre, 97410 Saint-Pierre, La Réunion</strong>.</p>
+<main>
+  <div class="ec-page">
 
-          <h3>2. Détails du séjour</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:.9rem">
-            <tr><td style="padding:6px 0;color:var(--muted);width:40%">Locataire</td><td><strong>${client.guestName}</strong></td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Email</td><td>${client.guestEmail}</td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Arrivée</td><td><strong>${client.arrival || 'À préciser'}</strong></td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Départ</td><td><strong>${client.departure || 'À préciser'}</strong></td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Voyageurs</td><td>${client.guests || 1}</td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Montant total</td><td><strong>${euro(client.totalAmountCents)}</strong></td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Acompte 30%</td><td>${euro(client.depositAmountCents)}</td></tr>
-            <tr><td style="padding:6px 0;color:var(--muted)">Caution</td><td>800 € (chèque non encaissé à l'arrivée)</td></tr>
-          </table>
+    <!-- Chargement -->
+    <div id="vw-loading">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
 
-          <h3>3. Conditions de la location</h3>
-          <ul class="document-list">
-            <li>Le séjour est non renouvelable. Le locataire s'engage à libérer le logement à l'heure du check-out.</li>
-            <li>Le locataire doit présenter sa pièce d'identité à l'arrivée.</li>
-            <li>Acompte de 30% dû à la réservation pour confirmer les dates. Sans paiement, le bailleur n'est pas tenu de bloquer les dates.</li>
-            <li>Solde dû au plus tard à J-15 avant l'arrivée. En cas de non-paiement, le bailleur peut annuler sans remboursement des arrhes.</li>
-            <li>Aucun remboursement en cas d'annulation.</li>
-          </ul>
+    <!-- Connexion -->
+    <div id="vw-login" hidden>
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <span class="ec-icon">🔑</span>
+          <h1>Mon espace client</h1>
+          <p class="auth-sub">Connectez-vous avec les identifiants transmis par les propriétaires.</p>
+          <form id="login-form" onsubmit="doLogin(event)">
+            <div class="field">
+              <label for="login-email">Adresse email</label>
+              <input type="email" id="login-email" autocomplete="email" required placeholder="votre@email.com">
+            </div>
+            <div class="field">
+              <label for="login-password">Mot de passe</label>
+              <input type="password" id="login-password" autocomplete="current-password" required placeholder="••••••••">
+            </div>
+            <button class="btn btn--primary btn-full" type="submit" id="login-btn">Se connecter</button>
+            <div class="ec-error" id="login-error"></div>
+          </form>
+          <hr class="divider" style="margin-top:28px">
+          <p style="text-align:center;font-size:.82rem;margin-top:8px"><a href="#" onclick="showForgot(event)" style="color:#888">Mot de passe oublié ?</a> &nbsp;·&nbsp; <a href="/reservation" style="color:var(--leaf)">Faire une demande de réservation →</a></p>
+        </div>
+      </div>
+    </div>
 
-          <h3>4. Caution</h3>
-          <p>800 € de caution demandée à l'arrivée par chèque non encaissé. Restituée 48h après le départ, sous réserve de bon état du logement.</p>
+    <!-- Mot de passe oublié -->
+    <div id="vw-forgot" hidden>
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <span class="ec-icon">📧</span>
+          <h1>Mot de passe oublié</h1>
+          <p class="auth-sub">Saisissez votre email pour recevoir un nouveau mot de passe temporaire.</p>
+          <form id="forgot-form" onsubmit="doForgot(event)">
+            <div class="field">
+              <label for="forgot-email">Adresse email</label>
+              <input type="email" id="forgot-email" required placeholder="votre@email.com" autocomplete="email">
+            </div>
+            <button class="btn btn--primary btn-full" type="submit" id="forgot-btn">Envoyer un mot de passe temporaire</button>
+            <div class="ec-error" id="forgot-error"></div>
+            <div class="ec-success" id="forgot-success"></div>
+          </form>
+          <hr class="divider" style="margin-top:24px">
+          <p style="text-align:center;font-size:.82rem"><a href="#" onclick="showView('login');return false;" style="color:#888">← Retour à la connexion</a></p>
+        </div>
+      </div>
+    </div>
 
-          <h3>5. Obligations du locataire</h3>
-          <ul class="document-list">
-            <li>Pas d'animaux, pas de tabac à l'intérieur.</li>
-            <li>Pas de nuisances sonores susceptibles de gêner les voisins.</li>
-            <li>Utilisation d'Internet conforme aux lois Hadopi.</li>
-            <li>Utilisation raisonnée de la climatisation.</li>
-            <li>Pas de recours contre le bailleur en cas de vol ou de dégradation.</li>
-            <li>Capacité maximale : 10 personnes. Toute personne supplémentaire doit être signalée.</li>
-          </ul>
+    <!-- Changement de mot de passe -->
+    <div id="vw-pass" hidden>
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <span class="ec-icon">🔐</span>
+          <h1>Choisissez votre mot de passe</h1>
+          <p class="auth-sub">Remplacez le mot de passe temporaire par un mot de passe personnel.</p>
+          <form id="pass-form" onsubmit="doChangePass(event)">
+            <div class="field">
+              <label for="pass-current">Mot de passe temporaire</label>
+              <input type="password" id="pass-current" required placeholder="••••••••">
+            </div>
+            <div class="field">
+              <label for="pass-new">Nouveau mot de passe <small style="font-weight:400;color:#888">(min. 8 caractères)</small></label>
+              <input type="password" id="pass-new" required minlength="8" placeholder="••••••••">
+            </div>
+            <div class="field">
+              <label for="pass-confirm">Confirmer le nouveau mot de passe</label>
+              <input type="password" id="pass-confirm" required placeholder="••••••••">
+            </div>
+            <button class="btn btn--primary btn-full" type="submit" id="pass-btn">Enregistrer mon mot de passe</button>
+            <div class="ec-error" id="pass-error"></div>
+            <div class="ec-success" id="pass-success"></div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-          <h3>6. Bailleur</h3>
-          <p>Verdure & Cie — 8 chemin Elie Hoarau, 97410 Saint-Pierre, La Réunion<br>
-          Tél : 0692 51 27 66 — Email : hello@maisonpicard.com</p>
-        </article>
-      `;
-      modal.style.display = 'grid';
+    <!-- Dashboard -->
+    <div id="vw-dash" hidden>
+      <div class="dash-wrap">
+
+        <div class="booking-bar">
+          <div class="booking-bar__info">
+            <strong id="dash-name">…</strong>
+            <span id="dash-dates">…</span>
+          </div>
+          <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+        </div>
+
+        <!-- Progression -->
+        <div class="progress-strip">
+          <div class="prog-item" id="prog-contrat"><span class="prog-icon">📄</span><span>Contrat</span></div>
+          <div class="prog-item" id="prog-reglement"><span class="prog-icon">📋</span><span>Règlement</span></div>
+          <div class="prog-item" id="prog-edl"><span class="prog-icon">🏠</span><span>État des lieux</span></div>
+          <div class="prog-item" id="prog-id"><span class="prog-icon">🪪</span><span>Identité</span></div>
+          <div class="prog-item" id="prog-payment"><span class="prog-icon">💶</span><span>Acompte</span></div>
+        </div>
+
+        <!-- Documents -->
+        <div class="dash-section">
+          <h2><span class="sec-icon">📄</span>Documents à signer</h2>
+          <div class="doc-list">
+
+            <div class="doc-card" id="doc-card-contract">
+              <div class="doc-card__info">
+                <h3>Contrat de location</h3>
+                <p>Contrat de location saisonnière personnalisé à votre séjour.</p>
+                <div id="badge-contract"></div>
+              </div>
+              <button class="btn btn--primary btn-sm" id="btn-contract" onclick="openSign('contract')">Lire et signer</button>
+            </div>
+
+            <div class="doc-card" id="doc-card-reglement">
+              <div class="doc-card__info">
+                <h3>Règlement intérieur</h3>
+                <p>Règles de vie et d'utilisation de la villa Verdure &amp; Cie.</p>
+                <div id="badge-reglement"></div>
+              </div>
+              <button class="btn btn--primary btn-sm" id="btn-reglement" onclick="openSign('reglement')">Lire et signer</button>
+            </div>
+
+            <div class="doc-card" id="doc-card-etat_des_lieux">
+              <div class="doc-card__info">
+                <h3>État des lieux d'entrée</h3>
+                <p>Constat contradictoire de l'état de la villa à votre arrivée.</p>
+                <div id="badge-etat_des_lieux"></div>
+              </div>
+              <button class="btn btn--primary btn-sm" id="btn-etat_des_lieux" onclick="openSign('etat_des_lieux')">Lire et signer</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Pièce d'identité -->
+        <div class="dash-section">
+          <h2><span class="sec-icon">🪪</span>Pièce d'identité</h2>
+          <div id="id-area">
+            <p style="font-size:.88rem;color:#666;margin:0 0 16px">Déposez une copie de votre pièce d'identité (passeport, carte d'identité). Formats acceptés : JPG, PNG, PDF, HEIC — 12 Mo max.</p>
+            <div class="upload-zone" id="upload-zone"
+              onclick="document.getElementById('id-input').click()"
+              ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+              <div class="upload-icon">📎</div>
+              <p><strong>Cliquez ou déposez votre fichier ici</strong></p>
+              <p>JPG, PNG, PDF, HEIC — 12 Mo max</p>
+            </div>
+            <input type="file" id="id-input" accept="image/*,.pdf,.heic" hidden onchange="handleIdFile(event)">
+            <div class="ec-error" id="id-error" style="margin-top:10px"></div>
+            <div class="upload-progress" id="upload-progress">
+              <div class="progress-bar"><div class="progress-bar__fill" id="pb-fill"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paiement -->
+        <div class="dash-section">
+          <h2><span class="sec-icon">💶</span>Acompte de réservation</h2>
+          <div id="payment-area"></div>
+        </div>
+
+        <!-- Guide -->
+        <div class="dash-section" id="guide-section">
+          <h2><span class="sec-icon">🗺️</span>Guide de séjour</h2>
+          <div id="guide-area">
+            <p style="text-align:center;color:#999;font-size:.88rem;padding:16px 0">Le guide de séjour sera disponible une fois votre dossier complet.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal signature -->
+<div id="modal-sign" class="modal" hidden>
+  <div class="modal__panel">
+    <div class="modal__header">
+      <h2 id="modal-title">Document</h2>
+      <button class="modal__close" onclick="closeModal()" aria-label="Fermer">✕</button>
+    </div>
+    <div class="modal__body">
+      <p style="font-size:.82rem;color:#888;margin:0 0 10px">Lisez attentivement le document ci-dessous avant de signer.</p>
+      <div id="doc-content" class="doc-scroll"></div>
+
+      <p class="sig-label">Votre signature manuscrite :</p>
+      <div class="sig-wrap"><canvas id="sig-canvas" height="160"></canvas></div>
+      <div class="sig-actions">
+        <button class="btn-clear" onclick="clearSig()">Effacer</button>
+      </div>
+
+      <div class="field">
+        <label for="sig-name">Nom et prénom (confirmation) :</label>
+        <input type="text" id="sig-name" placeholder="Ex : Jean Dupont" autocomplete="name">
+      </div>
+
+      <label class="sign-check" for="sign-accept-check"><input type="checkbox" id="sign-accept-check"> <span>J'ai lu et j'accepte ce document dans son intégralité. Je certifie que les informations fournies sont exactes.</span></label>
+
+      <p class="sig-legal">En cliquant sur « Signer et enregistrer », je certifie avoir lu et accepté ce document. Cette signature électronique a la même valeur légale qu'une signature manuscrite (Art. 1366 du Code civil).</p>
+
+      <div class="ec-error" id="sign-error"></div>
+
+      <div class="modal__footer">
+        <button class="btn btn--outline btn-sm" onclick="closeModal()">Annuler</button>
+        <button class="btn btn--primary btn-sm" id="sign-submit-btn" onclick="submitSign()">✍️ Signer et enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>© 2025 Verdure &amp; Cie — Saint-Pierre, La Réunion</span>
+    <nav class="footer__links">
+      <a href="/villa">La villa</a>
+      <a href="/galerie">Galerie</a>
+      <a href="/tarifs">Tarifs</a>
+      <span class="footer__sep">|</span>
+      <a href="tel:+262692512766">0692 51 27 66</a>
+      <a href="/mentions-legales">Mentions légales</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+<script>
+// ── État global ──────────────────────────────────────────────────────────────
+var S = { session: null, token: null, data: null, config: null };
+var SESS_KEY = 'ec_session_v2';
+var currentDocType = null;
+var sigCtx = null, sigDrawing = false;
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+async function init() {
+  try { var r = await fetch('/api/config'); S.config = await r.json(); } catch(e) {}
+  var saved = localStorage.getItem(SESS_KEY);
+  if (saved) {
+    try {
+      var parsed = JSON.parse(saved);
+      S.session = parsed.sessionToken;
+      S.token = parsed.token;
+      var ok = await loadData();
+      if (ok) return;
+    } catch(e) {}
+  }
+  clearSession();
+  showView('login');
+}
+
+async function loadData() {
+  try {
+    var r = await apiFetch('/api/client/me');
+    if (!r.ok) return false;
+    S.data = await r.json();
+    if (S.data.mustChangePassword) { showView('pass'); return true; }
+    S.token = S.data.client.token;
+    renderDash();
+    showView('dash');
+    return true;
+  } catch(e) { return false; }
+}
+
+function showView(id) {
+  ['loading','login','forgot','pass','dash'].forEach(function(v) {
+    var el = document.getElementById('vw-' + v);
+    if (el) el.hidden = (v !== id);
+  });
+}
+
+function clearSession() {
+  localStorage.removeItem(SESS_KEY);
+  S.session = null; S.token = null; S.data = null;
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+async function doLogin(e) {
+  e.preventDefault();
+  var btn = document.getElementById('login-btn');
+  var errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Connexion…';
+  try {
+    var r = await fetch('/api/client/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        login: document.getElementById('login-email').value.trim(),
+        password: document.getElementById('login-password').value
+      })
     });
+    var d = await r.json();
+    if (!r.ok) { showErr(errEl, d.error || 'Identifiants incorrects.'); return; }
+    S.session = d.sessionToken; S.token = d.token;
+    localStorage.setItem(SESS_KEY, JSON.stringify({ sessionToken: d.sessionToken, token: d.token }));
+    if (d.mustChangePassword) { showView('pass'); return; }
+    var ok = await loadData();
+    if (!ok) showErr(errEl, 'Erreur de chargement. Réessayez.');
+  } catch(e) { showErr(errEl, 'Erreur réseau. Réessayez.'); }
+  finally { btn.disabled = false; btn.textContent = 'Se connecter'; }
+}
 
-    document.getElementById('contractModalClose').addEventListener('click', () => {
-      document.getElementById('contractModal').style.display = 'none';
+async function doChangePass(e) {
+  e.preventDefault();
+  var errEl = document.getElementById('pass-error');
+  var sucEl = document.getElementById('pass-success');
+  var btn = document.getElementById('pass-btn');
+  errEl.style.display = 'none'; sucEl.style.display = 'none';
+  var cur = document.getElementById('pass-current').value;
+  var nw = document.getElementById('pass-new').value;
+  var conf = document.getElementById('pass-confirm').value;
+  if (nw !== conf) { showErr(errEl, 'Les deux mots de passe ne correspondent pas.'); return; }
+  if (nw.length < 8) { showErr(errEl, 'Minimum 8 caractères.'); return; }
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
+  try {
+    var r = await apiFetch('/api/client/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword: cur, newPassword: nw })
     });
-  </script>
+    var d = await r.json();
+    if (!r.ok) { showErr(errEl, d.error); return; }
+    sucEl.textContent = '✅ Mot de passe enregistré !';
+    sucEl.style.display = 'block';
+    setTimeout(async function() { var ok = await loadData(); if (!ok) showView('login'); }, 1200);
+  } catch(e) { showErr(errEl, 'Erreur réseau.'); }
+  finally { btn.disabled = false; btn.textContent = 'Enregistrer mon mot de passe'; }
+}
+
+async function doLogout() {
+  try { await apiFetch('/api/client/logout', { method: 'POST' }); } catch(e) {}
+  clearSession();
+  showView('login');
+}
+
+function showForgot(e) { if (e) e.preventDefault(); showView('forgot'); }
+
+async function doForgot(e) {
+  e.preventDefault();
+  var errEl = document.getElementById('forgot-error');
+  var sucEl = document.getElementById('forgot-success');
+  var btn = document.getElementById('forgot-btn');
+  errEl.style.display = 'none'; sucEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  try {
+    await fetch('/api/client/request-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: document.getElementById('forgot-email').value.trim() })
+    });
+    sucEl.textContent = '✅ Si un compte existe pour cet email, un mot de passe temporaire vous a été envoyé.';
+    sucEl.style.display = 'block';
+    setTimeout(function() { showView('login'); }, 4000);
+  } catch(e) { showErr(errEl, 'Erreur réseau. Réessayez.'); }
+  finally { btn.disabled = false; btn.textContent = 'Envoyer un mot de passe temporaire'; }
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+function renderDash() {
+  var d = S.data;
+  var c = d.client;
+  var sigs = d.signatures || [];
+
+  var fmt = function(dt) {
+    return dt ? new Date(dt).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' }) : '—';
+  };
+
+  document.getElementById('dash-name').textContent = 'Bonjour ' + c.guestName + ' 👋';
+  document.getElementById('dash-dates').textContent =
+    fmt(c.arrival) + ' → ' + fmt(c.departure) +
+    (c.guests ? ' · ' + c.guests + ' voyageur' + (c.guests > 1 ? 's' : '') : '');
+
+  var sigContract = sigs.find(function(s) { return s.document_type === 'contract'; });
+  var sigReglement = sigs.find(function(s) { return s.document_type === 'reglement'; });
+  var sigEdl = sigs.find(function(s) { return s.document_type === 'etat_des_lieux'; });
+
+  setDone('prog-contrat', Boolean(sigContract));
+  setDone('prog-reglement', Boolean(sigReglement));
+  setDone('prog-edl', Boolean(sigEdl));
+  setDone('prog-id', d.idDocUploaded);
+  setDone('prog-payment', d.paymentConfirmed || d.paymentPaid);
+
+  renderDocCard('contract', sigContract);
+  renderDocCard('reglement', sigReglement);
+  renderDocCard('etat_des_lieux', sigEdl);
+
+  renderIdSection(d.idDocUploaded, c.idDocUploadedAt);
+  renderPayment(c, d);
+
+  var allDone = sigContract && sigReglement && sigEdl && d.idDocUploaded && (d.paymentConfirmed || d.paymentPaid);
+  renderGuide(allDone, c.token);
+}
+
+function setDone(id, done) {
+  var el = document.getElementById(id);
+  if (el) { if (done) el.classList.add('done'); else el.classList.remove('done'); }
+}
+
+function renderDocCard(type, sig) {
+  var card = document.getElementById('doc-card-' + type);
+  var badge = document.getElementById('badge-' + type);
+  var btn = document.getElementById('btn-' + type);
+  if (!card) return;
+  if (sig) {
+    card.classList.add('signed');
+    badge.innerHTML = '<span class="signed-badge">✅ Signé le ' + new Date(sig.signed_at).toLocaleDateString('fr-FR') + '</span>';
+    btn.textContent = 'Consulter / re-signer';
+    btn.className = 'btn btn--outline btn-sm';
+  } else {
+    card.classList.remove('signed');
+    badge.innerHTML = '';
+    btn.textContent = 'Lire et signer';
+    btn.className = 'btn btn--primary btn-sm';
+  }
+}
+
+function renderIdSection(uploaded, uploadedAt) {
+  if (!uploaded) return;
+  document.getElementById('id-area').innerHTML =
+    '<div class="id-done"><span style="font-size:1.8rem">✅</span><div>' +
+    '<strong style="color:#1a6b1a">Pièce d\'identité reçue</strong>' +
+    '<span style="font-size:.82rem;color:#555;display:block">' + (uploadedAt ? 'Déposée le ' + new Date(uploadedAt).toLocaleDateString('fr-FR') : 'Document bien reçu') + '</span>' +
+    '</div></div>';
+}
+
+function renderPayment(c, d) {
+  var area = document.getElementById('payment-area');
+  var amt = c.depositAmountCents ? (c.depositAmountCents / 100).toFixed(2) : '—';
+  var total = c.totalAmountCents ? (c.totalAmountCents / 100).toFixed(2) : '—';
+  var solde = (c.totalAmountCents && c.depositAmountCents)
+    ? ((c.totalAmountCents - c.depositAmountCents) / 100).toFixed(2) : '—';
+  var ref = 'VDR-' + (c.token || '').slice(0, 8).toUpperCase();
+  var cfg = S.config || {};
+  var iban = cfg.bankIban || '';
+  var bic = cfg.bankBic || '';
+  var benef = cfg.bankBeneficiary || 'Magali & Paul';
+
+  if (d.paymentPaid) {
+    area.innerHTML = '<div class="payment-received">✅ Acompte reçu — Votre réservation est confirmée.</div>';
+    return;
+  }
+  if (d.paymentConfirmed) {
+    area.innerHTML = '<div class="payment-pending">⏳ Virement signalé. Nous vérifions la réception et vous confirmons sous 24h.</div>';
+    return;
+  }
+  area.innerHTML = '<div class="payment-box">' +
+    '<p class="payment-amount">' + amt + ' € <span>acompte (30% du séjour)</span></p>' +
+    '<p style="font-size:.85rem;color:#666;margin:0 0 14px">Effectuez un virement bancaire en indiquant la référence ci-dessous.</p>' +
+    '<div class="bank-ref">📌 Référence obligatoire : <strong>' + ref + '</strong></div>' +
+    '<table class="bank-table">' +
+    '<tr><td>Bénéficiaire</td><td>' + benef + '</td></tr>' +
+    '<tr><td>IBAN</td><td>' + (iban || '<span style="color:#c0392b">Contacter les propriétaires</span>') + '</td></tr>' +
+    '<tr><td>BIC / SWIFT</td><td>' + (bic || '<span style="color:#c0392b">Contacter les propriétaires</span>') + '</td></tr>' +
+    '<tr><td>Référence</td><td>' + ref + '</td></tr>' +
+    '<tr><td>Montant</td><td>' + amt + ' €</td></tr>' +
+    '</table>' +
+    '<p style="font-size:.8rem;color:#888;margin:0 0 16px">Séjour total : ' + total + ' € · Solde restant (' + solde + ' €) dû 30 jours avant l\'arrivée.</p>' +
+    '<button class="btn btn--primary" onclick="confirmPayment()">J\'ai effectué le virement ✓</button>' +
+    '</div>';
+}
+
+function renderGuide(allDone, token) {
+  if (!allDone) return;
+  document.getElementById('guide-area').innerHTML =
+    '<div class="guide-cta"><p>Votre dossier est complet ! Accédez au guide pour préparer votre arrivée.</p>' +
+    '<a class="btn btn--primary" href="/guide/' + token + '">Accéder au guide de séjour →</a></div>';
+}
+
+// ── Signature ─────────────────────────────────────────────────────────────────
+function openSign(type) {
+  var c = S.data.client;
+  currentDocType = type;
+  var titles = {
+    contract: 'Contrat de location saisonnière',
+    reglement: 'Règlement intérieur',
+    etat_des_lieux: "État des lieux d'entrée"
+  };
+  document.getElementById('modal-title').textContent = titles[type] || 'Document';
+  document.getElementById('doc-content').innerHTML = getDocText(type, c);
+  document.getElementById('sig-name').value = c.guestName || '';
+  document.getElementById('sign-error').style.display = 'none';
+  document.getElementById('sign-accept-check').checked = false;
+  document.getElementById('modal-sign').hidden = false;
+  document.body.style.overflow = 'hidden';
+  clearSig();
+  setTimeout(initCanvas, 80);
+}
+
+function closeModal() {
+  document.getElementById('modal-sign').hidden = true;
+  document.body.style.overflow = '';
+}
+
+async function submitSign() {
+  var nameVal = document.getElementById('sig-name').value.trim();
+  var errEl = document.getElementById('sign-error');
+  errEl.style.display = 'none';
+  if (!nameVal) { showErr(errEl, 'Veuillez saisir votre nom complet.'); return; }
+  if (!document.getElementById('sign-accept-check').checked) { showErr(errEl, 'Veuillez cocher la case pour confirmer avoir lu et accepté le document.'); return; }
+  if (isSigEmpty()) { showErr(errEl, 'Veuillez apposer votre signature dans le cadre.'); return; }
+  var sigData = document.getElementById('sig-canvas').toDataURL('image/png');
+  var btn = document.getElementById('sign-submit-btn');
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
+  try {
+    var r = await apiFetch('/api/client/' + S.token + '/sign', {
+      method: 'POST',
+      body: JSON.stringify({
+        documentType: currentDocType,
+        signerName: nameVal,
+        signerEmail: S.data.client.guestEmail,
+        acceptedText: 'Lu et approuvé le ' + new Date().toLocaleDateString('fr-FR') + ' par ' + nameVal,
+        signatureData: sigData
+      })
+    });
+    if (!r.ok) { var d = await r.json(); showErr(errEl, d.error || 'Erreur lors de la signature.'); return; }
+    closeModal();
+    await loadData();
+  } catch(e) { showErr(errEl, 'Erreur réseau. Réessayez.'); }
+  finally { btn.disabled = false; btn.textContent = '✍️ Signer et enregistrer'; }
+}
+
+// ── Canvas ────────────────────────────────────────────────────────────────────
+function initCanvas() {
+  var canvas = document.getElementById('sig-canvas');
+  var wrap = canvas.parentElement;
+  canvas.width = wrap.clientWidth;
+  canvas.height = 160;
+  sigCtx = canvas.getContext('2d');
+  sigCtx.strokeStyle = '#1a2e1a';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  function getPos(e) {
+    var r = canvas.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (canvas.width / r.width), y: (e.clientY - r.top) * (canvas.height / r.height) };
+  }
+  canvas.onmousedown = function(e) { sigDrawing = true; var p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); };
+  canvas.onmousemove = function(e) { if (!sigDrawing) return; var p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); };
+  canvas.onmouseup = canvas.onmouseleave = function() { sigDrawing = false; };
+  canvas.addEventListener('touchstart', function(e) { e.preventDefault(); sigDrawing = true; var p = getPos(e.touches[0]); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); }, { passive: false });
+  canvas.addEventListener('touchmove', function(e) { e.preventDefault(); if (!sigDrawing) return; var p = getPos(e.touches[0]); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }, { passive: false });
+  canvas.addEventListener('touchend', function() { sigDrawing = false; }, { passive: false });
+}
+
+function clearSig() {
+  if (sigCtx) { var c = document.getElementById('sig-canvas'); sigCtx.clearRect(0, 0, c.width, c.height); }
+}
+
+function isSigEmpty() {
+  if (!sigCtx) return true;
+  var canvas = document.getElementById('sig-canvas');
+  var data = sigCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+  for (var i = 3; i < data.length; i += 4) { if (data[i] > 0) return false; }
+  return true;
+}
+
+// ── Upload ID ─────────────────────────────────────────────────────────────────
+function handleIdFile(e) { if (e.target.files[0]) uploadId(e.target.files[0]); }
+function dragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('dragover'); }
+function dragLeave(e) { document.getElementById('upload-zone').classList.remove('dragover'); }
+function dropFile(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('dragover');
+  if (e.dataTransfer.files[0]) uploadId(e.dataTransfer.files[0]);
+}
+
+async function uploadId(file) {
+  var errEl = document.getElementById('id-error');
+  var prog = document.getElementById('upload-progress');
+  var fill = document.getElementById('pb-fill');
+  errEl.style.display = 'none';
+  if (file.size > 12 * 1024 * 1024) { showErr(errEl, 'Fichier trop volumineux (12 Mo max).'); return; }
+  var fd = new FormData();
+  fd.append('id_doc', file);
+  prog.style.display = 'block'; fill.style.width = '40%';
+  try {
+    var r = await fetch('/api/client/upload-id', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + S.session },
+      body: fd
+    });
+    fill.style.width = '100%';
+    if (!r.ok) { var d = await r.json(); showErr(errEl, d.error || 'Erreur lors du dépôt.'); return; }
+    setTimeout(async function() { prog.style.display = 'none'; await loadData(); }, 400);
+  } catch(e) { showErr(errEl, 'Erreur réseau. Réessayez.'); prog.style.display = 'none'; }
+}
+
+// ── Paiement ──────────────────────────────────────────────────────────────────
+async function confirmPayment() {
+  if (!confirm('Confirmez-vous avoir effectué le virement ?')) return;
+  try {
+    var r = await apiFetch('/api/client/confirm-payment', { method: 'POST' });
+    if (!r.ok) { alert('Erreur. Contactez les propriétaires.'); return; }
+    await loadData();
+  } catch(e) { alert('Erreur réseau.'); }
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+function apiFetch(url, opts) {
+  opts = opts || {};
+  return fetch(url, Object.assign({}, opts, {
+    headers: Object.assign({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + S.session }, opts.headers || {})
+  }));
+}
+
+function showErr(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+
+// Fermer modal en cliquant le fond
+document.getElementById('modal-sign').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('modal-sign')) closeModal();
+});
+
+// Nav mobile
+var navToggle = document.getElementById('navToggle');
+var navLinks = document.getElementById('navLinks');
+if (navToggle && navLinks) {
+  navToggle.addEventListener('click', function() {
+    var open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+    navToggle.textContent = open ? '✕' : '☰';
+  });
+}
+
+// ── Textes des documents ──────────────────────────────────────────────────────
+function getDocText(type, c) {
+  if (type === 'contract') return getContrat(c);
+  if (type === 'reglement') return getReglement();
+  if (type === 'etat_des_lieux') return getEtatDesLieux(c);
+  return '';
+}
+
+function getContrat(c) {
+  var fmt = function(d) { return d ? new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' }) : '—'; };
+  var nights = (c.arrival && c.departure) ? Math.round((new Date(c.departure) - new Date(c.arrival)) / 86400000) : '—';
+  var total = c.totalAmountCents ? (c.totalAmountCents / 100).toFixed(2) + ' €' : '—';
+  var arrhes = c.depositAmountCents ? (c.depositAmountCents / 100).toFixed(2) + ' €' : '—';
+  var solde = (c.totalAmountCents && c.depositAmountCents) ? ((c.totalAmountCents - c.depositAmountCents) / 100).toFixed(2) + ' €' : '—';
+  var today = new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+  return '<h2>CONTRAT DE LOCATION COURTE DURÉE</h2>' +
+    '<p style="text-align:center;font-size:.78rem;color:#888">Meublé de tourisme — Non soumis à la loi du 6 juillet 1989</p>' +
+    '<p>Il a été convenu entre les parties que le Bailleur louera au Locataire le logement décrit ci-dessous dans les conditions suivantes.</p>' +
+    '<h3>1. OBJET</h3>' +
+    '<p>Le logement est loué meublé et équipé à titre de location courte durée pour la période indiquée. Il s\'agit de la villa <strong>Verdure &amp; Cie</strong>, sise au :</p>' +
+    '<p style="text-align:center"><strong>8 chemin Élie Hoarau, Basse-Terre, 97410 Saint-Pierre, La Réunion</strong></p>' +
+    '<p>La villa comprend : 5 chambres climatisées, 3 salles de bain, séjour ouvert, cuisine équipée, 3 terrasses, jardin tropical, piscine privée chauffée, salle de billard, parking privatif.</p>' +
+    '<h3>2. PARTIES</h3>' +
+    '<table><tr><td>Bailleur</td><td>Magali &amp; Paul — Verdure &amp; Cie<br>verdure@maisonpicard.com · 0692 51 27 66</td></tr>' +
+    '<tr><td>Locataire</td><td>' + c.guestName + '<br>' + c.guestEmail + (c.guestPhone ? '<br>' + c.guestPhone : '') + '</td></tr></table>' +
+    '<h3>3. DURÉE DE LA LOCATION</h3>' +
+    '<p>Location consentie pour <strong>' + nights + ' nuit(s)</strong> :</p>' +
+    '<table><tr><td>Arrivée (Check-in)</td><td><strong>' + fmt(c.arrival) + '</strong> — à partir de 16h00</td></tr>' +
+    '<tr><td>Départ (Check-out)</td><td><strong>' + fmt(c.departure) + '</strong> — avant 11h00</td></tr>' +
+    '<tr><td>Nombre de personnes</td><td>' + (c.guests || '—') + ' (maximum 10)</td></tr></table>' +
+    '<p>Contrat ferme et non renouvelable. Aucun droit au maintien dans les lieux à son terme. Le locataire s\'engage à libérer intégralement le logement et à remettre les clefs au bailleur à la date et l\'heure du check-out.</p>' +
+    '<h3>4. CONDITIONS FINANCIÈRES</h3>' +
+    '<table><tr><td>Prix total du séjour</td><td><strong>' + total + '</strong></td></tr>' +
+    '<tr><td>Arrhes à la signature (30%)</td><td><strong>' + arrhes + '</strong> — par virement bancaire</td></tr>' +
+    '<tr><td>Solde restant</td><td><strong>' + solde + '</strong> — dû au plus tard 30 jours avant l\'arrivée</td></tr></table>' +
+    '<p>L\'acompte versé constitue des <strong>arrhes</strong> (art. 1590 du Code civil). En cas d\'annulation par le locataire, elles restent acquises au bailleur. En cas d\'annulation par le bailleur, il doit en rembourser le double. En cas d\'annulation moins de 30 jours avant l\'arrivée, 100% du montant total reste dû.</p>' +
+    '<p>Afin de confirmer la réservation, le locataire doit retourner ce contrat signé au bailleur. Le locataire devra présenter sa pièce d\'identité à son arrivée.</p>' +
+    '<h3>5. CAUTION</h3>' +
+    '<p>Une caution de <strong>1 000 €</strong> sera remise à l\'arrivée sous forme de chèque non encaissé, afin de couvrir les éventuels dommages et dégradations causés au logement, au mobilier, ainsi que les pertes de clefs. Cette caution sera restituée dans les 48 heures suivant le check-out, déduction faite des éventuels dommages constatés.</p>' +
+    '<h3>6. CAPACITÉ MAXIMALE</h3>' +
+    '<p>Capacité maximale : <strong>10 personnes</strong>. Tout dépassement peut entraîner la résiliation immédiate du contrat sans remboursement.</p>' +
+    '<h3>7. ÉTAT DES LIEUX</h3>' +
+    '<p>Un état des lieux contradictoire sera effectué à l\'entrée et à la sortie. En l\'absence du locataire lors du départ, le bailleur établira un constat dont les conclusions s\'imposeront.</p>' +
+    '<h3>8. OBLIGATIONS DU LOCATAIRE</h3>' +
+    '<ul><li>User paisiblement des lieux et respecter le règlement intérieur</li>' +
+    '<li>Ne pas sous-louer ni céder le contrat</li>' +
+    '<li>Ne pas organiser de fêtes ou événements sans accord préalable écrit du bailleur</li>' +
+    '<li>Les animaux ne sont pas autorisés dans le logement</li>' +
+    '<li>La consommation de tabac est interdite à l\'intérieur</li>' +
+    '<li>Restituer les lieux dans leur état initial</li>' +
+    '<li>Signaler immédiatement tout dysfonctionnement ou dommage</li></ul>' +
+    '<h3>9. ACCÈS INTERNET</h3>' +
+    '<p>Le locataire, à l\'accès à internet, s\'engage à ne pas utiliser cet accès à des fins de reproduction ou de communication au public d\'œuvres protégées par un droit d\'auteur, sans autorisation. Le locataire est tenu de se conformer à la politique de sécurité définie par le bailleur ainsi qu\'à la réglementation en vigueur (loi Hadopi).</p>' +
+    '<h3>10. ASSURANCE</h3>' +
+    '<p>Le locataire déclare être couvert par une assurance villégiature ou multirisque habitation couvrant sa responsabilité civile pour la durée du séjour. Le bailleur décline toute responsabilité pour vol, perte ou accident survenant dans le logement.</p>' +
+    '<h3>11. DROIT APPLICABLE</h3>' +
+    '<p>Le présent contrat est soumis au droit français. En cas de litige, le Tribunal Judiciaire de Saint-Pierre (La Réunion) sera seul compétent.</p>' +
+    '<p style="margin-top:20px;text-align:center"><strong>Fait à Saint-Pierre (La Réunion), le ' + today + '</strong></p>';
+}
+
+function getReglement() {
+  return '<h2>RÈGLEMENT INTÉRIEUR</h2>' +
+    '<h3>Villa Verdure &amp; Cie — Saint-Pierre, La Réunion</h3>' +
+    '<p>Bienvenue ! Pour le confort de tous et le respect de la villa, nous vous demandons de lire et respecter ce règlement.</p>' +
+    '<h3>1. Capacité et occupation</h3>' +
+    '<ul><li>Capacité maximale : <strong>10 personnes</strong></li>' +
+    '<li>Sous-location et cession strictement interdites</li>' +
+    '<li>Visiteurs extérieurs non autorisés après 22h sans accord préalable</li></ul>' +
+    '<h3>2. Tranquillité du voisinage</h3>' +
+    '<ul><li>Silence respecté de <strong>22h à 8h</strong></li>' +
+    '<li>Musique extérieure et activités bruyantes interdites après 22h</li>' +
+    '<li>Aucune fête ou événement sans autorisation écrite préalable des propriétaires</li></ul>' +
+    '<h3>3. Tabac</h3>' +
+    '<ul><li>Interdiction absolue de fumer à l\'intérieur de la villa</li>' +
+    '<li>Cendriers disponibles sur les terrasses extérieures</li></ul>' +
+    '<h3>4. Animaux</h3>' +
+    '<ul><li>Non admis sauf autorisation écrite préalable des propriétaires</li></ul>' +
+    '<h3>5. Piscine</h3>' +
+    '<ul><li>Baignade sous la responsabilité des adultes présents</li>' +
+    '<li>Douche obligatoire avant toute baignade</li>' +
+    '<li>Interdiction de plonger dans la partie peu profonde</li>' +
+    '<li>Aucun verre, nourriture ou objet cassable dans la piscine</li>' +
+    '<li>Enfants en bas âge encadrés en permanence par un adulte</li>' +
+    '<li>Baignade nocturne déconseillée sans surveillance</li></ul>' +
+    '<h3>6. Propreté et entretien</h3>' +
+    '<ul><li>Vaisselle lavée ou rangée dans le lave-vaisselle avant départ</li>' +
+    '<li>Déchets triés dans les bacs prévus à cet effet</li>' +
+    '<li>Mobilier de terrasse non déplacé à l\'intérieur</li>' +
+    '<li>Linge de maison non utilisé pour le nettoyage</li></ul>' +
+    '<h3>7. Équipements</h3>' +
+    '<ul><li>Climatisation : éteinte lorsque les fenêtres sont ouvertes</li>' +
+    '<li>Tout dysfonctionnement signalé immédiatement aux propriétaires</li>' +
+    '<li>Utilisation des équipements conforme à leur usage normal</li>' +
+    '<li>Dommages causés par négligence déduits de la caution</li></ul>' +
+    '<h3>8. Sécurité</h3>' +
+    '<ul><li>Porte d\'entrée verrouillée à chaque sortie</li>' +
+    '<li>Code du portail confidentiel — ne pas le communiquer à des tiers</li>' +
+    '<li>Numéros d\'urgence : 0692 51 27 66 (propriétaires) · SAMU 15 · Pompiers 18 · Police 17</li></ul>' +
+    '<h3>9. Responsabilité</h3>' +
+    '<p>Les propriétaires déclinent toute responsabilité pour vol, perte ou accident. Le locataire est responsable des dommages causés par lui-même et les personnes l\'accompagnant.</p>' +
+    '<h3>10. Internet</h3>' +
+    '<p>Utilisation d\'internet en conformité avec la loi (Hadopi). Interdiction d\'utiliser la connexion à des fins illicites.</p>' +
+    '<p style="margin-top:20px;font-weight:bold;border-top:1px solid #ddd;padding-top:14px">Je reconnais avoir lu et accepté l\'intégralité de ce règlement intérieur.</p>';
+}
+
+function getEtatDesLieux(c) {
+  var fmt = function(d) { return d ? new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' }) : '—'; };
+  var today = new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+  return '<h2>ÉTAT DES LIEUX D\'ENTRÉE</h2>' +
+    '<p style="text-align:center;font-size:.82rem;color:#888">Villa Verdure &amp; Cie — 8 chemin Élie Hoarau, 97410 Saint-Pierre</p>' +
+    '<table><tr><td>Locataire</td><td>' + c.guestName + '</td></tr>' +
+    '<tr><td>Arrivée</td><td>' + fmt(c.arrival) + '</td></tr>' +
+    '<tr><td>Départ prévu</td><td>' + fmt(c.departure) + '</td></tr>' +
+    '<tr><td>Date de l\'état des lieux</td><td>' + today + '</td></tr></table>' +
+    '<p>Le locataire reconnaît avoir pris possession des lieux dans l\'état décrit ci-après et s\'engage à les restituer dans le même état à la fin de son séjour.</p>' +
+    '<h3>Pièces à vivre</h3>' +
+    '<ul><li>Séjour / Salon : état général satisfaisant, mobilier complet</li>' +
+    '<li>Cuisine équipée : propre, équipements fonctionnels (réfrigérateur, plaques, four, micro-ondes, lave-vaisselle)</li>' +
+    '<li>5 chambres climatisées : literie en bon état, linge fourni</li>' +
+    '<li>3 salles de bain : sanitaires propres, fonctionnels</li></ul>' +
+    '<h3>Extérieur</h3>' +
+    '<ul><li>Piscine privée chauffée : eau propre, équipements de nettoyage présents</li>' +
+    '<li>Jardin tropical : entretenu, mobilier de jardin présent et en bon état</li>' +
+    '<li>3 terrasses : propres, mobilier complet</li>' +
+    '<li>Salle de billard : table en bon état, accessoires complets</li>' +
+    '<li>Parking privatif : accès libre</li></ul>' +
+    '<h3>Remise des clefs</h3>' +
+    '<ul><li>Clef principale : 1 exemplaire remis</li>' +
+    '<li>Code portail : communiqué séparément</li>' +
+    '<li>Instructions et guide de séjour : transmis via l\'espace client</li></ul>' +
+    '<h3>Inventaire du linge</h3>' +
+    '<ul><li>Linge de lit (draps, taies, couettes) : complet pour chaque chambre</li>' +
+    '<li>Serviettes de bain et de piscine : présentes</li></ul>' +
+    '<h3>Consommables</h3>' +
+    '<ul><li>Produits ménagers de base fournis</li>' +
+    '<li>Papier toilette (dotation initiale) fourni</li></ul>' +
+    '<p>Le locataire certifie avoir vérifié l\'ensemble des points ci-dessus à son arrivée et confirme que les lieux sont en bon état général. Toute réserve devra être signalée aux propriétaires dans les 24 heures suivant l\'arrivée.</p>' +
+    '<p>La restitution des lieux se fera dans le même état, faute de quoi des retenues sur caution pourront être opérées.</p>' +
+    '<p style="margin-top:20px;font-weight:bold;border-top:1px solid #ddd;padding-top:14px">Je certifie avoir pris possession des lieux dans l\'état décrit ci-dessus.</p>';
+}
+
+// ── Démarrage ─────────────────────────────────────────────────────────────────
+init();
+</script>
 </body>
 </html>
