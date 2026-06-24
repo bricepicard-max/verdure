@@ -20,6 +20,7 @@
     .upload-status{margin-top:16px;font-size:.9rem}
     .upload-status.success{color:var(--leaf)}
     .upload-status.error{color:#c0392b}
+    .token-field{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;margin:0 0 18px;background:var(--white);font:inherit}
     .btn{display:inline-block;margin-top:24px}
     .preview{display:none;margin-top:32px}
     .preview video{max-width:100%;border-radius:8px;box-shadow:var(--shadow)}
@@ -32,14 +33,16 @@
 
   <main class="upload-main">
     <h1>Mettre à jour la vidéo</h1>
-    <p>Remplace la vidéo d'accueil du site. MP4 ou WebM, max 50 Mo.</p>
+    <p>Remplace la vidéo d'accueil du site. MP4, max 50 Mo.</p>
+
+    <input class="token-field" id="adminToken" type="password" placeholder="Token admin" autocomplete="off">
 
     <form id="uploadForm" enctype="multipart/form-data">
       <div class="upload-zone" id="dropZone">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
         <p>Clique ou glisse-dépose ta vidéo ici</p>
         <p class="file-name" id="fileName"></p>
-        <input type="file" id="fileInput" name="video" accept="video/mp4,video/webm" hidden>
+        <input type="file" id="fileInput" name="video" accept="video/mp4" hidden>
       </div>
 
       <div class="upload-progress" id="progressArea">
@@ -68,6 +71,12 @@
     const previewVideo = document.getElementById('previewVideo');
     const useVideoBtn = document.getElementById('useVideoBtn');
     const uploadForm = document.getElementById('uploadForm');
+    const adminToken = document.getElementById('adminToken');
+
+    if (window.ADMIN_TOKEN) {
+      adminToken.value = window.ADMIN_TOKEN;
+      adminToken.style.display = 'none';
+    }
 
     let selectedFile = null;
 
@@ -78,6 +87,7 @@
     fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
 
     function handleFile(file) {
+      if (file.type !== 'video/mp4') { alert('Seulement des fichiers MP4.'); return; }
       if (!file.type.startsWith('video/')) { alert('Seulement des fichiers vidéo.'); return; }
       if (file.size > 50 * 1024 * 1024) { alert('Trop lourd — max 50 Mo.'); return; }
       selectedFile = file;
@@ -96,6 +106,13 @@
     uploadForm.addEventListener('submit', async e => {
       e.preventDefault();
       if (!selectedFile) return;
+      const token = adminToken.value.trim();
+      if (!token) {
+        statusMsg.className = 'upload-status error';
+        statusMsg.textContent = 'Token admin requis.';
+        progressArea.style.display = 'block';
+        return;
+      }
       submitBtn.style.display = 'none';
       progressArea.style.display = 'block';
       statusMsg.className = 'upload-status';
@@ -105,7 +122,7 @@
       formData.append('video', selectedFile);
 
       try {
-        const res = await fetch('/upload-video', { method: 'POST', body: formData });
+        const res = await fetch('/upload-video', { method: 'POST', headers: { 'x-admin-token': token }, body: formData });
         const data = await res.json();
         if (data.success) {
           statusMsg.className = 'upload-status success';

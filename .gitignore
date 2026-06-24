@@ -4,6 +4,7 @@ data/
 .env.local
 *.log
 .codex-logs/
+.codex-shots/
 .DS_Store
 npm-debug.log*
 

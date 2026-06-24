@@ -9,6 +9,7 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const https = require('https');
 const http = require('http');
@@ -30,7 +31,15 @@ const mailer = createMailer();
 
 const multer = require('multer');
 const uploadPath = path.join(__dirname, 'assets', 'video');
-const videoUpload = multer({ dest: uploadPath, limits: { fileSize: 100 * 1024 * 1024 } });
+const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+const videoUpload = multer({
+  dest: uploadPath,
+  limits: { fileSize: MAX_VIDEO_SIZE_BYTES },
+  fileFilter: (req, file, cb) => {
+    const ok = file.mimetype === 'video/mp4';
+    cb(ok ? null : new Error('Seules les videos MP4 sont acceptees.'), ok);
+  }
+});
 
 let Anthropic;
 // DeepSeek chat (OpenAI-compatible API)
@@ -41,6 +50,7 @@ app.set('trust proxy', 'loopback');
 const PORT = process.env.PORT || 3010;
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'verdure@maisonpicard.com';
 const SITE_URL = process.env.SITE_URL || `http://127.0.0.1:${PORT}`;
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const ICAL_AIRBNB = process.env.ICAL_AIRBNB || '';
@@ -61,7 +71,7 @@ const pages = new Map([
   ['/', 'index.html'],
   ['/villa', 'villa.html'],
   ['/galerie', 'galerie.html'],
-  ['/photos', 'photos.html'],
+  ['/photos', 'galerie.html'],
   ['/equipements', 'equipements.html'],
   ['/localisation', 'localisation.html'],
   ['/tarifs', 'tarifs.html'],
@@ -103,6 +113,19 @@ app.get(['/admin', '/admin.html'], requireBasicAuth, (req, res) => {
   res.send(html.replace('</head>', '<script>window.ADMIN_TOKEN=' + JSON.stringify(ADMIN_TOKEN) + ';</script></head>'));
 });
 
+function sendAdminToolPage(res, filename) {
+  const html = fs.readFileSync(path.join(__dirname, 'public', filename), 'utf8');
+  res.send(html.replace('</head>', '<script>window.ADMIN_TOKEN=' + JSON.stringify(ADMIN_TOKEN) + ';</script></head>'));
+}
+
+app.get(['/upload-photos', '/upload-photos.html'], requireBasicAuth, (req, res) => {
+  sendAdminToolPage(res, 'upload-photos.html');
+});
+
+app.get(['/upload-video', '/upload-video.html'], requireBasicAuth, (req, res) => {
+  sendAdminToolPage(res, 'upload-video.html');
+});
+
 // ── Fichiers statiques ────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
 app.use('/assets', express.static(path.join(__dirname, 'assets'), { maxAge: '7d' }));
@@ -111,12 +134,27 @@ app.get([...pages.keys()], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', pages.get(req.path)));
 });
 
+function safeUploadFilename(value, fallback) {
+  const raw = String(value || fallback || 'upload').trim();
+  const clean = path.basename(raw).replace(/[^a-zA-Z0-9._-]/g, '-');
+  return clean || 'upload';
+}
+
+function archiveExistingFile(filepath) {
+  if (!fs.existsSync(filepath)) return null;
+  const parsed = path.parse(filepath);
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const archivedPath = path.join(parsed.dir, `${parsed.name}-archive-${stamp}${parsed.ext}`);
+  fs.renameSync(filepath, archivedPath);
+  return archivedPath;
+}
+
 
 // Image upload pour la galerie
 const imageUpload = multer({ 
   storage: multer.diskStorage({
     destination: path.join(__dirname, 'assets', 'images'),
-    filename: (req, file, cb) => cb(null, req.body.filename || file.originalname)
+    filename: (req, file, cb) => cb(null, safeUploadFilename(req.body.filename, file.originalname))
   }),
   limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
@@ -125,20 +163,23 @@ const imageUpload = multer({
   }
 });
 
-app.post('/admin/upload-photo', requireAdmin, imageUpload.single('photo'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'Aucun fichier' });
-  res.json({ success: true, file: req.file.filename });
+app.post('/admin/upload-photo', requireAdmin, (req, res) => {
+  imageUpload.single('photo')(req, res, (err) => {
+    if (err) return res.status(400).json({ error: err.message || 'Upload impossible' });
+    if (!req.file) return res.status(400).json({ error: 'Aucun fichier' });
+    res.json({ success: true, file: req.file.filename });
+  });
 });
-app.get('/upload-photos', (req, res) => res.sendFile(path.join(__dirname, 'public', 'upload-photos.html')));
-app.get('/upload-video', (req, res) => res.sendFile(path.join(__dirname, 'public', 'upload-video.html')));
-app.post('/upload-video', videoUpload.single('video'), (req, res) => {
-  if (!req.file) return res.status(400).json({ success: false, error: 'Aucun fichier reçu.' });
-  const fs = require('fs');
-  if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
-  const finalPath = path.join(uploadPath, 'hero.mp4');
-  if (fs.existsSync(finalPath)) fs.unlinkSync(finalPath);
-  fs.renameSync(req.file.path, finalPath);
-  res.json({ success: true, url: '/assets/video/hero.mp4' });
+app.post('/upload-video', requireAdmin, (req, res) => {
+  videoUpload.single('video')(req, res, (err) => {
+    if (err) return res.status(400).json({ success: false, error: err.message || 'Upload impossible' });
+    if (!req.file) return res.status(400).json({ success: false, error: 'Aucun fichier reçu.' });
+    if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
+    const finalPath = path.join(uploadPath, 'hero.mp4');
+    archiveExistingFile(finalPath);
+    fs.renameSync(req.file.path, finalPath);
+    res.json({ success: true, url: '/assets/video/hero.mp4' });
+  });
 });
 
 app.get('/espace-client', (req, res) => {
@@ -166,7 +207,7 @@ app.get('/api/config', (req, res) => {
 });
 
 function requireAdmin(req, res, next) {
-  const token = req.get('x-admin-token') || req.query.token || req.body.adminToken;
+  const token = req.get('x-admin-token') || req.query.token || (req.body && req.body.adminToken);
   if (!ADMIN_TOKEN) {
     return res.status(503).json({ error: 'ADMIN_TOKEN non configuré sur le serveur.' });
   }
@@ -773,10 +814,9 @@ app.post('/api/client/logout', requireClientAuth, (req, res) => {
 });
 
 // ── Upload ID document ────────────────────────────────────────────────────────
-const fs = require('fs');
-const idUploadsDir = path.join(__dirname, 'data', 'uploads');
+const idUploadsDir = path.join(DATA_DIR, 'uploads');
 fs.mkdirSync(idUploadsDir, { recursive: true });
-const gedDir = path.join(__dirname, 'data', 'ged');
+const gedDir = path.join(DATA_DIR, 'ged');
 fs.mkdirSync(gedDir, { recursive: true });
 const idUpload = multer({
   dest: idUploadsDir,
@@ -792,13 +832,15 @@ app.post('/api/client/upload-id', requireClientAuth, idUpload.single('id_doc'), 
   const ext = path.extname(req.file.originalname).toLowerCase() || '.jpg';
   const finalName = `id_${req.client.token}${ext}`;
   const finalPath = path.join(idUploadsDir, finalName);
-  try { fs.unlinkSync(finalPath); } catch {}
+  archiveExistingFile(finalPath);
   fs.renameSync(req.file.path, finalPath);
   db.setClientIdDoc(req.client.id, finalName);
   try {
     const cgd = path.join(gedDir, req.client.token);
     fs.mkdirSync(cgd, { recursive: true });
-    fs.copyFileSync(finalPath, path.join(cgd, 'piece_identite' + ext));
+    const gedIdPath = path.join(cgd, 'piece_identite' + ext);
+    archiveExistingFile(gedIdPath);
+    fs.copyFileSync(finalPath, gedIdPath);
     const m2 = { token: req.client.token, guestName: req.client.guest_name, guestEmail: req.client.guest_email, arrival: req.client.arrival, departure: req.client.departure, guests: req.client.guests, updatedAt: new Date().toISOString() };
     fs.writeFileSync(path.join(cgd, 'dossier.json'), JSON.stringify(m2, null, 2));
   } catch (e) { console.error('GED ID copy:', e.message); }
@@ -951,7 +993,7 @@ app.post('/api/admin/clients/:token/mark-paid', requireAdmin, async (req, res) =
 app.get('/api/admin/id-doc/:token', requireAdmin, (req, res) => {
   const client = db.getClientByToken(req.params.token);
   if (!client || !client.id_doc_filename) return res.status(404).json({ error: 'Aucun document.' });
-  const filePath = path.join(__dirname, 'data', 'uploads', client.id_doc_filename);
+  const filePath = path.join(DATA_DIR, 'uploads', client.id_doc_filename);
   if (!require('fs').existsSync(filePath)) return res.status(404).json({ error: 'Fichier introuvable.' });
   res.download(filePath, `piece_identite_${client.guest_name.replace(/\s+/g,'_')}.jpg`);
 });

@@ -211,7 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   document.querySelectorAll('[data-nav]').forEach((link) => {
-    if (link.getAttribute('href') === path) {
+    const href = link.getAttribute('href');
+    if (href === path || (path === '/photos' && href === '/galerie')) {
       link.setAttribute('aria-current', 'page');
     }
   });
@@ -227,20 +228,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const galleryGroups = [
-  { id: 'piscine',       label: 'Piscine',                    cover: 108, photoIds: [108, 6, 51, 69, 72, 77, 92, 104, 106, 107] },
-  { id: 'piscine-nuit',  label: 'Piscine de nuit',            cover: 112, photoIds: [112, 28, 59] },
-  { id: 'facade',        label: 'Façade & Entrée',            cover: 1,   photoIds: [1, 2, 11, 45, 57, 94, 103, 105] },
-  { id: 'terrasse',      label: 'Terrasse & Repas',           cover: 110, photoIds: [110, 40, 48, 64, 67, 68, 82] },
-  { id: 'jardin',        label: 'Jardin',                     cover: 87,  photoIds: [39, 41, 73, 74, 87, 88, 93] },
-  { id: 'sejour',        label: 'Séjour',                     cover: 109, photoIds: [109, 3, 16, 18, 25, 34, 42, 58] },
-  { id: 'billard',       label: 'Billard & Divertissements',  cover: 20,  photoIds: [8, 20, 71] },
-  { id: 'cuisine',       label: 'Cuisine & Salle à manger',  cover: 111, photoIds: [111, 14, 23, 29, 31, 32, 36, 61, 62, 83, 97] },
-  { id: 'suite',         label: 'Suite parentale',            cover: 50,  photoIds: [50, 60, 63, 15] },
-  { id: 'chambres',      label: 'Chambres',                   cover: 46,  photoIds: [13, 19, 21, 22, 24, 43, 44, 46, 54] },
-  { id: 'bains',         label: 'Salles de bain',             cover: 33,  photoIds: [4, 27, 33, 38, 86, 99] },
-  { id: 'accueil',       label: 'Accueil & Bienvenue',        cover: 9,   photoIds: [9, 10, 17, 35, 53, 55, 75, 76, 89, 100] },
-  { id: 'details',       label: 'Détails & Décoration',       cover: 30,  photoIds: [5, 7, 30, 47, 49, 52, 56, 66, 84, 91, 98, 101, 102] },
-  { id: 'proprietaires', label: 'Nos propriétaires',          cover: 108, photoIds: [108, 109, 110, 111, 112] },
+  { id: 'piscine',       label: 'Piscine',                     cover: 6,   photoIds: [6, 51, 69, 72, 77, 104, 106, 107] },
+  { id: 'piscine-nuit',  label: 'Piscine de nuit',             cover: 28,  photoIds: [28, 59, 112] },
+  { id: 'sejour',        label: 'Séjour',                      cover: 3,   photoIds: [3, 18, 25, 34, 42, 58, 109] },
+  { id: 'cuisine',       label: 'Cuisine & repas',             cover: 23,  photoIds: [23, 14, 29, 31, 32, 36, 61, 62, 83, 111] },
+  { id: 'terrasse',      label: 'Terrasse & repas dehors',     cover: 48,  photoIds: [48, 67, 68, 110, 40, 64] },
+  { id: 'chambre-1',     label: 'Chambre 1 - suite parentale', cover: 60,  photoIds: [60, 63, 15, 50] },
+  { id: 'chambre-2',     label: 'Chambre 2',                   cover: 46,  photoIds: [46, 54] },
+  { id: 'chambre-3',     label: 'Chambre 3',                   cover: 13,  photoIds: [13, 44] },
+  { id: 'chambre-4',     label: 'Chambre 4',                   cover: 22,  photoIds: [22, 24] },
+  { id: 'chambre-5',     label: 'Chambre 5',                   cover: 19,  photoIds: [19, 21, 43] },
+  { id: 'bain-1',        label: 'Salle de bain 1',             cover: 50,  photoIds: [50, 4, 27] },
+  { id: 'bain-2',        label: 'Salle de bain 2',             cover: 33,  photoIds: [33, 86] },
+  { id: 'bain-3',        label: 'Salle de bain 3',             cover: 38,  photoIds: [38, 99] },
+  { id: 'facade',        label: 'Façade & entrée',             cover: 1,   photoIds: [1, 2, 11, 45, 57, 94, 103, 105] },
+  { id: 'jardin',        label: 'Jardin',                      cover: 87,  photoIds: [39, 41, 73, 74, 87, 88, 93] },
+  { id: 'details',       label: 'Détails & accueil',           cover: 9,   photoIds: [5, 7, 9, 10, 17, 30, 35, 53, 55, 75, 76, 84, 89, 98, 100, 101, 102] },
+  { id: 'proprietaires', label: 'Les propriétaires',           cover: 108, photoIds: [108, 109, 110, 111, 112] },
 ];
 
 function initGallery() {
@@ -852,6 +856,37 @@ function initBookingCalendar() {
 function initHeroReel() {
   const reel = document.getElementById('heroReel');
   if (!reel) return;
+  const slides = Array.from(reel.querySelectorAll('.hero__slide'));
+  if (slides.length > 1) {
+    const dots = document.createElement('div');
+    dots.className = 'hero__dots';
+    dots.setAttribute('aria-hidden', 'true');
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'hero__dot' + (index === 0 ? ' is-active' : '');
+      dot.type = 'button';
+      dot.addEventListener('click', () => showSlide(index));
+      dots.appendChild(dot);
+    });
+    reel.appendChild(dots);
+
+    let current = slides.findIndex((slide) => slide.classList.contains('is-active'));
+    if (current < 0) current = 0;
+    let timer = window.setInterval(() => showSlide(current + 1), 7600);
+
+    function showSlide(nextIndex) {
+      const next = (nextIndex + slides.length) % slides.length;
+      slides[current].classList.remove('is-active');
+      dots.children[current].classList.remove('is-active');
+      slides[next].classList.add('is-active');
+      dots.children[next].classList.add('is-active');
+      current = next;
+      window.clearInterval(timer);
+      timer = window.setInterval(() => showSlide(current + 1), 7600);
+    }
+    return;
+  }
+
   const video = reel.querySelector('video');
   if (!video) return;
   const tryPlay = () => {
@@ -1035,6 +1070,7 @@ function signDocument(token, client, documentType, acceptedText, docTitle) {
 
 function initVideoBar() {
   const video = document.getElementById('heroVideo');
+  const bar = document.getElementById('videoBar');
   const btnPlay = document.getElementById('vPlayPause');
   const btnBack = document.getElementById('vBack');
   const btnFwd = document.getElementById('vFwd');
@@ -1042,7 +1078,10 @@ function initVideoBar() {
   const volSlider = document.getElementById('vVolume');
   const played = document.getElementById('vPlayed');
   const progress = document.getElementById('vProgress');
-  if (!video || !btnPlay) return;
+  if (!video || !btnPlay) {
+    if (bar) bar.hidden = true;
+    return;
+  }
 
   // Play / Pause
   btnPlay.addEventListener('click', () => {

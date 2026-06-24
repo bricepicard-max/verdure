@@ -37,6 +37,12 @@
     ];
 
     const container = document.getElementById('slots');
+    const adminToken = document.getElementById('adminToken');
+
+    if (window.ADMIN_TOKEN) {
+      adminToken.value = window.ADMIN_TOKEN;
+      adminToken.style.display = 'none';
+    }
 
     photos.forEach(p => {
       const div = document.createElement('div');
@@ -62,7 +68,7 @@
 
       function upload(file) {
         if (!file) return;
-        const token = document.getElementById('adminToken').value.trim();
+        const token = adminToken.value.trim();
         if (!token) { status.className='status err'; status.textContent='⚠️ Entre le token admin d\'abord !'; return; }
 
         preview.src = URL.createObjectURL(file);
@@ -70,10 +76,10 @@
         status.className = 'status'; status.textContent = '⏳ Upload en cours...'; status.style.display='block';
 
         const fd = new FormData();
-        fd.append('photo', file);
         fd.append('filename', p.filename);
+        fd.append('photo', file);
 
-        fetch('/admin/upload-photo?token=' + encodeURIComponent(token), { method: 'POST', body: fd })
+        fetch('/admin/upload-photo', { method: 'POST', headers: { 'x-admin-token': token }, body: fd })
           .then(r => r.json())
           .then(data => {
             if (data.success) { status.className='status ok'; status.textContent='✅ Uploadé : ' + data.file; }
