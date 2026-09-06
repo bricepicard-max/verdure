@@ -1,0 +1,270 @@
+{
+  "communities": {
+    "0": [
+      "server",
+      "server_app",
+      "server_archiveexistingfile",
+      "server_centsfromeuros",
+      "server_createmailer",
+      "server_crypto",
+      "server_db",
+      "server_execfile",
+      "server_express",
+      "server_fetchurl",
+      "server_fs",
+      "server_geddir",
+      "server_hashpassword",
+      "server_helmet",
+      "server_http",
+      "server_https",
+      "server_idupload",
+      "server_iduploadsdir",
+      "server_mailer",
+      "server_multer",
+      "server_nodemailer",
+      "server_pages",
+      "server_path",
+      "server_requireadmin",
+      "server_requirebasicauth",
+      "server_requireclientauth",
+      "server_sendadmintoolpage",
+      "server_serializeclient",
+      "server_stripe",
+      "server_uploadpath",
+      "server_verifypassword",
+      "server_videoupload"
+    ],
+    "1": [
+      "db",
+      "db_clearclientsession",
+      "db_createclient",
+      "db_createpost",
+      "db_database",
+      "db_db",
+      "db_fs",
+      "db_getclientbyid",
+      "db_getclientbylogin",
+      "db_getclientbysession",
+      "db_getclientbytoken",
+      "db_listclients",
+      "db_listposts",
+      "db_listsignatures",
+      "db_now",
+      "db_path",
+      "db_recordpayment",
+      "db_setclientiddoc",
+      "db_setclientlogin",
+      "db_setclientpassword",
+      "db_setclientpaymentconfirmed",
+      "db_setclientpaymentpaid",
+      "db_setclientsession",
+      "db_updateclientstatus",
+      "db_updatepoststatus",
+      "db_upsertsignature"
+    ],
+    "2": [
+      "public_app",
+      "public_app_categorylabel",
+      "public_app_copylink",
+      "public_app_documentcard",
+      "public_app_euro",
+      "public_app_gallerygroups",
+      "public_app_initadminclientform",
+      "public_app_initavailabilityform",
+      "public_app_initclientportal",
+      "public_app_initdates",
+      "public_app_initgallery",
+      "public_app_initheroreel",
+      "public_app_initheroreel_showslide",
+      "public_app_initvideobar",
+      "public_app_initvideobar_updatemuteui",
+      "public_app_openlightbox",
+      "public_app_photoindex",
+      "public_app_renderclientportal",
+      "public_app_signdocument",
+      "public_app_signedset",
+      "public_app_statuslabel",
+      "public_app_updatetimeline"
+    ],
+    "3": [
+      "package",
+      "package_description",
+      "package_engines",
+      "package_engines_node",
+      "package_main",
+      "package_name",
+      "package_scripts",
+      "package_scripts_dev",
+      "package_scripts_start",
+      "package_version",
+      "ref_anthropic_ai_sdk",
+      "ref_better_sqlite3",
+      "ref_dotenv",
+      "ref_express",
+      "ref_helmet",
+      "ref_multer",
+      "ref_nodemailer",
+      "ref_pdfkit",
+      "ref_stripe"
+    ],
+    "4": [
+      "package_dependencies",
+      "package_dependencies_anthropic_ai_sdk",
+      "package_dependencies_better_sqlite3",
+      "package_dependencies_dotenv",
+      "package_dependencies_express",
+      "package_dependencies_helmet",
+      "package_dependencies_multer",
+      "package_dependencies_nodemailer",
+      "package_dependencies_pdfkit",
+      "package_dependencies_stripe"
+    ],
+    "5": [
+      "public_app_initbookingcalendar",
+      "public_app_initbookingcalendar_hasbookedinrange",
+      "public_app_initbookingcalendar_isbooked",
+      "public_app_initbookingcalendar_render",
+      "public_app_initbookingcalendar_rendermonth",
+      "public_app_initbookingcalendar_todaycompact",
+      "public_app_initbookingcalendar_toiso"
+    ],
+    "6": [
+      "server_generategedpdf",
+      "server_pdfdocument"
+    ],
+    "7": [
+      "server_imageupload",
+      "server_safeuploadfilename"
+    ],
+    "8": [
+      "server_parseical",
+      "server_parseicaldate"
+    ],
+    "9": [
+      "setup",
+      "setup_sh__entry"
+    ],
+    "10": [
+      "ecosystem_config"
+    ],
+    "11": [
+      "public_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.0625,
+    "1": 0.12,
+    "2": 0.12554112554112554,
+    "3": 0.10526315789473684,
+    "4": 0.2,
+    "5": 0.5238095238095238,
+    "6": 1.0,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0
+  },
+  "gods": [
+    {
+      "id": "db_now",
+      "label": "now()",
+      "degree": 13
+    },
+    {
+      "id": "public_app_initbookingcalendar",
+      "label": "initBookingCalendar()",
+      "degree": 7
+    },
+    {
+      "id": "public_app_renderclientportal",
+      "label": "renderClientPortal()",
+      "degree": 6
+    },
+    {
+      "id": "public_app_initbookingcalendar_render",
+      "label": "render()",
+      "degree": 5
+    },
+    {
+      "id": "public_app_initbookingcalendar_rendermonth",
+      "label": "renderMonth()",
+      "degree": 4
+    },
+    {
+      "id": "db_createclient",
+      "label": "createClient()",
+      "degree": 3
+    },
+    {
+      "id": "db_upsertsignature",
+      "label": "upsertSignature()",
+      "degree": 3
+    },
+    {
+      "id": "public_app_euro",
+      "label": "euro()",
+      "degree": 3
+    },
+    {
+      "id": "public_app_initclientportal",
+      "label": "initClientPortal()",
+      "degree": 3
+    },
+    {
+      "id": "public_app_openlightbox",
+      "label": "openLightbox()",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "openLightbox()",
+      "target": "render()",
+      "source_files": [
+        "public/app.js",
+        "public/app.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "note": "Bridges community 2 → community 5"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `dependencies` connect `dependencies` to `package.json`?",
+      "why": "High betweenness centrality (0.101) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `better-sqlite3` connect `package.json` to `db.js`?",
+      "why": "High betweenness centrality (0.074) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `app`, `crypto`, `db` to the rest of the system?",
+      "why": "45 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `server.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.0625 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `db.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.12 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `app.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.12554112554112554 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `package.json` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

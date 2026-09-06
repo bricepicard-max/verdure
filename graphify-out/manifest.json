@@ -1,0 +1,92 @@
+{
+  "db.js": {
+    "mtime": 1788669252.3354917,
+    "seen": 1788669450.6260889,
+    "ast_hash": "26a48575963c04748a9fadd88a970c29",
+    "semantic_hash": "26a48575963c04748a9fadd88a970c29"
+  },
+  "ecosystem.config.js": {
+    "mtime": 1788669252.3354917,
+    "seen": 1788669450.6260917,
+    "ast_hash": "521fda38297c4817307b6b344ad9437d",
+    "semantic_hash": "521fda38297c4817307b6b344ad9437d"
+  },
+  "package.json": {
+    "mtime": 1788669252.3354917,
+    "seen": 1788669450.6260931,
+    "ast_hash": "4efc851f028d40eb0765558f8cb456bd",
+    "semantic_hash": "4efc851f028d40eb0765558f8cb456bd"
+  },
+  "public/app.js": {
+    "mtime": 1788669252.3394916,
+    "seen": 1788669450.626094,
+    "ast_hash": "87af894e5f5e1bea8d7ac25d4b74318f",
+    "semantic_hash": "87af894e5f5e1bea8d7ac25d4b74318f"
+  },
+  "public/config.js": {
+    "mtime": 1788669252.3394916,
+    "seen": 1788669450.626095,
+    "ast_hash": "20855eeb6f320cae0047efac817b8e2f",
+    "semantic_hash": "20855eeb6f320cae0047efac817b8e2f"
+  },
+  "server.js": {
+    "mtime": 1788669252.3794916,
+    "seen": 1788669450.626096,
+    "ast_hash": "d6ec10ba976daed5841064c32ffc67ad",
+    "semantic_hash": "d6ec10ba976daed5841064c32ffc67ad"
+  },
+  "setup.sh": {
+    "mtime": 1788669252.3794916,
+    "seen": 1788669450.6260972,
+    "ast_hash": "774194241e73a491318587fc4ae35ff1",
+    "semantic_hash": "774194241e73a491318587fc4ae35ff1"
+  },
+  "assets/video/hero-compressed.mp4": {
+    "mtime": 1788669252.0514917,
+    "seen": 1788669450.6261046,
+    "ast_hash": "cb4f01e4ea2a200d0db5b3b8e17a8b1e",
+    "semantic_hash": "cb4f01e4ea2a200d0db5b3b8e17a8b1e"
+  },
+  "assets/video/hero-letterboxed.mp4": {
+    "mtime": 1788669252.0514917,
+    "seen": 1788669450.626106,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "assets/video/hero.mp4": {
+    "mtime": 1788669252.0994916,
+    "seen": 1788669450.6261072,
+    "ast_hash": "7a348a68cb4fc03c63bc17ff04228409",
+    "semantic_hash": "7a348a68cb4fc03c63bc17ff04228409"
+  },
+  "assets/video/hero_backup.mp4": {
+    "mtime": 1788669252.1154916,
+    "seen": 1788669450.626108,
+    "ast_hash": "cb4f01e4ea2a200d0db5b3b8e17a8b1e",
+    "semantic_hash": "cb4f01e4ea2a200d0db5b3b8e17a8b1e"
+  },
+  "assets/video/hero_cropped.mp4": {
+    "mtime": 1788669252.1234915,
+    "seen": 1788669450.626109,
+    "ast_hash": "71b3a3c9db70b724572a87f441ba061d",
+    "semantic_hash": "71b3a3c9db70b724572a87f441ba061d"
+  },
+  "assets/video/hero_cropped2.mp4": {
+    "mtime": 1788669252.1754916,
+    "seen": 1788669450.6261094,
+    "ast_hash": "ec3c47ec453b3404a65c4b125e4daeda",
+    "semantic_hash": "ec3c47ec453b3404a65c4b125e4daeda"
+  },
+  "assets/video/hero_cropped3.mp4": {
+    "mtime": 1788669252.1954916,
+    "seen": 1788669450.6261103,
+    "ast_hash": "7a348a68cb4fc03c63bc17ff04228409",
+    "semantic_hash": "7a348a68cb4fc03c63bc17ff04228409"
+  },
+  "assets/video/hero_original.mp4": {
+    "mtime": 1788669252.3354917,
+    "seen": 1788669450.626111,
+    "ast_hash": "4326ced2edefb3c3f77d6eae8f6ffd01",
+    "semantic_hash": "4326ced2edefb3c3f77d6eae8f6ffd01"
+  }
+}
